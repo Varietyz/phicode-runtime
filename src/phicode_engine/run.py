@@ -4,7 +4,7 @@ import traceback
 import argparse
 from .core.phicode_importer import install_phicode_importer
 
-__version__ = "1.0.0"
+__version__ = "1.0.1"
 
 def main():
     parser = argparse.ArgumentParser(description="PHICODE Runtime Engine")

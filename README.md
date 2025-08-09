@@ -25,7 +25,7 @@ PHICODE is not a separate language but a symbolic encoding mapped one-to-one wit
 ## Installation
 
 ```bash
-pip install .
+pip install phicode
 ```
 
 Or clone the repo and install in editable mode for development:
@@ -103,26 +103,6 @@ PHICODE replaces many Python keywords and built-ins with single Unicode glyphs f
 * **Symbolic Mapping:** Two-way dictionary translating PHICODE glyphs to Python keywords and vice versa.
 * **Runtime Runner (`phicode` CLI):** Parses command line, determines file or module, installs the importer, and executes the target.
 * **Package layout:** Source code is under `src/phicode_engine/` for clean separation.
-
----
-
-## Development
-
-1. Clone the repo and install dependencies:
-
-```bash
-pip install -r requirements.txt
-```
-
-2. Run tests (if any added).
-
-3. Develop inside `src/phicode_engine`.
-
-4. Install in editable mode for quick iteration:
-
-```bash
-pip install -e .
-```
 
 ---
 

@@ -12,6 +12,7 @@
 .pypirc
 dist
 build
+update.txt
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
