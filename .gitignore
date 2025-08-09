@@ -9,6 +9,9 @@
 *.user
 *.userosscache
 *.sln.docstates
+.pypirc
+dist
+build
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs

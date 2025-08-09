@@ -1,0 +1,43 @@
+# mapping.py
+
+PYTHON_TO_PHICODE = {
+    "False": "⊥",
+    "None": "Ø",
+    "True": "✓",
+    "and": "∧",
+    "as": "↦",
+    "assert": "‼",
+    "async": "⟳",
+    "await": "⌛",
+    "break": "⇲",
+    "class": "ℂ",
+    "continue": "⇉",
+    "def": "ƒ",
+    "del": "∂",
+    "elif": "⤷",
+    "else": "⋄",
+    "except": "⛒",
+    "finally": "⇗",
+    "for": "∀",
+    "from": "←",
+    "global": "⟁",
+    "if": "¿",
+    "import": "⇒",
+    "in": "∈",
+    "is": "≡",
+    "lambda": "λ",
+    "nonlocal": "∇",
+    "not": "¬",
+    "or": "∨",
+    "pass": "⋯",
+    "raise": "↑",
+    "return": "⟲",
+    "try": "∴",
+    "while": "↻",
+    "with": "∥",
+    "yield": "⟰",
+    "print": "π",
+}
+
+# Invert dictionary for decoding PHICODE -> Python
+PHICODE_TO_PYTHON = {v: k for k, v in PYTHON_TO_PHICODE.items()}

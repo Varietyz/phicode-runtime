@@ -1,3 +1,14 @@
+Metadata-Version: 2.4
+Name: phicode
+Version: 1.0.0
+Summary: PHICODE Runtime Engine — run φ code directly in Python
+Author-email: Jay Baleine <jay@banes-lab.com>
+License-Expression: MIT
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Dynamic: license-file
+
 # PHICODE Runtime Engine
 
 Run φ code directly in Python — a runtime and import system that lets you write and execute PHICODE, a symbolic variant of Python using concise, expressive glyphs.
