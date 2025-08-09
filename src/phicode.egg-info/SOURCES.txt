@@ -8,5 +8,8 @@ src/phicode.egg-info/entry_points.txt
 src/phicode.egg-info/top_level.txt
 src/phicode_engine/__init__.py
 src/phicode_engine/run.py
+src/phicode_engine/core/phicode_cache.py
+src/phicode_engine/core/phicode_finder.py
 src/phicode_engine/core/phicode_importer.py
+src/phicode_engine/core/phicode_loader.py
 src/phicode_engine/map/mapping.py

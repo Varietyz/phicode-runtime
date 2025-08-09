@@ -1,24 +1,16 @@
+# run.py
 import sys
 import os
 import traceback
 import argparse
 from .core.phicode_importer import install_phicode_importer
 
-__version__ = "1.0.1"
+__version__ = "2.1.2"
 
 def main():
     parser = argparse.ArgumentParser(description="PHICODE Runtime Engine")
-    parser.add_argument(
-        "module_or_file",
-        nargs="?",
-        default="main",
-        help="PHICODE module name or file to run (default: main)"
-    )
-    parser.add_argument(
-        "--version",
-        action="store_true",
-        help="Show PHICODE version and exit"
-    )
+    parser.add_argument("module_or_file", nargs="?", default="main")
+    parser.add_argument("--version", action="store_true")
     args = parser.parse_args()
 
     if args.version:
@@ -38,10 +30,8 @@ def main():
 
     install_phicode_importer(phicode_src_folder)
 
-    print(f"Starting PHICODE runtime from '{phicode_src_folder}' (module: {module_name})...")
     try:
         __import__(module_name)
-        print(f"Imported module '{module_name}' successfully")
     except Exception as e:
         print(f"Error running module '{module_name}': {e}", file=sys.stderr)
         traceback.print_exc()
