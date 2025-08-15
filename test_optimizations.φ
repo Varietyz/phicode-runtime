@@ -1,0 +1,43 @@
+# (φ) test_optimizations.φ
+# test_optimizations.Φ - Test optimization features
+ƒ test_ast_optimizations():
+    π("🔬 Testing AST optimizations...")
+
+    # Mathematical constant optimizations
+    import math
+    circle_area = π * (5 ** 2)  # π should be resolved to 3.14159...
+    π(f"Circle area (r=5): {circle_area}")
+
+    # Identity optimizations
+    x = 100
+    identity_tests = [
+        x + 0,    # Should optimize to x
+        x * 1,    # Should optimize to x
+        x ** 2,   # Should optimize to x * x
+        2 + 3,    # Should optimize to 5
+        5 * 0     # Should optimize to 0
+    ]
+
+    π(f"Identity optimizations: {identity_tests}")
+    ⟲ identity_tests
+
+ƒ test_parallelization():
+    π("⚡ Testing potential parallelization...")
+
+    # Simple function for testing
+    ƒ square(x):
+        ⟲ x * x
+
+    # This might be parallelized if threshold is low enough
+    small_test = [square(i) ∀ i ∈ range(100)]
+    π(f"Small test (100 items): {len(small_test)} results")
+
+    # This should definitely be parallelized (if threshold allows)
+    large_test = [square(i) ∀ i ∈ range(2000)]
+    π(f"Large test (2000 items): {len(large_test)} results")
+
+    ⟲ len(large_test)
+
+# Run optimization tests
+test_ast_optimizations()
+test_parallelization()

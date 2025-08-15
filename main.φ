@@ -1,0 +1,38 @@
+# (φ) main.Φ
+# test_ast.Φ - Test mathematical optimizations
+# main.Φ - Test basic functionality and optimizations
+ƒ test_basic_functionality():
+    π("🧪 Testing basic PHICODE functionality...")
+
+    # Test mathematical symbols work
+    x = 42
+    result1 = x + 0   # Should be optimized to just x
+    result2 = x * 1   # Should be optimized to just x
+    result3 = 2 + 3   # Should be optimized to 5
+
+    π(f"Basic math: x={x}, x+0={result1}, x*1={result2}, 2+3={result3}")
+
+    # Test control flow
+    ¿ x > 40:
+        π("✅ Conditional logic works!")
+    ⋄:
+        π("❌ This shouldn't execute")
+
+    ⟲ "Basic test complete"
+
+ƒ test_fibonacci():
+    π("🔢 Testing fibonacci with mathematical notation...")
+
+    ƒ fibonacci(n):
+        ¿ n ≤ 1:
+            ⟲ n
+        ⋄:
+            ⟲ fibonacci(n-1) + fibonacci(n-2)
+
+    ∀ i ∈ range(8):
+        π(f"F({i}) = {fibonacci(i)}")
+
+# Run tests
+test_basic_functionality()
+test_fibonacci()
+π("🎉 All tests completed!")

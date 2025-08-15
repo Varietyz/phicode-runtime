@@ -8,13 +8,13 @@ from .core.phicode_importer import install_phicode_importer
 __version__ = "2.1.2"
 
 def main():
-    parser = argparse.ArgumentParser(description="PHICODE Runtime Engine")
+    parser = argparse.ArgumentParser(description="(φ)PHICODE Runtime Engine")
     parser.add_argument("module_or_file", nargs="?", default="main")
     parser.add_argument("--version", action="store_true")
     args = parser.parse_args()
 
     if args.version:
-        print(f"phicode version {__version__}")
+        print(f"(φ)phicode version {__version__}")
         sys.exit(0)
 
     if os.path.isfile(args.module_or_file):
@@ -25,7 +25,7 @@ def main():
         module_name = args.module_or_file
 
     if not os.path.isdir(phicode_src_folder):
-        print(f"PHICODE source folder not found: {phicode_src_folder}", file=sys.stderr)
+        print(f"(φ)PHICODE source folder not found: {phicode_src_folder}", file=sys.stderr)
         sys.exit(2)
 
     install_phicode_importer(phicode_src_folder)

@@ -16,7 +16,7 @@
 
 ## 🎯 Executive Summary
 
-PHICODE enables writing Python using mathematical symbols through a sophisticated **meta path finder** and **bytecode caching system**. Files with `.Φ` extension are automatically translated to standard Python and compiled with full optimization. The system provides **thread-safe operations**, **persistent caching**, and **zero-overhead execution** after initial compilation.
+PHICODE enables writing Python using mathematical symbols through a sophisticated **meta path finder** and **bytecode caching system**. Files with `.φ` extension are automatically translated to standard Python and compiled with full optimization. The system provides **thread-safe operations**, **persistent caching**, and **zero-overhead execution** after initial compilation.
 
 **Value Proposition**: Reduce cognitive load by writing code that matches mathematical thinking patterns while maintaining full Python ecosystem compatibility and performance.
 
@@ -38,13 +38,13 @@ PHICODE enables writing Python using mathematical symbols through a sophisticate
 ### 📦 One-Line Installation & Verification
 
 ```bash
-pip install phicode && echo 'π("PHICODE Ready! ✨")' > test.Φ && phicode test.Φ
+pip install phicode && echo 'π("PHICODE Ready! ✨")' > test.φ && phicode test.φ
 ```
 
 ### 🔤 First Mathematical Program
 
 ```python
-# fibonacci.Φ - Mathematical sequence implementation
+# fibonacci.φ - Mathematical sequence implementation
 ƒ fibonacci(n):
     ¿ n ≤ 1:
         ⟲ n
@@ -57,7 +57,7 @@ pip install phicode && echo 'π("PHICODE Ready! ✨")' > test.Φ && phicode test
 ```
 
 ```bash
-phicode fibonacci.Φ
+phicode fibonacci.φ
 # Output: F(0) = 0, F(1) = 1, F(2) = 1, F(3) = 2, F(4) = 3, F(5) = 5, F(6) = 8, F(7) = 13
 ```
 
@@ -117,7 +117,7 @@ python -m build --sdist --wheel
 ### 🎯 Basic Workflow Integration
 
 ```python
-# mathematical_operations.Φ - Natural mathematical expressions
+# mathematical_operations.φ - Natural mathematical expressions
 ⇒ math  # import math
 
 ƒ statistical_analysis(dataset):
@@ -151,7 +151,7 @@ results = statistical_analysis(data)
 <summary>🧱 Complex Mathematical Logic (Click to expand)</summary>
 
 ```python
-# advanced_math.Φ - Comprehensive mathematical programming
+# advanced_math.φ - Comprehensive mathematical programming
 ⇒ itertools
 
 ƒ matrix_operations(A, B):
@@ -200,9 +200,9 @@ from phicode_engine.core.phicode_importer import install_phicode_importer
 project_root = "/path/to/your/phicode/modules"
 install_phicode_importer(project_root)
 
-# Import .Φ modules as standard Python modules
-import mathematical_utils  # Automatically imports mathematical_utils.Φ
-import data_processing     # Automatically imports data_processing.Φ
+# Import .φ modules as standard Python modules
+import mathematical_utils  # Automatically imports mathematical_utils.φ
+import data_processing     # Automatically imports data_processing.φ
 
 # Use imported mathematical functions
 results = mathematical_utils.calculate_derivatives(data)
@@ -221,9 +221,9 @@ results = mathematical_utils.calculate_derivatives(data)
 │
 ├── 📦 core/                     # Core runtime engine
 │   ├── 🔍 phicode_finder.py     # importlib.abc.MetaPathFinder implementation
-│   │   ├── find_spec() → .Φ file discovery with caching
+│   │   ├── find_spec() → .φ file discovery with caching
 │   │   ├── LRU cache (256 entries) for file path resolution
-│   │   └── Package detection: __init__.Φ support
+│   │   └── Package detection: __init__.φ support
 │   │
 │   ├── ⚡ phicode_loader.py     # importlib.abc.Loader implementation  
 │   │   ├── exec_module() → bytecode compilation & execution
@@ -250,7 +250,7 @@ results = mathematical_utils.calculate_derivatives(data)
 
 ```mermaid
 graph TD
-    A[📁 .Φ File Request] --> B[🔍 PhicodeFinder.find_spec]
+    A[📁 .φ File Request] --> B[🔍 PhicodeFinder.find_spec]
     B --> C{📊 Spec Cache Hit?}
     C -->|✅ Hit| D[📋 Return Cached Spec]
     C -->|❌ Miss| E[🔎 File System Lookup]
@@ -289,52 +289,69 @@ graph TD
 
 ### 🔤 Core Language Constructs
 
-| Symbol | Python | Mnemonic | Usage Pattern | Error Handling |
-|--------|--------|----------|---------------|----------------|
-| `ƒ` | `def` | **f**unction symbol | `ƒ name(args):` | ✅ Standard Python function rules |
-| `π` | `print` | **p**i for **p**rint | `π("message")` | ✅ All print() arguments supported |
-| `¿` | `if` | **?** (question) | `¿ condition:` | ✅ Standard boolean evaluation |
-| `⤷` | `elif` | branching arrow | `⤷ condition:` | ✅ Multiple elif chains supported |
-| `⋄` | `else` | diamond (**e**lse) | `⋄:` | ✅ Standard else semantics |
-| `∀` | `for` | **for** **a**ll | `∀ x ∈ iterable:` | ✅ All Python iteration patterns |
-| `↻` | `while` | circular loop | `↻ condition:` | ✅ Standard while loop behavior |
-| `⟲` | `return` | return arrow | `⟲ value` | ✅ All return scenarios supported |
+| Symbol | Python | Mnemonic            | Usage Pattern   | Error Handling                    |
+| ------ | ------ | ------------------- | --------------- | --------------------------------- |
+| ƒ      | def    | function symbol     | ƒ name(args):   | ✅ Standard Python function rules  |
+| π      | print  | pi for print        | π("message")    | ✅ All print() arguments supported |
+| ¿      | if     | ? (question)        | ¿ condition:    | ✅ Standard boolean evaluation     |
+| ⤷      | elif   | branching arrow     | ⤷ condition:    | ✅ Multiple elif chains supported  |
+| ⋄      | else   | diamond (else)      | ⋄:              | ✅ Standard else semantics         |
+| ∀      | for    | for all             | ∀ x ∈ iterable: | ✅ All Python iteration patterns   |
+| ↻      | while  | circular loop       | ↻ condition:    | ✅ Standard while loop behavior    |
+| ⟲      | return | return arrow        | ⟲ value         | ✅ All return scenarios supported  |
+| ⟷      | match  | bidirectional match | ⟷ variable:     | ✅ Structural pattern matching     |
+| ▷      | case   | branch case         | ▷ pattern:      | ✅ Pattern match branch semantics  |
+
+---
 
 ### 🧮 Logical & Mathematical Operators
 
-| Symbol | Python | Mathematical Meaning | Code Example | Notes |
-|--------|--------|----------------------|--------------|-------|
-| `∧` | `and` | Logical conjunction | `x > 0 ∧ x < 10` | ⚠️ Short-circuit evaluation preserved |
-| `∨` | `or` | Logical disjunction | `a ≡ 1 ∨ a ≡ 2` | ⚠️ Short-circuit evaluation preserved |
-| `¬` | `not` | Logical negation | `¬ condition` | ✅ Unary operator precedence maintained |
-| `≡` | `is` | Identity comparison | `x ≡ None` | ⚠️ Use for identity, not equality |
-| `≢` | `is not` | Non-identity | `x ≢ None` | ⚠️ Preferred over `¬(x ≡ y)` |
-| `∈` | `in` | Set membership | `item ∈ collection` | ✅ All container types supported |
-| `∉` | `not in` | Non-membership | `item ∉ collection` | ✅ All container types supported |
+| Symbol | Python | Mathematical Meaning | Code Example      | Notes                                  |
+| ------ | ------ | -------------------- | ----------------- | -------------------------------------- |
+| ∧      | and    | Logical conjunction  | x > 0 ∧ x < 10    | ⚠️ Short-circuit evaluation preserved  |
+| ∨      | or     | Logical disjunction  | a ≡ 1 ∨ a ≡ 2     | ⚠️ Short-circuit evaluation preserved  |
+| ¬      | not    | Logical negation     | ¬ condition       | ✅ Unary operator precedence maintained |
+| ≡      | is     | Identity comparison  | x ≡ None          | ⚠️ Use for identity, not equality      |
+| ≢      | is not | Non-identity         | x ≢ None          | ⚠️ Preferred over ¬(x ≡ y)             |
+| ∈      | in     | Set membership       | item ∈ collection | ✅ All container types supported        |
+| ∉      | not in | Non-membership       | item ∉ collection | ✅ All container types supported        |
+| ∑      | sum    | Summation            | ∑(\[1, 2, 3])     | ✅ Works with iterables of numbers      |
+| ⭱      | max    | Maximum value        | ⭱(list\_values)   | ✅ Works with any comparable types      |
+| ⭳      | min    | Minimum value        | ⭳(list\_values)   | ✅ Works with any comparable types      |
+| ∣      | abs    | Absolute value       | ∣-5               | ✅ Works with int, float, complex       |
+
+---
 
 ### 🔄 Control Flow & Exception Handling
 
-| Symbol | Python | Usage Context | Example Pattern |
-|--------|--------|---------------|-----------------|
-| `∴` | `try` | Exception handling | `∴: risky_operation()` |
-| `⛒` | `except` | Exception catching | `⛒ ValueError as e:` |
-| `⇗` | `finally` | Cleanup operations | `⇗: cleanup_resources()` |
-| `↑` | `raise` | Exception raising | `↑ ValueError("message")` |
-| `⇲` | `break` | Loop termination | `¿ condition: ⇲` |
-| `⇉` | `continue` | Loop continuation | `¿ skip_condition: ⇉` |
-| `⋯` | `pass` | No-operation | `¿ placeholder: ⋯` |
+| Symbol | Python   | Usage Context      | Example Pattern         |
+| ------ | -------- | ------------------ | ----------------------- |
+| ∴      | try      | Exception handling | ∴: risky\_operation()   |
+| ⛒      | except   | Exception catching | ⛒ ValueError as e:      |
+| ⇗      | finally  | Cleanup operations | ⇗: cleanup\_resources() |
+| ↑      | raise    | Exception raising  | ↑ ValueError("message") |
+| ⇲      | break    | Loop termination   | ¿ condition: ⇲          |
+| ⇉      | continue | Loop continuation  | ¿ skip\_condition: ⇉    |
+| ⋯      | pass     | No-operation       | ¿ placeholder: ⋯        |
+
+---
 
 ### 📦 Import & Module System
 
-| Symbol | Python | Usage | Advanced Pattern |
-|--------|--------|-------|------------------|
-| `⇒` | `import` | Module import | `⇒ math, sys, os` |
-| `←` | `from` | Selective import | `← math ⇒ sqrt, sin, cos` |
-| `↦` | `as` | Aliasing | `⇒ numpy ↦ np` |
-| `λ` | `lambda` | Anonymous functions | `λ x: x**2` |
-| `Ø` | `None` | Null value | `⟲ Ø ¿ error ⋄ result` |
-| `✓` | `True` | Boolean true | `flag = ✓` |
-| `⊥` | `False` | Boolean false | `flag = ⊥` |
+| Symbol | Python    | Usage               | Advanced Pattern          |                                     |
+| ------ | --------- | ------------------- | ------------------------- | ----------------------------------- |
+| ⇒      | import    | Module import       | ⇒ math, sys, os           |                                     |
+| ←      | from      | Selective import    | ← math ⇒ sqrt, sin, cos   |                                     |
+| ↦      | as        | Aliasing            | ⇒ numpy ↦ np              |                                     |
+| λ      | lambda    | Anonymous functions | λ x: x\*\*2               |                                     |
+| Ø      | None      | Null value          | ⟲ Ø ¿ error ⋄ result      |                                     |
+| ✓      | True      | Boolean true        | flag = ✓                  |                                     |
+| ⊥      | False     | Boolean false       | flag = ⊥                  |                                     |
+| ℓ      | len       | Length function     | ℓ(iterable)               | ✅ Works with sequences, sets, dicts |
+| ⟪      | range     | Sequence range      | ∀ i ∈ ⟪(5):               | ✅ Start, stop, step supported       |
+| №      | enumerate | Enumeration         | ∀ i, v ∈ №(iterable):     | ✅ Supports start index              |
+| ⨅      | zip       | Parallel iteration  | ∀ a, b ∈ ⨅(list1, list2): | ✅ Stops at shortest iterable        |
+
 
 > **🔍 Translation Engine**: Regex pattern `re.compile('|'.join(escaped_symbols))` with longest-match-first ordering ensures accurate symbol replacement. See [`mapping.py`](https://github.com/Varietyz/pip-phicode/blob/main/src/phicode_engine/map/mapping.py) for complete implementation.
 
@@ -392,7 +409,7 @@ export PHICODE_FORCE_RECOMPILE=1        # Disable cache for testing
 ### ✅ Comprehensive Test Suite
 
 ```python
-# test_phicode_functionality.Φ - Validation test patterns
+# test_phicode_functionality.φ - Validation test patterns
 ⇒ unittest
 
 ℂ TestPhicodeTranslation(unittest.TestCase):
@@ -486,16 +503,16 @@ python tests/test_unicode_symbols.py
 # Symptoms: "PHICODE source folder not found: /path"
 # Cause: Invalid file path or missing directory
 # Solution:
-ls -la $(dirname your_file.Φ)  # Verify file exists
-phicode $(pwd)/your_file.Φ     # Use absolute path
+ls -la $(dirname your_file.φ)  # Verify file exists
+phicode $(pwd)/your_file.φ     # Use absolute path
 ```
 
 **Error Code 3: Module Import Failure**  
 ```bash
 # Symptoms: "Error running module 'name': ModuleNotFoundError"
-# Cause: Missing dependencies or syntax errors in .Φ file
+# Cause: Missing dependencies or syntax errors in .φ file
 # Solution:
-python -c "import ast; ast.parse(open('file.Φ').read())"  # Check syntax
+python -c "import ast; ast.parse(open('file.φ').read())"  # Check syntax
 pip install missing-dependency  # Install dependencies
 ```
 
@@ -520,7 +537,7 @@ python -c "import sys; print(sys.path)"       # Check Python path
 # Solution:
 rm -rf .phicode_cache/                    # Nuclear cache reset
 find . -name "*.pyc" -delete             # Clear Python bytecode
-touch your_file.Φ && phicode your_file.Φ # Force recompilation
+touch your_file.φ && phicode your_file.φ # Force recompilation
 ```
 
 **High Memory Usage**
@@ -552,8 +569,8 @@ rsync -av /network/project/ /local/project/   # Work locally
 # Symptoms: "UnicodeDecodeError: 'utf-8' codec can't decode"
 # Cause: File encoding mismatch or terminal configuration
 # Solution:
-file your_file.Φ                          # Check file encoding
-iconv -f ISO-8859-1 -t UTF-8 file.Φ      # Convert encoding
+file your_file.φ                          # Check file encoding
+iconv -f ISO-8859-1 -t UTF-8 file.φ      # Convert encoding
 export PYTHONIOENCODING=utf-8            # Force UTF-8 mode
 ```
 
@@ -633,9 +650,9 @@ locale -a | grep -i utf                   # Check UTF-8 availability
 
 ```bash
 # Performance analysis tools
-python -m cProfile -s cumtime phicode your_file.Φ > profile.txt
+python -m cProfile -s cumtime phicode your_file.φ > profile.txt
 python -m py_spy top --pid $(pgrep -f phicode)  # Real-time profiling
-python -m memory_profiler phicode your_file.Φ   # Memory usage analysis
+python -m memory_profiler phicode your_file.φ   # Memory usage analysis
 ```
 
 ## 🔧 VS Code Extension Integration
@@ -750,7 +767,7 @@ CUSTOM_SYMBOLS = {
 PHICODE_TO_PYTHON.update(CUSTOM_SYMBOLS)
 
 # Use in mathematical computing
-# math_advanced.Φ
+# math_advanced.φ
 ← functools ⇒ reduce
 ← operator ⇒ mul
 
@@ -798,8 +815,8 @@ jobs:
         
     - name: Test Unicode Support
       run: |
-        echo 'π("Unicode test: ∀ ∃ ∈ ∉ ∅ ∧ ∨ ¬ λ")' > unicode_test.Φ
-        phicode unicode_test.Φ
+        echo 'π("Unicode test: ∀ ∃ ∈ ∉ ∅ ∧ ∨ ¬ λ")' > unicode_test.φ
+        phicode unicode_test.φ
         
     - name: Run Symbol Translation Tests
       run: |
@@ -822,7 +839,7 @@ jobs:
 // .vscode/settings.json - VSCode configuration for PHICODE development
 {
   "files.associations": {
-    "*.Φ": "python"
+    "*.φ": "python"
   },
   "python.analysis.extraPaths": ["./src"],
   "python.defaultInterpreterPath": "./venv/bin/python",
@@ -879,14 +896,14 @@ Core Classes and Functions for extending PHICODE functionality.
 
 ℂ PhicodeFinder(importlib.abc.MetaPathFinder):
     """
-    Meta path finder for .Φ files with intelligent caching.
+    Meta path finder for .φ files with intelligent caching.
     
     Integration Point: sys.meta_path finder for import system
     """
     
     ƒ find_spec(self, fullname, path, target=None):
         """
-        Locate .Φ files and create module specifications.
+        Locate .φ files and create module specifications.
         
         Returns:
             ModuleSpec | None: Specification for found module or None
@@ -908,7 +925,7 @@ Core Classes and Functions for extending PHICODE functionality.
     
     ƒ exec_module(self, module):
         """
-        Execute .Φ module with bytecode caching.
+        Execute .φ module with bytecode caching.
         
         Process:
             1. Source retrieval and validation
@@ -923,11 +940,11 @@ Core Classes and Functions for extending PHICODE functionality.
     Install PHICODE importer for specified directory.
     
     Args:
-        base_path: Root directory for .Φ file discovery
+        base_path: Root directory for .φ file discovery
         
     Usage:
         install_phicode_importer("/path/to/phicode/modules")
-        import my_module  # Automatically imports my_module.Φ
+        import my_module  # Automatically imports my_module.φ
     """
 
 # Symbol Extension API  
@@ -946,7 +963,7 @@ Core Classes and Functions for extending PHICODE functionality.
 ### 🔬 Research & Academic Integration
 
 ```python
-# academic_research.Φ - Academic and research computing patterns
+# academic_research.φ - Academic and research computing patterns
 """
 Mathematical research computing with PHICODE symbolic notation.
 Demonstrates academic use cases and citation-ready examples.
@@ -1063,7 +1080,6 @@ results = statistical_hypothesis_test(research_data, population_mean=2.0)
 
 **🌟 Core Contributors**
 - **Jay Baleine** ([@Varietyz](https://github.com/Varietyz)) - Creator, Lead Developer
-- **[Your Name Here]** - Join our contributor community!
 
 **🎯 Special Recognition Categories**
 - **🧠 Symbol Architects**: Contributors who design new symbol mappings
@@ -1134,7 +1150,7 @@ copies or substantial portions of the Software.
 
 <div align="center">
 
-## 🌟 Join the Mathematical Programming Revolution
+## 🌟 Join the Mathematical Programming Era
 
 **Transform your Python code from verbose to beautiful**
 
@@ -1160,16 +1176,13 @@ for i in range(10):           ∀ i ∈ range(10):
 
 [🌐 Website](https://banes-lab.com) • [📧 Contact](mailto:jay@banes-lab.com) • [🐙 GitHub](https://github.com/Varietyz) • [💼 LinkedIn](https://linkedin.com/company/banes-lab)
 
+**© 2025 Banes Lab • MIT License • [Repositories](https://github.com/Varietyz?tab=repositories)**
 </div>
 
 ---
 
 > **⚠️ Final Notes**: 
 > 
-> **🔄 Active Development**: PHICODE is continuously evolving with new mathematical symbols and performance improvements. Current API is stable with semantic versioning.
->
 > **📊 Performance Disclaimer**: Benchmark data reflects typical usage patterns on modern hardware. Performance may vary significantly across different environments, file systems, and usage patterns.
 >
 > **🌀 Implementation Variability**: Multiple approaches exist for integrating PHICODE into existing projects. The methods shown represent current best practices, though alternative strategies may be suitable depending on specific requirements.
->
-> **🔍 Documentation Evolution**: Advanced configuration guides and comprehensive API documentation are continuously expanding. For immediate assistance beyond this README, please [engage with our community](https://github.com/Varietyz/pip-phicode/discussions) or [contact support directly](mailto:jay@banes-lab.com).

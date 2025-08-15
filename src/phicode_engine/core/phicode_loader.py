@@ -1,4 +1,4 @@
-# core/phicode_loader.py
+# Enhanced phicode_loader.py - Centralized cache structure
 import importlib.abc
 import importlib.util
 import marshal
@@ -23,8 +23,8 @@ class PhicodeLoader(importlib.abc.Loader):
 
         python_source = _cache.get_translated(self.path, source)
 
-        pyc_path = importlib.util.cache_from_source(self.path, optimization='')
-
+        # Use centralized cache instead of scattered __pycache__ folders
+        pyc_path = self._get_centralized_pyc_path(self.path)
         os.makedirs(os.path.dirname(pyc_path), exist_ok=True)
 
         source_hash = self._hash_source(source)
@@ -40,6 +40,17 @@ class PhicodeLoader(importlib.abc.Loader):
             self._write_pyc(pyc_path, code, source_hash)
 
         exec(code, module.__dict__)
+
+    def _get_centralized_pyc_path(self, source_path):
+        """Generate centralized pyc path to avoid scattered __pycache__ folders."""
+        # Create a safe filename from the full path
+        relative_path = os.path.relpath(source_path)
+        safe_path = relative_path.replace(os.sep, '_').replace('.', '_')
+        safe_name = hashlib.sha256(source_path.encode('utf-8')).hexdigest()[:16]
+        
+        # Store all compiled files in a single .phicode_cache directory
+        cache_dir = os.path.join(os.getcwd(), '.(φ)cache', 'comφled')
+        return os.path.join(cache_dir, f"{safe_path}_{safe_name}.φca")
 
     def _hash_source(self, source):
         return hashlib.sha256(source.encode('utf-8')).digest()
