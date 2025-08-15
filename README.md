@@ -1,5 +1,7 @@
 # PHICODE Runtime Engine
 
+<div align="center">
+
 <img src="https://banes-lab.com/assets/images/banes_lab/700px_Main_Animated.gif" width="100" alt="Banes Lab"/>
 
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen)](https://github.com/Varietyz/pip-phicode) [![Python](https://img.shields.io/badge/python-3.8%2B-blue)](https://python.org) [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE) [![Version](https://img.shields.io/badge/version-2.1.2-orange)](https://github.com/Varietyz/pip-phicode/releases)
@@ -9,6 +11,8 @@
 **Target Audience**: Python developers, researchers, mathematicians, and data scientists who prefer mathematical notation over verbose keywords. Ideal for academic computing, symbolic programming, and projects requiring mathematical expressiveness.
 
 > **⚠️ Development Status**: Production-ready with active feature development.
+
+</div>
 
 ## 🎯 Executive Summary
 
