@@ -1,6 +1,6 @@
 # (φ) main.Φ
-# test_ast.Φ - Test mathematical optimizations
-# main.Φ - Test basic functionality and optimizations
+# test_ast.φ - Test mathematical optimizations
+# main.φ - Test basic functionality and optimizations
 ƒ test_basic_functionality():
     π("🧪 Testing basic PHICODE functionality...")
 
@@ -24,7 +24,7 @@
     π("🔢 Testing fibonacci with mathematical notation...")
 
     ƒ fibonacci(n):
-        ¿ n ≤ 1:
+        ¿ n <= 1:
             ⟲ n
         ⋄:
             ⟲ fibonacci(n-1) + fibonacci(n-2)

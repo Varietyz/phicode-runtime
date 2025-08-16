@@ -405,3 +405,15 @@ FodyWeavers.xsd
 *.sln.iml
 TO-DO.md
 /src/phicode_engine-backup
+/phicode_engine-backup
+/src/phicode_engine/core-backup
+/src/phicode_engine/todo
+test_optimizations.φ
+PROJECT_CONTENTS.txt
+main.φ
+1.content_extract.py
+2.project_tree.py
+LLVM_Steps.txt
+main.φ
+PROJECT_TREE.md
+/.(φ)cache
