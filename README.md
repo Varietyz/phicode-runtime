@@ -1174,7 +1174,7 @@ for i in range(10):           ∀ i ∈ range(10):
 
 **Created with ❤️ by [Jay Baleine - Banes Lab](https://banes-lab.com)**
 
-[🌐 Website](https://banes-lab.com) • [📧 Contact](mailto:jay@banes-lab.com) • [🐙 GitHub](https://github.com/Varietyz) • [💼 LinkedIn](https://linkedin.com/company/banes-lab)
+[🌐 Website](https://banes-lab.com) • [📧 Contact](mailto:jay@banes-lab.com) • [🐙 GitHub](https://github.com/Varietyz) • [💼 LinkedIn](https://linkedin.com/)
 
 **© 2025 Banes Lab • MIT License • [Repositories](https://github.com/Varietyz?tab=repositories)**
 </div>

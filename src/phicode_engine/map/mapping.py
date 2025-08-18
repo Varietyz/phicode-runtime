@@ -2,7 +2,16 @@ import os
 import json
 import re
 from functools import lru_cache
-from typing import Dict, Optional
+from typing import Dict
+from ..core.phicode_logger import logger
+
+_CACHED_MAPPINGS = None
+_CACHED_PATTERN = None
+
+_STRING_PATTERN = re.compile(
+    r'(""".*?"""|\'\'\'.*?\'\'\'|f""".*?"""|f\'\'\'.*?\'\'\'|[rub]?""".*?"""|[rub]?\'\'\'.*?\'\'\'|[rub]?".*?"|[rub]?\'.*?\'|f".*?"|f\'.*?\')',
+    re.DOTALL
+)
 
 PYTHON_TO_PHICODE = {
     "False": "⊥", "None": "Ø", "True": "✓", "and": "∧", "as": "↦", 
@@ -22,11 +31,8 @@ PHICODE_TO_PYTHON = {v: k for k, v in PYTHON_TO_PHICODE.items()}
 
 def _load_custom_symbols() -> Dict[str, str]:
     config_paths = [
-        "φ.symbols.json",
-        ".(φ)/symbols.json", 
-        ".phicode/symbols.json",
-        ".(φ)symbols.json",
-        "custom_φ_symbols.json"
+        ".(φ)/custom_symbols.json", 
+        ".phicode/custom_symbols.json",
     ]
     
     for config_path in config_paths:
@@ -35,8 +41,8 @@ def _load_custom_symbols() -> Dict[str, str]:
                 with open(config_path, 'r', encoding='utf-8') as f:
                     config = json.load(f)
                 return config.get('symbols', {})
-            except Exception:
-                continue
+            except Exception as e:
+                logger.warning(f"Failed to load symbols from {config_path}: {e}")
     return {}
 
 @lru_cache(maxsize=1)
@@ -50,7 +56,7 @@ def get_symbol_mappings() -> Dict[str, str]:
     
     return base_mapping
 
-@lru_cache(maxsize=1)  
+@lru_cache(maxsize=1)
 def build_transpilation_pattern() -> re.Pattern:
     mappings = get_symbol_mappings()
     sorted_symbols = sorted(mappings.keys(), key=len, reverse=True)
@@ -58,6 +64,17 @@ def build_transpilation_pattern() -> re.Pattern:
     return re.compile('|'.join(escaped_symbols))
 
 def transpile_symbols(source: str) -> str:
-    mappings = get_symbol_mappings()
-    pattern = build_transpilation_pattern()
-    return pattern.sub(lambda m: mappings[m.group(0)], source)
+    global _CACHED_MAPPINGS, _CACHED_PATTERN
+    if _CACHED_MAPPINGS is None:
+        _CACHED_MAPPINGS = get_symbol_mappings()
+        _CACHED_PATTERN = build_transpilation_pattern()
+    
+    parts = _STRING_PATTERN.split(source)
+    result = []
+    for i, part in enumerate(parts):
+        if i % 2 == 0:
+            result.append(_CACHED_PATTERN.sub(lambda m: _CACHED_MAPPINGS[m.group(0)], part))
+        else:
+            result.append(part)
+    
+    return ''.join(result)

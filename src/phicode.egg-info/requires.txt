@@ -1,0 +1,4 @@
+xxhash>=3.0.0
+
+[utility]
+psutil>=5.8.0
