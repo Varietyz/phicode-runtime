@@ -1,28 +1,23 @@
 import sys
-import os
 import argparse
 import concurrent.futures
-from typing import List
 from .phicode_interpreter import InterpreterSelector
-from ..version import __version__
+from ..config.version import __version__
+from ..config.config import BADGE, ENGINE_NAME
 from .phicode_logger import logger
 
 
 def build_parser():
-    parser = argparse.ArgumentParser(description="(φ)PHICODE Runtime Engine")
+    parser = argparse.ArgumentParser(description= "{BADGE}PHICODE Runtime Engine")
     parser.add_argument("module_or_file", nargs="?", default="main")
     parser.add_argument("--version", action="store_true")
     parser.add_argument("--debug", action="store_true", help="Enable debug mode")
 
-    # Interpreter selection (informational only, no re-exec)
     interpreter_group = parser.add_mutually_exclusive_group()
     interpreter_group.add_argument("--interpreter", help="Show info about specific interpreter")
-    interpreter_group.add_argument("--python", action="store_const", const="python", dest="interpreter",
-                                   help="Show CPython info")
-    interpreter_group.add_argument("--pypy", action="store_const", const="pypy3", dest="interpreter",
-                                   help="Show PyPy info")
-    interpreter_group.add_argument("--cpython", action="store_const", const="python3", dest="interpreter",
-                                   help="Show CPython info")
+    interpreter_group.add_argument("--python", action="store_const", const="python", dest="interpreter", help="Show CPython info")
+    interpreter_group.add_argument("--pypy", action="store_const", const="pypy3", dest="interpreter", help="Show PyPy info")
+    interpreter_group.add_argument("--cpython", action="store_const", const="python3", dest="interpreter", help="Show CPython info")
 
     parser.add_argument("--list-interpreters", action="store_true", help="List available interpreters and exit")
     parser.add_argument("--show-versions", action="store_true", help="Show interpreter versions")
@@ -37,10 +32,8 @@ def parse_args(argv=None):
         logger.setLevel("DEBUG")
         logger.debug("Debug mode enabled")
 
-    # Show current interpreter info
     _log_current_interpreter()
 
-    # Handle early exits
     if args.list_interpreters:
         _print_interpreters(show_versions=args.show_versions)
         sys.exit(0)
@@ -49,7 +42,6 @@ def parse_args(argv=None):
         _print_version()
         sys.exit(0)
 
-    # Show interpreter preference info if requested
     if args.interpreter:
         _show_interpreter_info(args.interpreter)
 
@@ -57,35 +49,33 @@ def parse_args(argv=None):
 
 
 def _log_current_interpreter():
-    """Log what interpreter we're currently using"""
     impl_name = sys.implementation.name
     version = f"{sys.version_info.major}.{sys.version_info.minor}"
-    
+
     if impl_name == "pypy":
-        logger.info(f"(φ) Running on PyPy {version} - for symbolic processing")
+        logger.info(f"Running on PyPy {version} - for symbolic processing")
     else:
-        logger.info(f"(φ) Running on {impl_name} {version}")
+        logger.info(f"Running on {impl_name} {version}")
         logger.info("    💡 Use PyPy for ~3x faster symbolic processing: pip install pypy3")
 
 
 def _show_interpreter_info(interpreter_name: str):
-    """Show information about a specific interpreter"""
     selector = InterpreterSelector()
-    
-    full_path = selector._get_interpreter_path(interpreter_name)
+
+    full_path = selector.get_interpreter_path(interpreter_name)
     if not full_path:
         logger.warning(f"Interpreter '{interpreter_name}' not found")
         return
-    
+
     version = selector.get_interpreter_version(full_path)
     is_pypy = selector.is_pypy(full_path)
-    
+
     print(f"\nInterpreter Info:")
     print(f"  Name: {interpreter_name}")
     print(f"  Path: {full_path}")
     print(f"  Version: {version or 'unknown'}")
     print(f"  Type: {'PyPy 🚀' if is_pypy else 'CPython 🐍'}")
-    
+
     if not is_pypy:
         print(f"  💡 To use this interpreter: {interpreter_name} -m phicode_engine <module>")
 
@@ -106,14 +96,12 @@ def _print_interpreters(show_versions=False):
             logger.warning(f"Failed to get info for {interp}: {e}")
             return interp, "unknown", False
 
-    # Fetch info concurrently
     with concurrent.futures.ThreadPoolExecutor() as executor:
         futures = [executor.submit(get_info, interp) for interp in available]
         for future in concurrent.futures.as_completed(futures):
             interp, version, is_pypy = future.result()
             interpreter_info[interp] = {"version": version, "is_pypy": is_pypy}
 
-    # Sort: current first, then PyPy, then alphabetically
     available.sort(key=lambda i: (
         i != current_interp,
         not interpreter_info[i]['is_pypy'],
@@ -136,7 +124,7 @@ def _print_interpreters(show_versions=False):
 
 
 def _print_version():
-    print(f"(φ) Phicode version {__version__}")
+    print(f"{BADGE}{ENGINE_NAME} version {__version__}")
     print(f"Running on: {sys.implementation.name} {sys.version}")
 
     selector = InterpreterSelector()

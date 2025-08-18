@@ -7,13 +7,13 @@ from functools import lru_cache
 from typing import Optional, Tuple
 from .phicode_cache import _cache
 from .phicode_loader import PhicodeLoader
-from .phicode_logger import logger
+from ..config.config import MAIN_FILE_TYPE, SECONDARY_FILE_TYPE
 
 try:
     from .phicode_loader import _flush_batch_writes
 except ImportError:
     def _flush_batch_writes(): pass
-    
+
 class PhicodeFinder(importlib.abc.MetaPathFinder):
     __slots__ = ('base_path', '_canon_base_path')
 
@@ -39,7 +39,7 @@ class PhicodeFinder(importlib.abc.MetaPathFinder):
     def _get_file_path(self, fullname: str) -> Optional[str]:
         parts = fullname.split('.')
         base = os.path.join(self._canon_base_path, *parts)
-        for ext in ['.φ', '.py']:
+        for ext in [MAIN_FILE_TYPE, SECONDARY_FILE_TYPE]:
             candidate = base + ext
             try:
                 if os.path.isfile(candidate):
@@ -52,7 +52,7 @@ class PhicodeFinder(importlib.abc.MetaPathFinder):
     def _get_package_paths(self, fullname: str) -> Optional[Tuple[str, str]]:
         parts = fullname.split('.')
         package_dir = os.path.join(self._canon_base_path, *parts)
-        for ext in ['.φ', '.py']:
+        for ext in [MAIN_FILE_TYPE, SECONDARY_FILE_TYPE]:
             init_file = os.path.join(package_dir, '__init__' + ext)
             if os.path.isfile(init_file):
                 return package_dir, init_file
@@ -75,7 +75,7 @@ class PhicodeFinder(importlib.abc.MetaPathFinder):
 
         filename = self._get_file_path(fullname)
         if filename:
-            loader = PhicodeLoader(filename) if filename.endswith('.φ') else None
+            loader = PhicodeLoader(filename) if filename.endswith(MAIN_FILE_TYPE) else None
             spec = importlib.util.spec_from_file_location(
                 fullname, filename, loader=loader,
                 submodule_search_locations=[os.path.dirname(filename)] if os.path.isdir(filename) else None
@@ -89,7 +89,7 @@ class PhicodeFinder(importlib.abc.MetaPathFinder):
         package_result = self._get_package_paths(fullname)
         if package_result:
             package_dir, init_file = package_result
-            loader = PhicodeLoader(init_file) if init_file.endswith('.φ') else None
+            loader = PhicodeLoader(init_file) if init_file.endswith(MAIN_FILE_TYPE) else None
             spec = importlib.util.spec_from_file_location(
                 fullname, init_file, loader=loader, submodule_search_locations=[package_dir]
             )

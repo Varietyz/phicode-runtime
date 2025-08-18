@@ -9,7 +9,8 @@ src/phicode.egg-info/requires.txt
 src/phicode.egg-info/top_level.txt
 src/phicode_engine/__init__.py
 src/phicode_engine/main.py
-src/phicode_engine/version.py
+src/phicode_engine/config/config.py
+src/phicode_engine/config/version.py
 src/phicode_engine/core/phicode_cache.py
 src/phicode_engine/core/phicode_cli.py
 src/phicode_engine/core/phicode_finder.py

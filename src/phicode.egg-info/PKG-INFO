@@ -378,7 +378,7 @@ graph TD
 from phicode_engine.core.phicode_cache import PhicodeCache
 
 # Custom cache with performance tuning
-cache = PhicodeCache(cache_dir="./cache")
+cache = PhicodeCache(cache_dir="./optimized_cache")
 
 # Cache performance characteristics
 MAX_MEMORY_ENTRIES = 512  # LRU eviction threshold
