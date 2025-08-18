@@ -32,10 +32,16 @@ CACHE_BUFFER_SIZE = POSIX_BUFFER_SIZE if os.name == 'posix' else WINDOWS_BUFFER_
 MAX_FILE_RETRIES = 3
 RETRY_BASE_DELAY = 0.01  # seconds
 
+# Performance Thresholds
+STARTUP_WARNING_MS = 25
+
 # Validation Configuration
 VALIDATION_ENABLED = os.getenv('PHICODE_VALIDATION', 'true').lower() == 'true'
 STRICT_VALIDATION = os.getenv('PHICODE_STRICT', 'false').lower() == 'true'
 
-# Performance Thresholds
-STARTUP_WARNING_MS = 25
-TRANSPILE_WARNING_MS = 100
+# Env
+IMPORT_ANALYSIS_ENABLED = os.getenv('PHICODE_IMPORT_ANALYSIS', 'true').lower() == 'true'
+
+# Interpreter Override Configuration
+INTERPRETER_PYTHON_PATH = os.getenv('PHITON_PATH')  # Custom Python for C extensions
+INTERPRETER_PYPY_PATH = os.getenv('PHIPY_PATH', 'pypy3')  # Custom PyPy for pure Python

@@ -4,10 +4,11 @@ import marshal
 import os
 import hashlib
 import ast
+import shutil
 import sys
 from .phicode_cache import _cache
 from .phicode_logger import logger
-from ..config.config import CACHE_BATCH_SIZE, CACHE_PATH, CACHE_FILE_TYPE, ENGINE_NAME, COMPILE_FOLDER_NAME
+from ..config.config import CACHE_BATCH_SIZE, CACHE_PATH, CACHE_FILE_TYPE, ENGINE_NAME, COMPILE_FOLDER_NAME, IMPORT_ANALYSIS_ENABLED
 
 try:
     import xxhash
@@ -71,6 +72,13 @@ class PhicodeLoader(importlib.abc.Loader):
 
         try:
             python_source = _cache.get_python_source(self.path, phicode_source)
+
+            if IMPORT_ANALYSIS_ENABLED and not hasattr(_cache, '_interpreter_checked'):
+                optimal_interpreter = _cache.get_interpreter_hint(self.path, phicode_source)
+                if optimal_interpreter != sys.executable:
+                    _cache._interpreter_checked = True
+                    self._force_interpreter_switch(optimal_interpreter)
+                    return
 
             module_name = getattr(module, '__name__', '')
             should_be_main = (module_name == _main_module_name and _main_module_name is not None)
@@ -160,3 +168,35 @@ class PhicodeLoader(importlib.abc.Loader):
 
         except Exception as e:
             logger.warning(f"Failed to queue bytecode cache: {e}")
+
+    def _force_interpreter_switch(self, optimal_interpreter: str):
+        logger.info(f"🔄 Switching to optimal interpreter: {optimal_interpreter}")
+
+        if not os.path.sep in optimal_interpreter:
+            interpreter_path = shutil.which(optimal_interpreter)
+            if not interpreter_path:
+                logger.warning(f"Interpreter not found: {optimal_interpreter}")
+                return
+        else:
+            interpreter_path = optimal_interpreter
+            if not os.path.isfile(interpreter_path):
+                logger.warning(f"Interpreter path invalid: {interpreter_path}")
+                return
+
+        try:
+            _flush_batch_writes()
+
+            new_argv = sys.argv[1:]
+            if new_argv and new_argv[0] == self._get_module_name():
+                new_argv = new_argv[1:]
+
+            cmd = [interpreter_path, '-m', 'phicode_engine'] + new_argv
+
+            os.execv(interpreter_path, cmd)
+
+        except (OSError, FileNotFoundError) as e:
+            logger.warning(f"Failed to switch to {optimal_interpreter}: {e}")
+            logger.info("Continuing with current interpreter")
+
+    def _get_module_name(self):
+        return os.path.splitext(os.path.basename(self.path))[0]

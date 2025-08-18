@@ -25,15 +25,26 @@ def build_parser():
 
 
 def parse_args(argv=None):
+    if argv is None:
+        argv = sys.argv[1:]
+
+    if "--interpreter-switch" in argv:
+        idx = argv.index("--interpreter-switch")
+        del argv[idx]
+        if idx < len(argv) and not argv[idx].startswith("-"):
+            del argv[idx]
+
     parser = build_parser()
     args, remaining_args = parser.parse_known_args(argv)
+    if args.module_or_file in remaining_args:
+        remaining_args.remove(args.module_or_file)
 
     if args.debug:
         logger.setLevel("DEBUG")
         logger.debug("Debug mode enabled")
 
     _log_current_interpreter()
-
+    logger.debug("Debug mode enabled")
     if args.list_interpreters:
         _print_interpreters(show_versions=args.show_versions)
         sys.exit(0)
@@ -53,10 +64,10 @@ def _log_current_interpreter():
     version = f"{sys.version_info.major}.{sys.version_info.minor}"
 
     if impl_name == "pypy":
-        logger.info(f"Running on PyPy {version} - for symbolic processing")
+        logger.info(f"Running on PyPy {version}")
+        logger.info(" 🚀 ~3x faster symbolic processing")
     else:
         logger.info(f"Running on {impl_name} {version}")
-        logger.info("    💡 Use PyPy for ~3x faster symbolic processing: pip install pypy3")
 
 
 def _show_interpreter_info(interpreter_name: str):

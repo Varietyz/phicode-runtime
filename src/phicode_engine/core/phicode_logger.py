@@ -2,7 +2,7 @@ import logging
 from ..config.config import BADGE
 
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
+logger.setLevel(logging.DEBUG)
 console_handler = logging.StreamHandler()
 formatter = logging.Formatter(BADGE + ' - '+'%(levelname)s - %(message)s')
 console_handler.setFormatter(formatter)

@@ -5,6 +5,7 @@ import time
 import errno
 import importlib.util
 import marshal
+import sys
 from threading import RLock
 from collections import OrderedDict
 from typing import Optional, Tuple
@@ -22,12 +23,12 @@ class PhicodeCache:
     def __init__(self, cache_dir=CACHE_PATH):
         self.cache_dir = os.path.abspath(cache_dir)
         os.makedirs(self.cache_dir, exist_ok=True)
-
         self.source_cache = OrderedDict()
         self.python_cache = OrderedDict()
         self.spec_cache = OrderedDict()
         self._lock = RLock()
         self._canon_cache = {}
+        self.interpreter_hints = OrderedDict()
 
     def _canonicalize_path(self, path: str) -> str:
         if path not in self._canon_cache:
@@ -129,6 +130,10 @@ class PhicodeCache:
                 return self.python_cache[cache_key]
 
             python_source = transpile_symbols(phicode_source)
+            if IMPORT_ANALYSIS_ENABLED:
+                optimal_interpreter = self._quick_interpreter_check(python_source)
+                self.interpreter_hints[cache_key] = optimal_interpreter
+                self._evict_if_needed(self.interpreter_hints)
             self.python_cache[cache_key] = python_source
             self._evict_if_needed(self.python_cache)
             return python_source
@@ -144,5 +149,22 @@ class PhicodeCache:
         with self._lock:
             self.spec_cache[key] = value
             self._evict_if_needed(self.spec_cache)
+
+    def get_interpreter_hint(self, path: str, phicode_source: str) -> str:
+        if not IMPORT_ANALYSIS_ENABLED:
+            return sys.executable
+        cache_key = self._fast_hash(phicode_source)
+        with self._lock:
+            if cache_key in self.interpreter_hints:
+                self.interpreter_hints.move_to_end(cache_key)
+                return self.interpreter_hints[cache_key]
+        return sys.executable
+
+    def _quick_interpreter_check(self, python_source: str) -> str:
+        c_extensions = ['numpy', 'pandas', 'scipy', 'matplotlib', 'torch', 'tensorflow']
+        for ext in c_extensions:
+            if f'import {ext}' in python_source or f'from {ext}' in python_source:
+                return INTERPRETER_PYTHON_PATH or 'python3'
+        return INTERPRETER_PYPY_PATH or 'pypy3'
 
 _cache = PhicodeCache()

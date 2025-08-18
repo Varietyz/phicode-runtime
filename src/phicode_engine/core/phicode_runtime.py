@@ -12,8 +12,7 @@ from ..config.config import STARTUP_WARNING_MS, ENGINE_NAME, MAIN_FILE_TYPE, SEC
 
 def run(args, remaining_args):
     start_time = time.perf_counter()
-    
-    _log_runtime_environment()
+
     _show_interpreter_recommendations()
 
     install_shutdown_handler()
@@ -45,15 +44,6 @@ def run(args, remaining_args):
     _execute_module(module_name, is_phicode_file, remaining_args, args.debug)
     _flush_batch_writes()
 
-def _log_runtime_environment():
-    selector = InterpreterSelector()
-    current = selector.get_current_info()
-
-    if current["is_pypy"]:
-        logger.info(f"Running on PyPy {current['version']} - for symbolic processing ✨")
-    else:
-        logger.info(f"Running on {current['implementation']} {current['version']}")
-
 def _show_interpreter_recommendations():
     selector = InterpreterSelector()
     current = selector.get_current_info()
@@ -69,22 +59,24 @@ def _resolve_module(module_or_file):
         folder = os.path.dirname(os.path.abspath(module_or_file))
         name = os.path.splitext(os.path.basename(module_or_file))[0]
         is_phi = module_or_file.endswith(MAIN_FILE_TYPE)
-        logger.debug(f"Resolved file: {module_or_file} -> module: {name}, folder: {folder}")
+        logger.debug(f"Resolved file: {module_or_file} -> script: {name}, folder: {folder}")
         return name, folder, is_phi
     else:
         cwd = os.getcwd()
+        # Check for script files first
         phi_file = os.path.join(cwd, f"{module_or_file}" + MAIN_FILE_TYPE)
         py_file = os.path.join(cwd, f"{module_or_file}" + SECONDARY_FILE_TYPE)
-
+        
         if os.path.isfile(phi_file):
-            logger.debug(f"Found {ENGINE_NAME} file: {phi_file}")
+            logger.debug(f"Found {ENGINE_NAME} script: {phi_file}")
             return module_or_file, cwd, True
         elif os.path.isfile(py_file):
-            logger.debug(f"Found Python file: {py_file}")
+            logger.debug(f"Found Python script: {py_file}")
             return module_or_file, cwd, False
         else:
+            # Fall back to module import
             logger.debug(f"Treating as module name: {module_or_file}")
-            return module_or_file, cwd, module_or_file.endswith(MAIN_FILE_TYPE)
+            return module_or_file, cwd, False  # Don't treat as phi file for modules
 
 def _execute_module(module_name, is_phicode_file, remaining_args, debug):
     try:
@@ -95,7 +87,17 @@ def _execute_module(module_name, is_phicode_file, remaining_args, debug):
             if hasattr(module, "main") and callable(getattr(module, "main")):
                 logger.debug(f"Calling main() with args: {remaining_args}")
                 try:
-                    module.main(remaining_args)
+                    original_argv = sys.argv.copy()
+                    filtered_args = [arg for arg in remaining_args if arg != module_name]
+
+                    sys.argv = [original_argv[0]] + filtered_args
+
+                    try:
+                        module.main(filtered_args)
+                    except TypeError:
+                        module.main()
+                    finally:
+                        sys.argv = original_argv
                 except Exception as e:
                     _handle_main_error(e, debug)
             else:

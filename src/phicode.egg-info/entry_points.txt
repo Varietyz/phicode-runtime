@@ -1,2 +1,3 @@
 [console_scripts]
+phi = phicode_engine.main:main
 phicode = phicode_engine.main:main
