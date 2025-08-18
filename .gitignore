@@ -424,7 +424,6 @@ DISAMBIGOUS_FW.φp
 LLVM_FW-DISAMBIG.φp
 LLVM_FW.φp
 LLVM_Steps-2.txt
-main.py
 main.φ
 main_DEBUG_transpiled.py
 phicode_benchmark_results.json
