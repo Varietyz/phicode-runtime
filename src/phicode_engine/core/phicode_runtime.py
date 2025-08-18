@@ -6,33 +6,28 @@ from .phicode_importer import install_phicode_importer
 from .shutdown_handler import install_shutdown_handler, register_cleanup, cleanup_cache_temp_files
 from .phicode_interpreter import InterpreterSelector
 from .phicode_logger import logger
-
+from .phicode_loader import _flush_batch_writes
 
 def run(args, remaining_args):
-    """Main runtime execution - simplified without re-exec complexity"""
-    
-    # Log current runtime environment
+    """Main runtime execution with I/O"""
     _log_runtime_environment()
-    
-    # Show interpreter recommendations if helpful
     _show_interpreter_recommendations()
 
-    # Setup runtime environment
     install_shutdown_handler()
     register_cleanup(cleanup_cache_temp_files)
+    register_cleanup(_flush_batch_writes)
 
-    # Resolve module path and setup
+    # Pre-canonicalize paths once
     module_name, phicode_src_folder, is_phicode_file = _resolve_module(args.module_or_file)
+    phicode_src_folder = os.path.realpath(phicode_src_folder)
 
     if not os.path.isdir(phicode_src_folder):
         logger.error(f"(φ) Source folder not found: {phicode_src_folder}")
         sys.exit(2)
 
-    # Install PhiCode importer
     install_phicode_importer(phicode_src_folder)
     logger.debug(f"Installed PhiCode importer for: {phicode_src_folder}")
 
-    # Setup main module for PhiCode files
     if is_phicode_file:
         try:
             import phicode_engine.core.phicode_loader as loader_module
@@ -41,9 +36,8 @@ def run(args, remaining_args):
         except ImportError as e:
             logger.warning(f"Could not set main module name: {e}")
 
-    # Execute the target module
     _execute_module(module_name, is_phicode_file, remaining_args, args.debug)
-
+    _flush_batch_writes()
 
 def _log_runtime_environment():
     """Log information about current runtime environment"""
@@ -51,7 +45,7 @@ def _log_runtime_environment():
     current = selector.get_current_info()
     
     if current["is_pypy"]:
-        logger.info(f"(φ) Running on PyPy {current['version']} - optimized for symbolic processing ✨")
+        logger.info(f"(φ) Running on PyPy {current['version']} - for symbolic processing ✨")
     else:
         logger.info(f"(φ) Running on {current['implementation']} {current['version']}")
 

@@ -62,7 +62,7 @@ def _log_current_interpreter():
     version = f"{sys.version_info.major}.{sys.version_info.minor}"
     
     if impl_name == "pypy":
-        logger.info(f"(φ) Running on PyPy {version} - optimized for symbolic processing")
+        logger.info(f"(φ) Running on PyPy {version} - for symbolic processing")
     else:
         logger.info(f"(φ) Running on {impl_name} {version}")
         logger.info("    💡 Use PyPy for ~3x faster symbolic processing: pip install pypy3")
