@@ -1,6 +1,6 @@
 from .core.phicode_importer import install_phicode_importer
 from .map.mapping import transpile_symbols, get_symbol_mappings
-from .run import main, __version__
+from .version import __version__
 
 __version__
 __all__ = [

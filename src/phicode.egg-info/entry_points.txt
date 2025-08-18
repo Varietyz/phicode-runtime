@@ -1,2 +1,2 @@
 [console_scripts]
-phicode = phicode_engine.run:main
+phicode = phicode_engine.main:main

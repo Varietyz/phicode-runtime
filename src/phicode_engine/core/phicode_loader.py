@@ -4,7 +4,7 @@ import marshal
 import os
 import hashlib
 import ast
-
+import sys
 from .phicode_cache import _cache
 from .phicode_logger import logger
 
@@ -78,7 +78,9 @@ class PhicodeLoader(importlib.abc.Loader):
 
     def _get_pyc_path(self) -> str:
         safe_name = self._fast_hash_path(self.path)
-        cache_dir = os.path.join(os.getcwd(), '.(φ)cache', 'comφled')
+        impl_name = sys.implementation.name
+        version = f"{sys.version_info.major}{sys.version_info.minor}"
+        cache_dir = os.path.join(os.getcwd(), '.(φ)cache', f'comφled_{impl_name}_{version}')
         os.makedirs(cache_dir, exist_ok=True)
         return os.path.join(cache_dir, f"{safe_name}.φca")
 

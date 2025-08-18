@@ -20,7 +20,7 @@ dependencies = [
 utility = ["psutil>=5.8.0"]
 
 [project.scripts]
-phicode = "phicode_engine.run:main"
+phicode = "phicode_engine.main:main"
 
 [tool.setuptools]
 package-dir = {"" = "src"}
