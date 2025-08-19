@@ -1,7 +1,7 @@
 Metadata-Version: 2.4
 Name: phicode
 Version: 2.1.4
-Summary: (φ) PHICODE Runtime Engine — run φ code directly in Python
+Summary: (φ) PHICODE Dual-Runtime Engine — run φ code directly in Python/PyPy
 Author-email: Jay Baleine <jay@banes-lab.com>
 License: MIT
 Requires-Python: >=3.8

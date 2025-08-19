@@ -9,9 +9,9 @@ import sys
 from threading import RLock
 from collections import OrderedDict
 from typing import Optional, Tuple
-from ..map.mapping import transpile_symbols
-from .phicode_logger import logger
-from ..config.config import *
+from ..transpilation.phicode_to_python import transpile_symbols
+from ..phicode_logger import logger
+from .phicode_cache_config import _cache_config
 
 try:
     import xxhash
@@ -20,7 +20,9 @@ except ImportError:
     _HAS_XXHASH = False
 
 class PhicodeCache:
-    def __init__(self, cache_dir=CACHE_PATH):
+    def __init__(self, cache_dir=None):
+        if cache_dir is None:
+            cache_dir = _cache_config.get_cache_path()
         self.cache_dir = os.path.abspath(cache_dir)
         os.makedirs(self.cache_dir, exist_ok=True)
         self.source_cache = OrderedDict()
@@ -59,27 +61,32 @@ class PhicodeCache:
             return False
 
     def _retry_file_op(self, operation):
-        for attempt in range(MAX_FILE_RETRIES):
+        max_retries = _cache_config.get_max_file_retries()
+        base_delay = _cache_config.get_retry_base_delay()
+
+        for attempt in range(max_retries):
             try:
                 return operation()
             except OSError as e:
-                if e.errno in (errno.EBUSY, errno.EAGAIN) and attempt < MAX_FILE_RETRIES - 1:
-                    delay = RETRY_BASE_DELAY * (2 ** attempt)
+                if e.errno in (errno.EBUSY, errno.EAGAIN) and attempt < max_retries - 1:
+                    delay = base_delay * (2 ** attempt)
                     time.sleep(delay)
                     continue
                 logger.warning(f"File operation failed after {attempt + 1} attempts: {e}")
-                if attempt == MAX_FILE_RETRIES - 1:
+                if attempt == max_retries - 1:
                     return None
                 raise
 
     def _read_file(self, path: str) -> Optional[str]:
         canon_path = self._canonicalize_path(path)
+        mmap_threshold = _cache_config.get_mmap_threshold()
+        buffer_size = _cache_config.get_buffer_size()
 
         def _do_read():
             try:
                 file_size = os.path.getsize(canon_path)
 
-                if file_size > CACHE_MMAP_THRESHOLD:
+                if file_size > mmap_threshold:
                     with open(canon_path, 'rb') as f:
                         try:
                             with mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ) as mm:
@@ -88,7 +95,7 @@ class PhicodeCache:
                             f.seek(0)
                             return f.read().decode('utf-8')
                 else:
-                    with open(canon_path, 'r', encoding='utf-8', buffering=CACHE_BUFFER_SIZE) as f:
+                    with open(canon_path, 'r', encoding='utf-8', buffering=buffer_size) as f:
                         return f.read()
             except OSError as e:
                 logger.debug(f"File read failed {canon_path}: {e}")
@@ -104,8 +111,9 @@ class PhicodeCache:
         return xxhash.xxh64(data_bytes).hexdigest() if _HAS_XXHASH else hashlib.md5(data_bytes).hexdigest()
 
     def _evict_if_needed(self, cache):
-        if len(cache) > CACHE_MAX_SIZE:
-            evict_count = min(CACHE_MAX_SIZE // 4, len(cache) - CACHE_MAX_SIZE + 64)
+        max_size = _cache_config.get_max_size()
+        if len(cache) > max_size:
+            evict_count = min(max_size // 4, len(cache) - max_size + 64)
             for _ in range(evict_count):
                 cache.popitem(last=False)
 
@@ -130,7 +138,7 @@ class PhicodeCache:
                 return self.python_cache[cache_key]
 
             python_source = transpile_symbols(phicode_source)
-            if IMPORT_ANALYSIS_ENABLED:
+            if _cache_config.get_interpreter_analysis_enabled():
                 optimal_interpreter = self._quick_interpreter_check(python_source)
                 self.interpreter_hints[cache_key] = optimal_interpreter
                 self._evict_if_needed(self.interpreter_hints)
@@ -151,7 +159,7 @@ class PhicodeCache:
             self._evict_if_needed(self.spec_cache)
 
     def get_interpreter_hint(self, path: str, phicode_source: str) -> str:
-        if not IMPORT_ANALYSIS_ENABLED:
+        if not _cache_config.get_interpreter_analysis_enabled():
             return sys.executable
         cache_key = self._fast_hash(phicode_source)
         with self._lock:
@@ -161,10 +169,12 @@ class PhicodeCache:
         return sys.executable
 
     def _quick_interpreter_check(self, python_source: str) -> str:
-        c_extensions = ['numpy', 'pandas', 'scipy', 'matplotlib', 'torch', 'tensorflow']
+        c_extensions = _cache_config.get_c_extension_list()
+        interpreter_paths = _cache_config.get_interpreter_paths()
+        
         for ext in c_extensions:
             if f'import {ext}' in python_source or f'from {ext}' in python_source:
-                return INTERPRETER_PYTHON_PATH or 'python3'
-        return INTERPRETER_PYPY_PATH or 'pypy3'
+                return interpreter_paths['python_path'] or 'python3'
+        return interpreter_paths['pypy_path'] or 'pypy3'
 
 _cache = PhicodeCache()

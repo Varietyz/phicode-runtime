@@ -1,6 +1,6 @@
-
-from .core.phicode_args import parse_args, handle_early_exit_flags
-from .core.phicode_runtime import run
+from .core.interpreter.phicode_parser import parse_args
+from .core.interpreter.phicode_exit_handlers import handle_early_exit_flags
+from .core.runtime.phicode_runtime import run
 from .core.phicode_logger import logger
 
 def main():

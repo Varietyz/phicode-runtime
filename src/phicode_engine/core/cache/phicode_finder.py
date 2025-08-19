@@ -6,11 +6,11 @@ import sys
 from functools import lru_cache
 from typing import Optional, Tuple
 from .phicode_cache import _cache
-from .phicode_loader import PhicodeLoader
-from ..config.config import MAIN_FILE_TYPE, SECONDARY_FILE_TYPE
+from ..runtime.phicode_loader import PhicodeLoader
+from ...config.config import MAIN_FILE_TYPE, SECONDARY_FILE_TYPE
 
 try:
-    from .phicode_loader import _flush_batch_writes
+    from ..runtime.phicode_loader import _flush_batch_writes
 except ImportError:
     def _flush_batch_writes(): pass
 

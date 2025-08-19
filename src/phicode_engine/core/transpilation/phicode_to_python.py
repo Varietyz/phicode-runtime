@@ -3,8 +3,8 @@ import json
 import re
 from functools import lru_cache
 from typing import Dict
-from ..core.phicode_logger import logger
-from ..config.config import VALIDATION_ENABLED, STRICT_VALIDATION, CUSTOM_FOLDER_PATH, CUSTOM_FOLDER_PATH_2
+from ..phicode_logger import logger
+from ...config.config import VALIDATION_ENABLED, STRICT_VALIDATION, CUSTOM_FOLDER_PATH, CUSTOM_FOLDER_PATH_2
 
 _STRING_PATTERN = re.compile(
     r'(""".*?"""|\'\'\'.*?\'\'\'|f""".*?"""|f\'\'\'.*?\'\'\'|[rub]?""".*?"""|[rub]?\'\'\'.*?\'\'\'|[rub]?".*?"|[rub]?\'.*?\'|f".*?"|f\'.*?\')',

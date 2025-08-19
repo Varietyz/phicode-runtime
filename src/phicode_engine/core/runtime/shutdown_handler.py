@@ -3,8 +3,8 @@ import os
 import signal
 import atexit
 from threading import RLock
-from .phicode_logger import logger
-from ..config.config import CACHE_PATH
+from ..phicode_logger import logger
+from ..cache.phicode_cache_config import _cache_config
 
 class ShutdownHandler:
     __slots__ = ('_shutdown_hooks', '_lock', '_shutting_down')
@@ -58,7 +58,7 @@ def install_shutdown_handler():
     _shutdown_handler.install()
 
 def cleanup_cache_temp_files():
-    cache_dir = CACHE_PATH
+    cache_dir = _cache_config.get_cache_path()
     if os.path.exists(cache_dir):
         try:
             logger.debug(f"Cleaning up cache dir: {cache_dir}")

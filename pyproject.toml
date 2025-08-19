@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "phicode"
 version = "2.1.4"
-description = "(φ) PHICODE Runtime Engine — run φ code directly in Python"
+description = "(φ) PHICODE Dual-Runtime Engine — run φ code directly in Python/PyPy"
 readme = "README.md"
 license = {text = "MIT"}
 authors = [
@@ -20,8 +20,8 @@ dependencies = [
 utility = ["psutil>=5.8.0"]
 
 [project.scripts]
-phicode = "phicode_engine.main:main"
-phi = "phicode_engine.main:main"
+phicode = "phicode_engine.engine:main"
+phi = "phicode_engine.engine:main"
 
 [tool.setuptools]
 package-dir = {"" = "src"}

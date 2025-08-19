@@ -4,13 +4,13 @@ import os
 import time
 import traceback
 import importlib
-from .phicode_importer import install_phicode_importer
+from ..cache.phicode_importer import install_phicode_importer
 from .shutdown_handler import install_shutdown_handler, register_cleanup, cleanup_cache_temp_files
-from .phicode_interpreter import InterpreterSelector
-from .phicode_logger import logger
-from .phicode_loader import _flush_batch_writes
-from .phicode_args import PhicodeArgs, _argv_context
-from ..config.config import STARTUP_WARNING_MS, ENGINE_NAME, MAIN_FILE_TYPE, SECONDARY_FILE_TYPE
+from ..interpreter.phicode_interpreter import InterpreterSelector
+from ..phicode_logger import logger
+from ..cache.phicode_bytecode import _flush_batch_writes
+from ..interpreter.phicode_args import PhicodeArgs, _argv_context
+from ...config.config import STARTUP_WARNING_MS, ENGINE_NAME, MAIN_FILE_TYPE, SECONDARY_FILE_TYPE
 
 
 def run(args: PhicodeArgs):
@@ -33,7 +33,7 @@ def run(args: PhicodeArgs):
 
     if is_phicode_file:
         try:
-            import phicode_engine.core.phicode_loader as loader_module
+            import phicode_engine.core.runtime.phicode_loader as loader_module
             setattr(loader_module, "_main_module_name", module_name)
             logger.debug(f"Set main module: {module_name}")
         except ImportError as e:
