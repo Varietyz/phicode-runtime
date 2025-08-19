@@ -1,4 +1,3 @@
-"""Minimal runtime using centralized args"""
 import sys
 import os
 import time
@@ -11,7 +10,6 @@ from ..phicode_logger import logger
 from ..cache.phicode_bytecode import _flush_batch_writes
 from ..interpreter.phicode_args import PhicodeArgs, _argv_context
 from ...config.config import STARTUP_WARNING_MS, ENGINE_NAME, MAIN_FILE_TYPE, SECONDARY_FILE_TYPE
-
 
 def run(args: PhicodeArgs):
     start_time = time.perf_counter()
@@ -29,7 +27,7 @@ def run(args: PhicodeArgs):
         sys.exit(2)
 
     install_phicode_importer(phicode_src_folder)
-    logger.debug(f"Installed {ENGINE_NAME} importer for: {phicode_src_folder}")
+    logger.debug(f"{ENGINE_NAME} importer ready for: {phicode_src_folder}")
 
     if is_phicode_file:
         try:
@@ -46,7 +44,6 @@ def run(args: PhicodeArgs):
     _execute_module(module_name, is_phicode_file, args)
     _flush_batch_writes()
 
-
 def _show_interpreter_recommendations():
     selector = InterpreterSelector()
     current = selector.get_current_info()
@@ -56,7 +53,6 @@ def _show_interpreter_recommendations():
         if recommended and selector.is_pypy(recommended):
             logger.info("💡 For 3x faster symbolic processing, use PyPy:")
             logger.info(f"   pypy3 -m phicode_engine <module>")
-
 
 def _resolve_module(module_or_file):
     if os.path.isfile(module_or_file):
@@ -69,7 +65,7 @@ def _resolve_module(module_or_file):
         cwd = os.getcwd()
         phi_file = os.path.join(cwd, f"{module_or_file}" + MAIN_FILE_TYPE)
         py_file = os.path.join(cwd, f"{module_or_file}" + SECONDARY_FILE_TYPE)
-        
+
         if os.path.isfile(phi_file):
             logger.debug(f"Found {ENGINE_NAME} script: {phi_file}")
             return module_or_file, cwd, True
@@ -80,7 +76,6 @@ def _resolve_module(module_or_file):
             logger.debug(f"Treating as module name: {module_or_file}")
             return module_or_file, cwd, False
 
-
 def _execute_module(module_name, is_phicode_file, args):
     try:
         logger.debug(f"Importing module: {module_name}")
@@ -89,7 +84,7 @@ def _execute_module(module_name, is_phicode_file, args):
         if not is_phicode_file:
             if hasattr(module, "main") and callable(getattr(module, "main")):
                 logger.debug(f"Calling main() with args: {args.remaining_args}")
-                
+
                 with _argv_context(args.get_module_argv()):
                     try:
                         module.main(args.remaining_args if args.remaining_args else None)
@@ -105,12 +100,10 @@ def _execute_module(module_name, is_phicode_file, args):
     except Exception as e:
         _handle_execution_error(module_name, e, args.debug)
 
-
 def _handle_main_error(error, debug):
     logger.error(f"Error in main() function: {error}")
     if debug:
         traceback.print_exc()
-
 
 def _handle_import_error(module_name, error, debug):
     if debug:
@@ -119,7 +112,6 @@ def _handle_import_error(module_name, error, debug):
     else:
         logger.error(f"Failed to import module '{module_name}': {error}")
     sys.exit(2)
-
 
 def _handle_execution_error(module_name, error, debug):
     if debug:

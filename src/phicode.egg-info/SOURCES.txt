@@ -15,7 +15,6 @@ src/phicode_engine/config/version.py
 src/phicode_engine/core/phicode_logger.py
 src/phicode_engine/core/cache/phicode_bytecode.py
 src/phicode_engine/core/cache/phicode_cache.py
-src/phicode_engine/core/cache/phicode_cache_config.py
 src/phicode_engine/core/cache/phicode_finder.py
 src/phicode_engine/core/cache/phicode_importer.py
 src/phicode_engine/core/interpreter/phicode_args.py

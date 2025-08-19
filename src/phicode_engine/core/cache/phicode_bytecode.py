@@ -4,8 +4,7 @@ import os
 import hashlib
 import sys
 from ..phicode_logger import logger
-from ...config.config import CACHE_FILE_TYPE, COMPILE_FOLDER_NAME
-from ..cache.phicode_cache_config import _cache_config
+from ...config.config import CACHE_BATCH_SIZE, CACHE_PATH, CACHE_FILE_TYPE, COMPILE_FOLDER_NAME
 
 try:
     import xxhash
@@ -63,7 +62,7 @@ class BytecodeManager:
         safe_name = BytecodeManager._fast_hash_path(path)
         impl_name = sys.implementation.name
         version = f"{sys.version_info.major}{sys.version_info.minor}"
-        cache_dir = os.path.join(os.getcwd(), _cache_config.get_cache_path(), f'{COMPILE_FOLDER_NAME}_{impl_name}_{version}')
+        cache_dir = os.path.join(os.getcwd(), CACHE_PATH, f'{COMPILE_FOLDER_NAME}_{impl_name}_{version}')
         os.makedirs(cache_dir, exist_ok=True)
         return os.path.join(cache_dir, f"{safe_name}" + CACHE_FILE_TYPE)
 
@@ -100,7 +99,7 @@ class BytecodeManager:
 
             _pending_cache_writes.append((pyc_path, data))
 
-            if len(_pending_cache_writes) >= _cache_config.get_batch_size():
+            if len(_pending_cache_writes) >= CACHE_BATCH_SIZE:
                 _flush_batch_writes()
 
         except Exception as e:

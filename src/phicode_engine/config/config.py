@@ -7,11 +7,11 @@ BADGE = "("+ SYMBOL +")" # (φ)
 MAIN_FILE_TYPE = "." + SYMBOL # .φ
 SECONDARY_FILE_TYPE = ".py"
 
-CUSTOM_FILE_TYPE = ".json"
-CUSTOM_SYMBOL_FILE = "custom_symbols" + CUSTOM_FILE_TYPE # custom_symbols.json
+CONFIG_FILE_TYPE = ".json"
+CONFIG_FILE = "config" + CONFIG_FILE_TYPE # config.json
 
-CUSTOM_FOLDER_PATH = "." + BADGE + "/" + CUSTOM_SYMBOL_FILE   # .(φ)/custom_symbols.json
-CUSTOM_FOLDER_PATH_2 = ".phicode/" + CUSTOM_SYMBOL_FILE     # .phicode/custom_symbols.json
+CUSTOM_FOLDER_PATH = "." + BADGE + "/" + CONFIG_FILE   # .(φ)/config.json
+CUSTOM_FOLDER_PATH_2 = ".phicode/" + CONFIG_FILE     # .phicode/config.json
 
 COMPILE_FOLDER_NAME = "com" + SYMBOL + "led"    # comφled
 
@@ -45,3 +45,9 @@ IMPORT_ANALYSIS_ENABLED = os.getenv('PHICODE_IMPORT_ANALYSIS', 'true').lower() =
 # Interpreter Override Configuration
 INTERPRETER_PYTHON_PATH = os.getenv('PHITON_PATH')  # Custom Python for C extensions
 INTERPRETER_PYPY_PATH = os.getenv('PHIPY_PATH', 'pypy3')  # Custom PyPy for pure Python
+
+# Default C Extensions for Interpreter Selection
+DEFAULT_C_EXTENSIONS = [
+    'numpy', 'pandas', 'scipy', 'matplotlib',
+    'torch', 'tensorflow', 'opencv-python'
+]

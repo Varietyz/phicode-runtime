@@ -33,10 +33,10 @@ class InterpreterSwitcher:
             cmd_parts.append(original_module_name)
             if target_args:
                 cmd_parts.extend(target_args)
-            
+
             logger.debug(f"Interpreter switch command: {cmd_parts}")
             logger.info(f"🔄 Switching to optimal interpreter: {optimal_interpreter}")
-            
+
             result = subprocess.run(cmd_parts, cwd=os.getcwd())
             sys.exit(result.returncode)
 

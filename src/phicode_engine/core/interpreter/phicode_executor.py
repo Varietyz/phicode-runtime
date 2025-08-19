@@ -5,10 +5,10 @@ class ModuleExecutor:
     def execute_module(module, code, should_be_main: bool):
         if should_be_main:
             module.__dict__['__name__'] = "__main__"
-            
+
             from .phicode_args import get_current_args, _argv_context
             current_args = get_current_args()
-            
+
             if current_args:
                 with _argv_context(current_args.get_module_argv()):
                     ModuleExecutor._execute_code(module, code)
