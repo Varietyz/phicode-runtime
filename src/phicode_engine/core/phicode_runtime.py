@@ -1,3 +1,4 @@
+"""Minimal runtime using centralized args"""
 import sys
 import os
 import time
@@ -8,13 +9,14 @@ from .shutdown_handler import install_shutdown_handler, register_cleanup, cleanu
 from .phicode_interpreter import InterpreterSelector
 from .phicode_logger import logger
 from .phicode_loader import _flush_batch_writes
+from .phicode_args import PhicodeArgs, _argv_context
 from ..config.config import STARTUP_WARNING_MS, ENGINE_NAME, MAIN_FILE_TYPE, SECONDARY_FILE_TYPE
 
-def run(args, remaining_args):
+
+def run(args: PhicodeArgs):
     start_time = time.perf_counter()
 
     _show_interpreter_recommendations()
-
     install_shutdown_handler()
     register_cleanup(cleanup_cache_temp_files)
     register_cleanup(_flush_batch_writes)
@@ -41,8 +43,9 @@ def run(args, remaining_args):
     if startup_time > STARTUP_WARNING_MS:
         logger.warning(f"Slow startup detected: {startup_time:.1f}ms")
 
-    _execute_module(module_name, is_phicode_file, remaining_args, args.debug)
+    _execute_module(module_name, is_phicode_file, args)
     _flush_batch_writes()
+
 
 def _show_interpreter_recommendations():
     selector = InterpreterSelector()
@@ -54,6 +57,7 @@ def _show_interpreter_recommendations():
             logger.info("💡 For 3x faster symbolic processing, use PyPy:")
             logger.info(f"   pypy3 -m phicode_engine <module>")
 
+
 def _resolve_module(module_or_file):
     if os.path.isfile(module_or_file):
         folder = os.path.dirname(os.path.abspath(module_or_file))
@@ -63,7 +67,6 @@ def _resolve_module(module_or_file):
         return name, folder, is_phi
     else:
         cwd = os.getcwd()
-        # Check for script files first
         phi_file = os.path.join(cwd, f"{module_or_file}" + MAIN_FILE_TYPE)
         py_file = os.path.join(cwd, f"{module_or_file}" + SECONDARY_FILE_TYPE)
         
@@ -74,46 +77,40 @@ def _resolve_module(module_or_file):
             logger.debug(f"Found Python script: {py_file}")
             return module_or_file, cwd, False
         else:
-            # Fall back to module import
             logger.debug(f"Treating as module name: {module_or_file}")
-            return module_or_file, cwd, False  # Don't treat as phi file for modules
+            return module_or_file, cwd, False
 
-def _execute_module(module_name, is_phicode_file, remaining_args, debug):
+
+def _execute_module(module_name, is_phicode_file, args):
     try:
         logger.debug(f"Importing module: {module_name}")
         module = importlib.import_module(module_name)
 
         if not is_phicode_file:
             if hasattr(module, "main") and callable(getattr(module, "main")):
-                logger.debug(f"Calling main() with args: {remaining_args}")
-                try:
-                    original_argv = sys.argv.copy()
-                    filtered_args = [arg for arg in remaining_args if arg != module_name]
-
-                    sys.argv = [original_argv[0]] + filtered_args
-
+                logger.debug(f"Calling main() with args: {args.remaining_args}")
+                
+                with _argv_context(args.get_module_argv()):
                     try:
-                        module.main(filtered_args)
-                    except TypeError:
-                        module.main()
-                    finally:
-                        sys.argv = original_argv
-                except Exception as e:
-                    _handle_main_error(e, debug)
+                        module.main(args.remaining_args if args.remaining_args else None)
+                    except Exception as e:
+                        _handle_main_error(e, args.debug)
             else:
                 logger.debug(f"No main() function found in {module_name}")
 
         logger.debug(f"Module {module_name} executed successfully")
 
     except ImportError as e:
-        _handle_import_error(module_name, e, debug)
+        _handle_import_error(module_name, e, args.debug)
     except Exception as e:
-        _handle_execution_error(module_name, e, debug)
+        _handle_execution_error(module_name, e, args.debug)
+
 
 def _handle_main_error(error, debug):
     logger.error(f"Error in main() function: {error}")
     if debug:
         traceback.print_exc()
+
 
 def _handle_import_error(module_name, error, debug):
     if debug:
@@ -122,6 +119,7 @@ def _handle_import_error(module_name, error, debug):
     else:
         logger.error(f"Failed to import module '{module_name}': {error}")
     sys.exit(2)
+
 
 def _handle_execution_error(module_name, error, debug):
     if debug:

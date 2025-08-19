@@ -16,6 +16,8 @@ try:
 except ImportError:
     _HAS_XXHASH = False
 
+_switch_executed = False
+_original_module_name = None
 _main_module_name = None
 _pending_cache_writes = []
 
@@ -65,6 +67,7 @@ class PhicodeLoader(importlib.abc.Loader):
         return None
 
     def exec_module(self, module):
+        global _switch_executed, _original_module_name
         phicode_source = _cache.get_source(self.path)
         if phicode_source is None:
             logger.error(f"Failed to read: {self.path}")
@@ -73,52 +76,63 @@ class PhicodeLoader(importlib.abc.Loader):
         try:
             python_source = _cache.get_python_source(self.path, phicode_source)
 
-            if IMPORT_ANALYSIS_ENABLED and not hasattr(_cache, '_interpreter_checked'):
+            if IMPORT_ANALYSIS_ENABLED and not _switch_executed:
                 optimal_interpreter = _cache.get_interpreter_hint(self.path, phicode_source)
                 if optimal_interpreter != sys.executable:
-                    _cache._interpreter_checked = True
                     self._force_interpreter_switch(optimal_interpreter)
                     return
-
+            
             module_name = getattr(module, '__name__', '')
-            should_be_main = (module_name == _main_module_name and _main_module_name is not None)
+            should_be_main = (module_name == (_original_module_name or _main_module_name) and 
+                            (_original_module_name or _main_module_name) is not None)
 
             if should_be_main:
                 module.__dict__['__name__'] = "__main__"
-
-            pyc_path = self._get_pyc_path()
-            source_hash = hashlib.sha256(phicode_source.encode()).digest()[:8]
-
-            if self._is_pyc_valid(pyc_path, source_hash):
-                try:
-                    if _cache._verify_cache_integrity(pyc_path):
-                        code = self._load_pyc(pyc_path)
-                        exec(code, module.__dict__)
-                        return
-                    else:
-                        logger.warning(f"Cache integrity check failed for {pyc_path}, recompiling")
-                except Exception as e:
-                    logger.warning(f"Failed to load cached bytecode, recompiling: {e}")
-
-            try:
-                tree = ast.parse(python_source, filename=self.path)
-                code = compile(tree, filename=self.path, mode='exec', optimize=2, dont_inherit=True)
-                self._queue_pyc_write(pyc_path, code, source_hash)
-                exec(code, module.__dict__)
-            except Exception as compile_error:
-                logger.error(f"Compilation failed for {self.path}: {compile_error}")
-
-                try:
-                    simple_code = compile(python_source, self.path, 'exec')
-                    exec(simple_code, module.__dict__)
-                    logger.info(f"Executed {self.path} without cache optimization")
-                except Exception as final_error:
-                    logger.error(f"All execution attempts failed for {self.path}: {final_error}")
-                    raise
+                
+                from .phicode_args import get_current_args, _argv_context
+                current_args = get_current_args()
+                
+                if current_args:
+                    with _argv_context(current_args.get_module_argv()):
+                        self._execute_code(module, python_source)
+                else:
+                    self._execute_code(module, python_source)
+            else:
+                self._execute_code(module, python_source)
 
         except SyntaxError as e:
             logger.error(f"Syntax error in {self.path} at line {e.lineno}: {e.msg}")
             raise SyntaxError(f"{ENGINE_NAME} syntax error in {self.path}: {e}") from e
+
+    def _execute_code(self, module, python_source):
+        pyc_path = self._get_pyc_path()
+        source_hash = hashlib.sha256(python_source.encode()).digest()[:8]
+
+        if self._is_pyc_valid(pyc_path, source_hash):
+            try:
+                if _cache._verify_cache_integrity(pyc_path):
+                    code = self._load_pyc(pyc_path)
+                    exec(code, module.__dict__)
+                    return
+                else:
+                    logger.warning(f"Cache integrity check failed for {pyc_path}, recompiling")
+            except Exception as e:
+                logger.warning(f"Failed to load cached bytecode, recompiling: {e}")
+
+        try:
+            tree = ast.parse(python_source, filename=self.path)
+            code = compile(tree, filename=self.path, mode='exec', optimize=2, dont_inherit=True)
+            self._queue_pyc_write(pyc_path, code, source_hash)
+            exec(code, module.__dict__)
+        except Exception as compile_error:
+            logger.error(f"Compilation failed for {self.path}: {compile_error}")
+            try:
+                simple_code = compile(python_source, self.path, 'exec')
+                exec(simple_code, module.__dict__)
+                logger.info(f"Executed {self.path} without cache optimization")
+            except Exception as final_error:
+                logger.error(f"All execution attempts failed for {self.path}: {final_error}")
+                raise
 
     def _fast_hash_path(self, path: str) -> str:
         path_bytes = path.encode('utf-8')
@@ -170,7 +184,14 @@ class PhicodeLoader(importlib.abc.Loader):
             logger.warning(f"Failed to queue bytecode cache: {e}")
 
     def _force_interpreter_switch(self, optimal_interpreter: str):
+        global _switch_executed, _original_module_name
+        
+        if _switch_executed:
+            return
+        
         logger.info(f"🔄 Switching to optimal interpreter: {optimal_interpreter}")
+        _original_module_name = self._get_module_name()
+        _switch_executed = True
 
         if not os.path.sep in optimal_interpreter:
             interpreter_path = shutil.which(optimal_interpreter)
@@ -186,16 +207,26 @@ class PhicodeLoader(importlib.abc.Loader):
         try:
             _flush_batch_writes()
 
-            new_argv = sys.argv[1:]
-            if new_argv and new_argv[0] == self._get_module_name():
-                new_argv = new_argv[1:]
+            try:
+                from .phicode_args import get_current_args
+                current_args = get_current_args()
+                target_args = current_args.remaining_args if current_args else []
+            except:
+                target_args = []
 
-            cmd = [interpreter_path, '-m', 'phicode_engine'] + new_argv
+            cmd_parts = [interpreter_path, '-m', 'phicode_engine']
+            cmd_parts.append(_original_module_name)
+            if target_args:
+                cmd_parts.extend(target_args)
+            
+            logger.debug(f"Interpreter switch command: {cmd_parts}")
+            
+            import subprocess
+            result = subprocess.run(cmd_parts, cwd=os.getcwd())
+            sys.exit(result.returncode)
 
-            os.execv(interpreter_path, cmd)
-
-        except (OSError, FileNotFoundError) as e:
-            logger.warning(f"Failed to switch to {optimal_interpreter}: {e}")
+        except Exception as e:
+            logger.warning(f"Failed to switch to {interpreter_path}: {e}")
             logger.info("Continuing with current interpreter")
 
     def _get_module_name(self):
