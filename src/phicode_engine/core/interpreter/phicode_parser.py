@@ -2,10 +2,10 @@ import sys
 import argparse
 from typing import List, Optional
 from .phicode_args import PhicodeArgs, _set_current_args, _set_switched_execution
-from ...config.config import BADGE, ENGINE_NAME
+from ...config.config import BADGE, ENGINE, SERVER
 
 def _build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description=f"{BADGE}{ENGINE_NAME} Runtime Engine")
+    parser = argparse.ArgumentParser(description=f"{ENGINE}")
 
     parser.add_argument("module_or_file", nargs="?", default="main")
     parser.add_argument("--debug", action="store_true")
@@ -15,6 +15,9 @@ def _build_parser() -> argparse.ArgumentParser:
 
     parser.add_argument("--config-generate", action="store_true", help="Generate default configuration")
     parser.add_argument("--config-reset", action="store_true", help="Reset configuration")
+
+    parser.add_argument("--api-server", action="store_true", help=f"Start local {SERVER}")
+    parser.add_argument("--api-port", type=int, default=8000, help=f"{SERVER} port")
 
     interp_group = parser.add_mutually_exclusive_group()
     interp_group.add_argument("--interpreter")
@@ -27,6 +30,19 @@ def _build_parser() -> argparse.ArgumentParser:
 def parse_args(argv: Optional[List[str]] = None) -> PhicodeArgs:
     if argv is None:
         argv = sys.argv[1:]
+
+    if "--api-server" in argv:
+        try:
+            port_idx = argv.index("--api-port") + 1 if "--api-port" in argv else None
+            api_port = int(argv[port_idx]) if port_idx and port_idx < len(argv) else 8000
+        except (ValueError, IndexError):
+            api_port = 8000
+
+        from ...api.cli import main as api_main
+        import sys as sys_module
+        sys_module.argv = ['phicode-api', '--port', str(api_port)]
+        api_main()
+        sys_module.exit(0)
 
     if "--interpreter-switch" in argv:
         _set_switched_execution(True)

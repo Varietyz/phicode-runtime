@@ -5,7 +5,7 @@ from ..phicode_logger import logger
 from ..cache.phicode_bytecode import BytecodeManager
 from ..interpreter.phicode_executor import ModuleExecutor
 from ..interpreter.phicode_switch import InterpreterSwitcher
-from ...config.config import ENGINE_NAME, IMPORT_ANALYSIS_ENABLED
+from ...config.config import ENGINE, IMPORT_ANALYSIS_ENABLED
 
 _switch_executed = False
 _original_module_name = None
@@ -47,7 +47,7 @@ class PhicodeLoader(importlib.abc.Loader):
 
         except SyntaxError as e:
             logger.error(f"Syntax error in {self.path} at line {e.lineno}: {e.msg}")
-            raise SyntaxError(f"{ENGINE_NAME} syntax error in {self.path}: {e}") from e
+            raise SyntaxError(f"{ENGINE} syntax error in {self.path}: {e}") from e
 
     def _get_module_name(self):
         return os.path.splitext(os.path.basename(self.path))[0]

@@ -1,11 +1,10 @@
 import os
 import json
-from ...config.config import CUSTOM_FOLDER_PATH, SYMBOL
+from ...config.config import CUSTOM_FOLDER_PATH, SYMBOL, PYTHON_TO_PHICODE
 from ..phicode_logger import logger
 
 
 def generate_default_config():
-    from ...core.transpilation.phicode_to_python import PYTHON_TO_PHICODE
     default_symbols = {python_kw: symbol for python_kw, symbol in PYTHON_TO_PHICODE.items()}
 
     config = {

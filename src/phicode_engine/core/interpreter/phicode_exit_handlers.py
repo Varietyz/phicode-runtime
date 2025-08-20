@@ -1,13 +1,12 @@
 import sys
 from .phicode_args import PhicodeArgs
 from .phicode_interpreter_display import print_interpreters, show_interpreter_info
-from ...config.config import BADGE, ENGINE_NAME
-from ...config.version import __version__
+from ...config.config import ENGINE, PHICODE_VERSION
 
 
 def handle_early_exit_flags(args: PhicodeArgs) -> bool:
     if args.version:
-        print(f"{BADGE}{ENGINE_NAME} version {__version__}")
+        print(f"{ENGINE} version {PHICODE_VERSION}")
         print(f"Running on: {sys.implementation.name} {sys.version}")
         return True
 

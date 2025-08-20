@@ -1,1 +1,3 @@
-__version__ = "2.1.4"
+from .config import PHICODE_VERSION
+
+__version__ = PHICODE_VERSION

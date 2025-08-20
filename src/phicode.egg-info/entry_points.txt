@@ -1,3 +1,5 @@
 [console_scripts]
+aphi = phicode_engine.api.cli:main
 phi = phicode_engine.engine:main
 phicode = phicode_engine.engine:main
+phicode-api = phicode_engine.api.cli:main

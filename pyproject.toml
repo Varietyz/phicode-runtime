@@ -22,6 +22,8 @@ utility = ["psutil>=5.8.0"]
 [project.scripts]
 phicode = "phicode_engine.engine:main"
 phi = "phicode_engine.engine:main"
+phicode-api = "phicode_engine.api.cli:main"
+aphi = "phicode_engine.api.cli:main"
 
 [tool.setuptools]
 package-dir = {"" = "src"}

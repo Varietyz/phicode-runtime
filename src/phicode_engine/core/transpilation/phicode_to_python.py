@@ -4,7 +4,7 @@ import re
 from functools import lru_cache
 from typing import Dict
 from ...core.phicode_logger import logger
-from ...config.config import VALIDATION_ENABLED, CONFIG_FILE, CUSTOM_FOLDER_PATH, CUSTOM_FOLDER_PATH_2
+from ...config.config import VALIDATION_ENABLED, STRICT_VALIDATION, CUSTOM_FOLDER_PATH, CUSTOM_FOLDER_PATH_2, PYTHON_TO_PHICODE
 
 _STRING_PATTERN = re.compile(
     r'('
@@ -17,61 +17,30 @@ _STRING_PATTERN = re.compile(
     re.DOTALL
 )
 
-PYTHON_TO_PHICODE = {
-    "False": "⊥", "None": "Ø", "True": "✓", "and": "∧", "as": "↦",
-    "assert": "‼", "async": "⟳", "await": "⌛", "break": "⇲", "class": "ℂ",
-    "continue": "⇉", "def": "ƒ", "del": "∂", "elif": "⤷", "else": "⋄",
-    "except": "⛒", "finally": "⇗", "for": "∀", "from": "←", "global": "⟁",
-    "if": "¿", "import": "⇒", "in": "∈", "is": "≡", "lambda": "λ",
-    "nonlocal": "∇", "not": "¬", "or": "∨", "pass": "⋯", "raise": "↑",
-    "return": "⟲", "try": "∴", "while": "↻", "with": "∥", "yield": "⟰",
-    "print": "π", "match": "⟷", "case": "▷",
-    "len": "ℓ", "range": "⟪", "enumerate": "№", "zip": "⨅",
-    "sum": "∑", "max": "⭱", "min": "⭳", "abs": "∣",
-    "type": "τ", "walrus": "≔"
-}
-
 PHICODE_TO_PYTHON = {v: k for k, v in PYTHON_TO_PHICODE.items()}
-
-def _normalize_symbol(symbol: str) -> str:
-    if not isinstance(symbol, str):
-        symbol = str(symbol)
-    return symbol.strip()
 
 def _validate_custom_symbols(symbols: Dict[str, str]) -> Dict[str, str]:
     if not VALIDATION_ENABLED:
         return symbols
 
     validated = {}
+    conflicts = []
 
-    for python_kw, raw_symbol in symbols.items():
-        if not python_kw.isidentifier():
-            logger.warning(f"{CUSTOM_FOLDER_PATH} - Invalid Python identifier: '{python_kw}', skipping")
-            continue
-
-        symbol = _normalize_symbol(raw_symbol)
-
-        original_symbol = PYTHON_TO_PHICODE.get(python_kw)
-        if original_symbol is not None and original_symbol == symbol:
-            validated[python_kw] = symbol
-            continue
-
-        if original_symbol:
-            logger.info(f"{CUSTOM_FOLDER_PATH} - [ {original_symbol} ] → [ {symbol} ] → '{python_kw}'")
-        else:
-            logger.info(f"{CUSTOM_FOLDER_PATH} - [ {symbol} ] → '{python_kw}'")
-
+    for python_kw, symbol in symbols.items():
         if symbol in PHICODE_TO_PYTHON:
-            old_kw = PHICODE_TO_PYTHON[symbol]
-            del PHICODE_TO_PYTHON[symbol]
-            if old_kw in PYTHON_TO_PHICODE:
-                del PYTHON_TO_PHICODE[old_kw]
+            conflicts.append(f"Symbol '{symbol}' conflicts with built-in mapping")
+            continue
 
-        if symbol in validated.values():
-            logger.warning(f"Symbol '{symbol}' already used, skipping '{python_kw}'")
+        if not python_kw.isidentifier():
+            logger.warning(f"Invalid Python identifier: '{python_kw}', skipping")
             continue
 
         validated[python_kw] = symbol
+
+    if conflicts and STRICT_VALIDATION:
+        raise ValueError(f"Symbol conflicts detected: {'; '.join(conflicts)}")
+    elif conflicts:
+        logger.warning(f"Symbol conflicts ignored: {'; '.join(conflicts)}")
 
     return validated
 
@@ -108,19 +77,27 @@ def get_symbol_mappings() -> Dict[str, str]:
     return base_mapping
 
 @lru_cache(maxsize=1)
+def has_custom_ascii_identifiers() -> bool:
+    custom_symbols = _load_custom_symbols()
+    return any(symbol.isidentifier() and symbol.isascii() for symbol in custom_symbols.values())
+
+@lru_cache(maxsize=1)
 def build_transpilation_pattern() -> re.Pattern:
     mappings = get_symbol_mappings()
     sorted_symbols = sorted(mappings.keys(), key=len, reverse=True)
-    escaped_symbols = []
 
+    if not has_custom_ascii_identifiers():
+        escaped_symbols = [re.escape(sym) for sym in sorted_symbols]
+        return re.compile('|'.join(escaped_symbols))
+
+    escaped_symbols = []
     for sym in sorted_symbols:
-        if sym.isidentifier():
+        if sym.isidentifier() and sym.isascii():
             escaped_symbols.append(rf"\b{re.escape(sym)}\b")
         else:
             escaped_symbols.append(re.escape(sym))
 
     return re.compile('|'.join(escaped_symbols))
-
 
 class SymbolTranspiler:
     def __init__(self):
@@ -128,40 +105,34 @@ class SymbolTranspiler:
         self._pattern = None
 
     def _has_phi_symbols(self, source: str) -> bool:
-        mappings = self.get_mappings()
-        return any(sym in source for sym in mappings)
+        return any(ord(c) > 127 for c in source)
 
     def get_mappings(self) -> Dict[str, str]:
         if self._mappings is None:
             self._mappings = get_symbol_mappings()
         return self._mappings
 
-    def get_pattern(self) -> re.Pattern:
-        if self._pattern is None:
-            self._pattern = build_transpilation_pattern()
-        return self._pattern
-
     def transpile(self, source: str) -> str:
-        pattern = self.get_pattern()
+        if not self._has_phi_symbols(source):
+            return source
+
+        if self._pattern is None:
+            mappings = self.get_mappings()
+            sorted_symbols = sorted(mappings.keys(), key=len, reverse=True)
+            escaped_symbols = [re.escape(sym) for sym in sorted_symbols]
+            self._pattern = re.compile('|'.join(escaped_symbols))
+
+        parts = _STRING_PATTERN.split(source)
+        result = []
         mappings = self.get_mappings()
 
-        segments = []
-        last_idx = 0
+        for i, part in enumerate(parts):
+            if i % 2 == 0:
+                result.append(self._pattern.sub(lambda m: mappings[m.group(0)], part))
+            else:
+                result.append(part)
 
-        for match in _STRING_PATTERN.finditer(source):
-            text_segment = source[last_idx:match.start()]
-            text_segment = pattern.sub(lambda m: mappings.get(m.group(0), m.group(0)), text_segment)
-            segments.append(text_segment)
-
-            segments.append(match.group(0))
-            last_idx = match.end()
-
-        tail = source[last_idx:]
-        tail = pattern.sub(lambda m: mappings.get(m.group(0), m.group(0)), tail)
-        segments.append(tail)
-
-        return ''.join(segments)
-
+        return ''.join(result)
 
 _transpiler = SymbolTranspiler()
 

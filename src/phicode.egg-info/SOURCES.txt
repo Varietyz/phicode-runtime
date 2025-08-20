@@ -10,6 +10,10 @@ src/phicode.egg-info/top_level.txt
 src/phicode_engine/__init__.py
 src/phicode_engine/__main__.py
 src/phicode_engine/engine.py
+src/phicode_engine/api/__init__.py
+src/phicode_engine/api/cli.py
+src/phicode_engine/api/http_server.py
+src/phicode_engine/api/subprocess_handler.py
 src/phicode_engine/config/config.py
 src/phicode_engine/config/version.py
 src/phicode_engine/core/phicode_logger.py
