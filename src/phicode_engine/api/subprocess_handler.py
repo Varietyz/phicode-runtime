@@ -2,8 +2,12 @@ import sys
 import subprocess
 import os
 import time
-import re
 from ..config.config import ENGINE, BADGE, SYMBOL, PYTHON_TO_PHICODE, PHICODE_VERSION
+
+try:
+    import regex as re
+except ImportError:
+    import re
 
 class PhicodeSubprocessHandler:
     def __init__(self, timeout: int = 30):

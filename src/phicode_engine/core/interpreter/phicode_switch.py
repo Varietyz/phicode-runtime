@@ -7,15 +7,19 @@ from ..phicode_logger import logger
 class InterpreterSwitcher:
     @staticmethod
     def attempt_switch(optimal_interpreter: str, original_module_name: str):
+        if optimal_interpreter == sys.executable:
+            logger.debug(f"✅ Using Optimal interpreter: {optimal_interpreter}")
+            return False
+        
         if not os.path.sep in optimal_interpreter:
             interpreter_path = shutil.which(optimal_interpreter)
             if not interpreter_path:
-                logger.warning(f"Interpreter not found: {optimal_interpreter}")
+                logger.warning(f"🛑 Interpreter not found: {optimal_interpreter}")
                 return False
         else:
             interpreter_path = optimal_interpreter
             if not os.path.isfile(interpreter_path):
-                logger.warning(f"Interpreter path invalid: {interpreter_path}")
+                logger.warning(f"🚫 Interpreter path invalid: {interpreter_path}")
                 return False
 
         try:
@@ -34,15 +38,15 @@ class InterpreterSwitcher:
             if target_args:
                 cmd_parts.extend(target_args)
 
-            logger.debug(f"Interpreter switch command: {cmd_parts}")
+            logger.debug(f"⚡ Interpreter switch command: {cmd_parts}")
             logger.info(f"🔄 Switching to optimal interpreter: {optimal_interpreter}")
 
             result = subprocess.run(cmd_parts, cwd=os.getcwd())
             sys.exit(result.returncode)
 
         except Exception as e:
-            logger.warning(f"Failed to switch to {interpreter_path}: {e}")
-            logger.info("Continuing with current interpreter")
+            logger.warning(f"⚠️ Failed to switch to {interpreter_path}: {e}")
+            logger.info("👟 Continuing with current interpreter")
             return False
 
         return True

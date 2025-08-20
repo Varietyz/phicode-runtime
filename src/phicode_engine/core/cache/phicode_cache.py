@@ -31,6 +31,8 @@ class PhicodeCache:
         self.interpreter_hints = OrderedDict()
 
     def _canonicalize_path(self, path: str) -> str:
+        if len(self._canon_cache) > 1000:
+            self._canon_cache.clear()
         if path not in self._canon_cache:
             self._canon_cache[path] = os.path.realpath(path)
         return self._canon_cache[path]

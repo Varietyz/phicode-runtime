@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "phicode"
-version = "2.1.4"
-description = "(φ) PHICODE Dual-Runtime Engine — run φ code directly in Python/PyPy"
+version = "2.1.5"
+description = "(φ) PHICODE Engine — run φ code directly in Python/PyPy"
 readme = "README.md"
 license = {text = "MIT"}
 authors = [
@@ -13,7 +13,8 @@ authors = [
 ]
 requires-python = ">=3.8"
 dependencies = [
-    "xxhash>=3.0.0"
+    "xxhash>=3.0.0",
+    "regex>=2025.7.34"
 ]
 
 [project.optional-dependencies]

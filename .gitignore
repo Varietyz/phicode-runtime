@@ -433,3 +433,6 @@ quick_benchmark_results.md
 requirements.txt
 TODO
 python_benchmark_results.json
+/phicode-transpiler-rs/.venv
+/phicode-transpiler-rs/target
+/phicode-transpiler-rs
