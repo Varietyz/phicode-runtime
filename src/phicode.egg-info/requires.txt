@@ -1,5 +1,7 @@
 xxhash>=3.0.0
 regex>=2025.7.34
 
+[rust]
+
 [utility]
 psutil>=5.8.0

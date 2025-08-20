@@ -35,3 +35,7 @@ src/phicode_engine/core/runtime/shutdown_handler.py
 src/phicode_engine/core/transpilation/phicode_to_python.py
 src/phicode_engine/core/transpilation/symbol_config.py
 src/phicode_engine/core/transpilation/symbol_optimization.py
+src/phicode_engine/rust/__init__.py
+src/phicode_engine/rust/phirust_accelerator.py
+src/phicode_engine/rust/phirust_cli.py
+src/phicode_engine/rust/phirust_installer.py

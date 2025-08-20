@@ -1,6 +1,6 @@
 from functools import lru_cache
 from typing import Dict
-from ...config.config import PYTHON_TO_PHICODE
+from ...config.config import PYTHON_TO_PHICODE, RUST_SIZE_THRESHOLD
 
 try:
     import regex as re
@@ -100,6 +100,12 @@ class SymbolTranspiler:
     def transpile(self, source: str) -> str:
         if not self._has_phi_symbols(source):
             return source
+
+        if len(source) >= RUST_SIZE_THRESHOLD:
+            from ...rust.phirust_accelerator import try_rust_acceleration
+            rust_result = try_rust_acceleration(source, self.get_mappings())
+            if rust_result is not None:
+                return rust_result
 
         if self._pattern is None:
             self._pattern = build_transpilation_pattern()

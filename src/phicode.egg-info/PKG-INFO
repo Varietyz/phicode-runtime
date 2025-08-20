@@ -1,7 +1,7 @@
 Metadata-Version: 2.4
 Name: phicode
-Version: 2.1.5
-Summary: (φ) PHICODE Engine — run φ code directly in Python/PyPy
+Version: 2.2.0
+Summary: (φ) PHICODE Engine — run φ code directly in Python/PyPy with optional Rust acceleration
 Author-email: Jay Baleine <jay@banes-lab.com>
 License: MIT
 Requires-Python: >=3.8
@@ -11,6 +11,7 @@ Requires-Dist: xxhash>=3.0.0
 Requires-Dist: regex>=2025.7.34
 Provides-Extra: utility
 Requires-Dist: psutil>=5.8.0; extra == "utility"
+Provides-Extra: rust
 Dynamic: license-file
 
 # PHICODE Runtime Engine

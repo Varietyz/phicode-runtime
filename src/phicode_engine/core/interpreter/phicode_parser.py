@@ -31,6 +31,15 @@ def parse_args(argv: Optional[List[str]] = None) -> PhicodeArgs:
     if argv is None:
         argv = sys.argv[1:]
 
+    if any(arg.startswith("--phirust") for arg in argv):
+        try:
+            from ...rust.phirust_cli import handle_rust_commands
+            handle_rust_commands(argv)
+        except ImportError:
+            from ..phicode_logger import logger
+            logger.error("Rust module not available")
+        sys.exit(0)
+
     if "--api-server" in argv:
         try:
             port_idx = argv.index("--api-port") + 1 if "--api-port" in argv else None

@@ -1,15 +1,25 @@
 import os
 
+# Versioning
+PHICODE_VERSION = '2.1.5'
+
+PHIRUST_VERSION = '0.2.0'
+
+#--- -  - -  - ---#
+## IN-HOUSE DEPS ##
+#---  --   --  ---#
+
+PHIRUST_BINARY_NAME = "phirust-transpiler"
+PHIRUST_RELEASE_BASE = f"https://github.com/Varietyz/phirust-transpiler/releases/download/v{PHIRUST_VERSION}"
+
 #--- -  - -  - ---#
 ## MAIN SETTINGS ##
 #---  --   --  ---#
 
-# Versioning
-PHICODE_VERSION = '2.1.5'
-
 # Branding
 ENGINE_NAME = "Phicode"
 API_NAME = "APHI"
+RUST_NAME = "PhiRust"
 
 # Branding Symbol(s)
 SYMBOL = "φ"
@@ -20,6 +30,7 @@ BADGE = "("+ SYMBOL +")" # (φ)
 # Process Names
 ENGINE = f"{BADGE} {ENGINE_NAME} Engine"
 SERVER = f"{BADGE} {API_NAME} Server"
+SCRIPT = f"{BADGE} {RUST_NAME}"
 
 # File types
 MAIN_FILE_TYPE = "." + SYMBOL # .φ
@@ -70,6 +81,8 @@ IMPORT_ANALYSIS_ENABLED = os.getenv('PHICODE_IMPORT_ANALYSIS', 'true').lower() =
 INTERPRETER_PYTHON_PATH = os.getenv('PHITON_PATH')  # Custom Python for C extensions
 INTERPRETER_PYPY_PATH = os.getenv('PHIPY_PATH', 'pypy3')  # Custom PyPy for pure Python
 
+# Rust Transpiler Configuration
+RUST_SIZE_THRESHOLD = 300000  # 2 MB From here Rust outperforms Python consistently (for bases with +5M chars increased transpilation to 25M chars/sec with phirust)
 #---  --  ---#
 ## LISTINGS ##
 #--- -  - ---#

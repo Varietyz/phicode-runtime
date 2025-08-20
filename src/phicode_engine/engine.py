@@ -4,6 +4,7 @@ from .core.runtime.phicode_runtime import run
 from .core.phicode_logger import logger
 
 def main():
+    args = None
     try:
         args = parse_args()
         if handle_early_exit_flags(args):

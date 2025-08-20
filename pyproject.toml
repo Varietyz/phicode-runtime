@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "phicode"
-version = "2.1.5"
-description = "(φ) PHICODE Engine — run φ code directly in Python/PyPy"
+version = "2.2.0"
+description = "(φ) PHICODE Engine — run φ code directly in Python/PyPy with optional Rust acceleration"
 readme = "README.md"
 license = {text = "MIT"}
 authors = [
@@ -19,6 +19,7 @@ dependencies = [
 
 [project.optional-dependencies]
 utility = ["psutil>=5.8.0"]
+rust = []
 
 [project.scripts]
 phicode = "phicode_engine.engine:main"
@@ -31,3 +32,7 @@ package-dir = {"" = "src"}
 
 [tool.setuptools.packages.find]
 where = ["src"]
+include = ["phicode_engine*"]
+
+[tool.setuptools.package-data]
+"phicode_engine.rust" = ["*.py"]

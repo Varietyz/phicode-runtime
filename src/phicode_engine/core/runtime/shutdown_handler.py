@@ -1,4 +1,3 @@
-# core/shutdown_handler.py
 import os
 import signal
 import atexit
