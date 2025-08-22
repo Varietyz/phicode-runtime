@@ -3,6 +3,7 @@ import argparse
 from typing import List, Optional
 from .phicode_args import PhicodeArgs, _set_current_args, _set_switched_execution
 from ...config.config import BADGE, ENGINE, SERVER
+from ..phicode_logger import logger
 
 def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=f"{ENGINE}")
@@ -19,6 +20,7 @@ def _build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--api-server", action="store_true", help=f"Start local {SERVER}")
     parser.add_argument("--api-port", type=int, default=8000, help=f"{SERVER} port")
 
+    parser.add_argument("--benchmark", action="store_true", help="Engine Benchmark suite")
     interp_group = parser.add_mutually_exclusive_group()
     interp_group.add_argument("--interpreter")
     interp_group.add_argument("--python", action="store_const", const="python", dest="interpreter")
@@ -36,8 +38,20 @@ def parse_args(argv: Optional[List[str]] = None) -> PhicodeArgs:
             from ...rust.phirust_cli import handle_rust_commands
             handle_rust_commands(argv)
         except ImportError:
-            from ..phicode_logger import logger
             logger.error("Rust module not available")
+        sys.exit(0)
+
+    if "--benchmark" in argv:
+        try:
+            from ...benchsuite import run_benchmarks
+            original_argv = sys.argv
+            sys.argv = ['phicode'] + argv
+            try:
+                run_benchmarks()
+            finally:
+                sys.argv = original_argv 
+        except ImportError:
+            logger.error("Benchsuite module not available")
         sys.exit(0)
 
     if "--api-server" in argv:
@@ -79,16 +93,16 @@ def parse_args(argv: Optional[List[str]] = None) -> PhicodeArgs:
     if "--config-generate" in argv:
         from ..mod.phicode_config_generator import generate_default_config
         generate_default_config()
-        print(f"{BADGE} Default configuration generated")
-        print(f"💡 Edit the config file to customize symbols and settings")
+        logger.info(f"{BADGE} Default configuration generated")
+        logger.info(f"💡 Edit the config file to customize symbols and settings")
         sys.exit(0)
 
     if "--config-reset" in argv:
         from ..mod.phicode_config_generator import reset_config
         if reset_config():
-            print(f"{BADGE} Configuration reset successfully")
+            logger.info(f"{BADGE} Configuration reset successfully")
         else:
-            print(f"{BADGE} No configuration to reset")
+            logger.info(f"{BADGE} No configuration to reset")
         sys.exit(0)
 
     module_name = "main"

@@ -1,0 +1,10 @@
+Benchmark,Status,Output
+bench_cache,completed,Cache Hit Rate: 0.67 | Cache Growth: 5 entries | 
+bench_memory,error,
+bench_stress,completed,Concurrent Stress Test: 0.05s total | Average Worker Time: 0.01s | Operations Per Second: 375 | 
+bench_transpiler,completed,Transpile 1000 chars: 871384 chars/sec | Transpile 10000 chars: 712941 chars/sec | Transpile 100000 chars: 639541 chars/sec | 
+simulate_concurrency,completed,🔄 Concurrent Engine Test - Real Components |   Workers: 8 |   Successful: 8 |   Failed: 0 |   Total time: 5779.4ms |   Avg worker time: 5105.7ms |   Fastest worker: 4173.0ms |   Slowest worker: 5559.8ms | 
+simulate_crash,timeout,
+simulate_import_burst,completed,📦 Importer Burst Test - Real Engine |   Importer registrations: 500 |   Registration time: 301.6ms |   Avg per registration: 0.60ms |   PhicodeFinders ∈ meta_path: 501 |   Deduplication test: 0.2ms |   Finders after dedup: 501 |   Deduplication working: True |   Module lookups: 5000 |   Lookup time: 2349.8ms |   Avg per lookup: 0.47ms | 
+simulate_stress_transpiler,completed,⚡ Transpiler Stress Test - Real Engine |   Light symbols: |     Iterations: 500 |     Time: 7.4ms |     Throughput: 3038077 chars/sec |   Medium symbols: |     Iterations: 300 |     Time: 1.3ms |     Throughput: 58532125 chars/sec |   Heavy symbols: |     Iterations: 200 |     Time: 0.7ms |     Throughput: 131893461 chars/sec | 
+simulate_workload_cache,completed,💾 Cache Load Test - Real Engine |   Operations: 400 |   Cache hits: 396 |   Hit rate: 0.99 |   Total time: 516.9ms |   Avg per op: 1.3ms | 

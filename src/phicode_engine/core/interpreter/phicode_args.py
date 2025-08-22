@@ -22,6 +22,7 @@ class PhicodeArgs:
     list_interpreters: bool = False
     show_versions: bool = False
     version: bool = False
+    benchmark: bool = False
     _original_argv: List[str] = field(default_factory=list)
 
     def __post_init__(self):
@@ -30,7 +31,7 @@ class PhicodeArgs:
 
     @property
     def should_exit_early(self) -> bool:
-        return any([self.version, self.list_interpreters, self.interpreter and not self.module_or_file])
+        return any([self.version, self.list_interpreters, self.interpreter, self.benchmark and not self.module_or_file])
 
     def get_module_argv(self) -> List[str]:
         return ['__main__'] + self.remaining_args

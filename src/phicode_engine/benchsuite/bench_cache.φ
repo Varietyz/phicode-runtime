@@ -1,0 +1,26 @@
+# (φ) src/phicode_engine/benchsuite/bench_scripts/bench_cache.φ
+← phicode_engine.core.cache.phicode_cache ⇒ _cache
+← phicode_engine.config.config ⇒ PYTHON_TO_PHICODE
+
+ƒ report(name, result):
+    π(f"{name}: {result}")
+
+initial_size = len(_cache.python_cache)
+
+symbols = list(PYTHON_TO_PHICODE.values())[:5]
+test_sources = []
+
+∀ i, symbol ∈ enumerate(symbols):
+    test_sources.append(f"{symbol} x: π(x + {i})")
+
+operation_count = 0
+∀ source ∈ test_sources * 3:
+    _cache.get_python_source(f"test_{operation_count}", source)
+    operation_count += 1
+
+final_size = len(_cache.python_cache)
+cache_growth = final_size - initial_size
+hit_rate = max(0, (operation_count - cache_growth) / operation_count) ¿ operation_count > 0 ⋄ 0
+
+report("Cache Hit Rate", f"{hit_rate:.2f}")
+report("Cache Growth", f"{cache_growth} entries")

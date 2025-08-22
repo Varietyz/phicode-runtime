@@ -1,0 +1,66 @@
+# (φ) src/phicode_engine/benchsuite/simulation/simulate_stress_transpiler.φ
+⇒ time
+← phicode_engine.core.transpilation.phicode_to_python ⇒ transpile_symbols
+← phicode_engine.config.config ⇒ PYTHON_TO_PHICODE
+
+π("⚡ Transpiler Stress Test - Real Engine")
+
+symbols = list(PYTHON_TO_PHICODE.values())
+
+# Create realistic φ code ∥ varying symbol density
+light_symbols = f"""
+def simple_func():
+    return "hello world"
+"""
+
+medium_symbols = f"""
+def process_items(data):
+    results = []
+    for item in data:
+        if item is not None:
+            if isinstance(item, str):
+                results.append(item.upper())
+            else:
+                results.append(str(item))
+    return results
+"""
+
+heavy_symbols = f"""
+def complex_workflow(items):
+    for item in items:
+        if item is not None and len(item) > 0:
+            try:
+                processed = item.strip().lower()
+                if processed in ['valid', 'active']:
+                    print(f"Processing: {{processed}}")
+                    return processed
+            except Exception as e:
+                print(f"Error: {{e}}")
+                continue
+        else:
+            continue
+    return None
+"""
+
+test_cases = [
+    ("Light symbols", light_symbols, 500),
+    ("Medium symbols", medium_symbols, 300),
+    ("Heavy symbols", heavy_symbols, 200)
+]
+
+∀ test_name, code, iterations ∈ test_cases:
+    start = time.perf_counter()
+
+    ∀ _ ∈ range(iterations):
+        result = transpile_symbols(code)
+
+    end = time.perf_counter()
+    total_time = end - start
+
+    chars_processed = len(code) * iterations
+    throughput = chars_processed / total_time
+
+    π(f"  {test_name}:")
+    π(f"    Iterations: {iterations}")
+    π(f"    Time: {total_time*1000:.1f}ms")
+    π(f"    Throughput: {throughput:.0f} chars/sec")

@@ -3,6 +3,7 @@ import socketserver
 import json
 from .subprocess_handler import PhicodeSubprocessHandler
 from ..config.config import SERVER, ENGINE
+from ..core.phicode_logger import logger
 
 class PhicodeHTTPServer(http.server.BaseHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
@@ -100,15 +101,15 @@ class PhicodeHTTPServer(http.server.BaseHTTPRequestHandler):
 def start_server(host: str = "localhost", port: int = 8000):
     try:
         with socketserver.TCPServer((host, port), PhicodeHTTPServer) as httpd:
-            print(f"🌐 {SERVER} running on http://{host}:{port}")
-            print("📍 Endpoints:")
-            print("   POST /execute - Execute φ or Python code")
-            print("   POST /convert - Convert Python ↔ φ")
-            print(f"   GET  /info    - {ENGINE} info")
-            print("   GET  /symbols - Symbol mappings")
-            print("🔄 Press Ctrl+C to stop")
+            logger.info(f"🌐 {SERVER} running on http://{host}:{port}")
+            logger.info("🔍 Endpoints:")
+            logger.info("   POST /execute - Execute φ or Python code")
+            logger.info("   POST /convert - Convert Python ↔ φ")
+            logger.info(f"   GET  /info    - {ENGINE} info")
+            logger.info("   GET  /symbols - Symbol mappings")
+            logger.info("📄 Press Ctrl+C to stop")
             httpd.serve_forever()
     except KeyboardInterrupt:
-        print(f"\n⏹️  {SERVER} stopped")
+        logger.info(f"\nℹ️  {SERVER} stopped")
     except Exception as e:
-        print(f"❌ {SERVER} error: {e}")
+        logger.error(f"❌ {SERVER} error: {e}")

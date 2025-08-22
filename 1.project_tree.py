@@ -94,7 +94,7 @@ def save_tree_structure(include_paths, exclude_specifics=None, output_file='PROJ
     for path in include_paths:
         if should_exclude(path):
             continue
-            
+
         if os.path.isfile(path):
             emoji = get_file_emoji(os.path.basename(path))
             all_tree_lines.append(f'{emoji} {os.path.basename(path)}')
@@ -123,6 +123,6 @@ if __name__ == '__main__':
     ]
 
     exclude_specifics = [
-        'phicode.egg-info', '__pycache__'
+        'phicode.egg-info', '__pycache__', '.(φ)cache'
     ]
     save_tree_structure(include_paths, exclude_specifics)

@@ -11,7 +11,7 @@ from collections import OrderedDict
 from typing import Optional, Tuple
 from ..transpilation.phicode_to_python import transpile_symbols
 from ..phicode_logger import logger
-from ...config.config import CACHE_PATH, MAX_FILE_RETRIES, RETRY_BASE_DELAY, CACHE_MMAP_THRESHOLD, CACHE_BUFFER_SIZE, CACHE_MAX_SIZE, IMPORT_ANALYSIS_ENABLED, INTERPRETER_PYPY_PATH, INTERPRETER_PYTHON_PATH
+from ...config.config import CACHE_PATH, MAX_FILE_RETRIES, RETRY_BASE_DELAY, CACHE_MMAP_THRESHOLD, CACHE_BUFFER_SIZE, CACHE_MAX_SIZE, IMPORT_ANALYSIS_ENABLED, INTERPRETER_PYPY_PATH, INTERPRETER_PYTHON_PATH, DEFAULT_C_EXTENSIONS
 
 try:
     import xxhash
@@ -163,7 +163,7 @@ class PhicodeCache:
         return sys.executable
 
     def _quick_interpreter_check(self, python_source: str) -> str:
-        c_extensions = ['numpy', 'pandas', 'scipy', 'matplotlib', 'torch', 'tensorflow']
+        c_extensions = DEFAULT_C_EXTENSIONS
         for ext in c_extensions:
             if f'import {ext}' in python_source or f'from {ext}' in python_source:
                 return INTERPRETER_PYTHON_PATH or 'python3'

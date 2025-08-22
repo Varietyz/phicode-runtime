@@ -1,0 +1,37 @@
+# (φ) src/phicode_engine/benchsuite/bench_scripts/bench_stress.φ
+← phicode_engine.core.transpilation.phicode_to_python ⇒ transpile_symbols
+← phicode_engine.config.config ⇒ PYTHON_TO_PHICODE, CACHE_BATCH_SIZE
+⇒ time
+⇒ threading
+
+ƒ report(name, result):
+    π(f"{name}: {result}")
+
+symbols = list(PYTHON_TO_PHICODE.values())
+test_content = f"{symbols[0]} x {symbols[2]} range(50): {symbols[20]}(x) {symbols[6]} x % 2: ⟲ x * 2 {symbols[9]}: ⟲ x" * 20
+
+results = []
+
+ƒ worker():
+    start = time.perf_counter()
+    ∀ _ ∈ range(CACHE_BATCH_SIZE):
+        transpile_symbols(test_content)
+    end = time.perf_counter()
+    results.append(end - start)
+
+thread_count = 4
+threads = [threading.Thread(target=worker) ∀ _ ∈ range(thread_count)]
+
+start_time = time.perf_counter()
+∀ t ∈ threads:
+    t.start()
+∀ t ∈ threads:
+    t.join()
+total_time = time.perf_counter() - start_time
+
+avg_worker_time = sum(results) / len(results) ¿ results ⋄ 0
+operations_per_sec = (thread_count * CACHE_BATCH_SIZE) / total_time ¿ total_time > 0 ⋄ 0
+
+report("Concurrent Stress Test", f"{total_time:.2f}s total")
+report("Average Worker Time", f"{avg_worker_time:.2f}s")
+report("Operations Per Second", f"{operations_per_sec:.0f}")

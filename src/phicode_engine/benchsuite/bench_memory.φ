@@ -1,0 +1,37 @@
+# (φ) src/phicode_engine/benchsuite/bench_memory.φ
+← phicode_engine.core.cache.phicode_bytecode ⇒ BytecodeManager
+← phicode_engine.config.config ⇒ PYTHON_TO_PHICODE, MAIN_FILE_TYPE
+⇒ os
+
+∴:
+    ⇒ psutil
+    HAS_PSUTIL = ✓
+⛒ ImportError:
+    HAS_PSUTIL = ⊥
+
+ƒ report(name, result):
+    π(f"{name}: {result}")
+
+¿ ¬ HAS_PSUTIL:
+    report("Memory Usage", "psutil ¬ available - install ∥: pip install psutil")
+⋄:
+    process = psutil.Process(os.getpid())
+    initial_memory = process.memory_info().rss / 1024 / 1024
+
+    symbols = list(PYTHON_TO_PHICODE.values())
+    test_code = """
+for i in range(100):
+   if i % 2 == 0:
+       print(f"Even: {i}")
+   else:
+       print(f"Odd: {i}")
+"""
+
+    ∀ i ∈ range(5):
+        BytecodeManager.compile_and_cache(test_code, f"test_memory_{i}{MAIN_FILE_TYPE}")
+
+    final_memory = process.memory_info().rss / 1024 / 1024
+    memory_increase = final_memory - initial_memory
+
+    report("Memory Usage", f"{final_memory:.1f}MB")
+    report("Memory Delta", f"{memory_increase:+.1f}MB")

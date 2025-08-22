@@ -17,7 +17,10 @@ class PhicodeSubprocessHandler:
     def execute_code(self, code: str, code_type: str = "auto") -> dict:
         start_time = time.perf_counter()
         if code_type == "phicode" or (code_type == "auto" and self._is_phicode(code)):
+            # Development HAX:
             script = f'import sys; sys.path.insert(0, r"{os.path.dirname(os.path.dirname(os.path.dirname(__file__)))}"); from phicode_engine.core.transpilation.phicode_to_python import transpile_symbols; exec(transpile_symbols("""{code}"""))'
+            #PRODUCTION: script = f'from phicode_engine.core.transpilation.phicode_to_python import transpile_symbols; exec(transpile_symbols("""{code}"""))'
+
         else:
             script = code
         try:

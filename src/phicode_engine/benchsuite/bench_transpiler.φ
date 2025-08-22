@@ -1,0 +1,25 @@
+# (φ) src/phicode_engine/benchsuite/bench_scripts/bench_transpiler.φ
+← phicode_engine.core.transpilation.phicode_to_python ⇒ transpile_symbols
+← phicode_engine.config.config ⇒ PYTHON_TO_PHICODE
+⇒ time
+
+ƒ generate_test_content(size):
+    symbols = list(PYTHON_TO_PHICODE.values())[:10]
+    base_content = ""
+    ∀ symbol ∈ symbols:
+        base_content += f"{symbol} x: π(x) "
+    multiplier = max(1, size // len(base_content))
+    ⟲ base_content * multiplier
+
+ƒ report(name, result):
+    π(f"{name}: {result}")
+
+test_sizes = [1000, 10000, 100000]
+
+∀ test_size ∈ test_sizes:
+    test_content = generate_test_content(test_size)
+    start = time.perf_counter()
+    result = transpile_symbols(test_content)
+    end = time.perf_counter()
+    chars_per_sec = len(test_content) / (end - start)
+    report(f"Transpile {test_size} chars", f"{chars_per_sec:.0f} chars/sec")

@@ -66,7 +66,7 @@ if __name__ == '__main__':
     ]
 
     exclude_specifics = [
-        'phicode.egg-info', '__pycache__'
+        'phicode.egg-info', '__pycache__', '.(φ)cache'
     ]
 
     collect_files_content(include_paths, exclude_specifics)

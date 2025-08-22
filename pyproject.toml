@@ -36,3 +36,5 @@ include = ["phicode_engine*"]
 
 [tool.setuptools.package-data]
 "phicode_engine.rust" = ["*.py"]
+"phicode_engine.benchsuite" = ["*.φ"]
+"phicode_engine.benchsuite.simulation" = ["*.φ"]

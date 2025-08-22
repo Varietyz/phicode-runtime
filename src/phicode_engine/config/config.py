@@ -1,7 +1,7 @@
 import os
 
 # Versioning
-PHICODE_VERSION = '2.1.5'
+PHICODE_VERSION = '2.2.0'
 
 PHIRUST_VERSION = '0.2.0'
 
@@ -25,7 +25,7 @@ RUST_NAME = "PhiRust"
 SYMBOL = "φ"
 
 # Branding Badge(s)
-BADGE = "("+ SYMBOL +")" # (φ)
+BADGE = f"({SYMBOL})" # (φ)
 
 # Process Names
 ENGINE = f"{BADGE} {ENGINE_NAME} Engine"
@@ -33,21 +33,23 @@ SERVER = f"{BADGE} {API_NAME} Server"
 SCRIPT = f"{BADGE} {RUST_NAME}"
 
 # File types
-MAIN_FILE_TYPE = "." + SYMBOL # .φ
+MAIN_FILE_TYPE = f".{SYMBOL}" # .φ
 SECONDARY_FILE_TYPE = ".py"
 
 # Config Location
 CONFIG_FILE_TYPE = ".json"
-CONFIG_FILE = "config" + CONFIG_FILE_TYPE # config.json
+CONFIG_FILE = f"config{CONFIG_FILE_TYPE}" # config.json
 
-CUSTOM_FOLDER_PATH = "." + BADGE + "/" + CONFIG_FILE   # .(φ)/config.json
-CUSTOM_FOLDER_PATH_2 = ".phicode/" + CONFIG_FILE     # .phicode/config.json
+CUSTOM_FOLDER_PATH = f".{BADGE}/{CONFIG_FILE}"   # .(φ)/config.json
+CUSTOM_FOLDER_PATH_2 = f".phicode/{CONFIG_FILE}"     # .phicode/config.json
+BENCHMARK_FOLDER_PATH = f".{BADGE}/benchmark_results"  # .(φ)/benchmark
 
 # Cache Location
-COMPILE_FOLDER_NAME = "com" + SYMBOL + "led"    # comφled
+COMPILE_FOLDER_NAME = f"com{SYMBOL}led"    # comφled
 
-CACHE_PATH = "." + BADGE + "cache"  # .(φ)cache
-CACHE_FILE_TYPE = MAIN_FILE_TYPE +"ca"  # .φca
+CACHE_PATH = f".{BADGE}cache"  # .(φ)cache
+CACHE_FILE_TYPE = f"{MAIN_FILE_TYPE}ca"  # .φca
+
 
 #---  --  ---#
 ## TWEAKING ##
@@ -65,7 +67,7 @@ CACHE_BUFFER_SIZE = POSIX_BUFFER_SIZE if os.name == 'posix' else WINDOWS_BUFFER_
 
 # Retry Configuration
 MAX_FILE_RETRIES = 3
-RETRY_BASE_DELAY = 0.01  # seconds
+RETRY_BASE_DELAY = 0.01
 
 # Performance Thresholds
 STARTUP_WARNING_MS = 25
@@ -82,16 +84,18 @@ INTERPRETER_PYTHON_PATH = os.getenv('PHITON_PATH')  # Custom Python for C extens
 INTERPRETER_PYPY_PATH = os.getenv('PHIPY_PATH', 'pypy3')  # Custom PyPy for pure Python
 
 # Rust Transpiler Configuration
-RUST_SIZE_THRESHOLD = 300000  # 2 MB From here Rust outperforms Python consistently (for bases with +5M chars increased transpilation to 25M chars/sec with phirust)
+RUST_SIZE_THRESHOLD = 300000  # From here Rust outperforms Python consistently
+
 #---  --  ---#
 ## LISTINGS ##
 #--- -  - ---#
 
 # Default C Extensions for Interpreter Selection
 DEFAULT_C_EXTENSIONS = [
-    'numpy', 'pandas', 'scipy', 'matplotlib',
-    'torch', 'tensorflow', 'opencv-python'
+    'numpy', 'pandas', 'scipy', 'matplotlib', 'torch',
+    'tensorflow', 'opencv-python', 'tracemalloc'
 ]
+
 
 # Default Phicode Map
 PYTHON_TO_PHICODE = {
@@ -107,3 +111,11 @@ PYTHON_TO_PHICODE = {
     "sum": "∑", "max": "⭱", "min": "⭳", "abs": "∣",
     "type": "τ", "walrus": "≔"
 }
+
+# Finding Project Root
+PROJECT_ROOT = [
+    'pyproject.toml', 'setup.py', '.git', 'requirements.txt', '.env',
+    '.φc', 'README.md', 'LICENSE', 'app', 'lib', 'tests', 'benchmark',
+    'scripts', 'φ-src', 'φ-scripts', 'φ-files', 'φ-root', 'φ-branch',
+    '.pypirc', 'docs', 'phicode', '.gitignore',
+]

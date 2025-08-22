@@ -3,7 +3,7 @@ import os
 import time
 import traceback
 import importlib
-from ..cache.phicode_importer import install_phicode_importer
+from ..importing.phicode_importer import install_phicode_importer
 from .shutdown_handler import install_shutdown_handler, register_cleanup, cleanup_cache_temp_files
 from ..interpreter.phicode_interpreter import InterpreterSelector
 from ..phicode_logger import logger

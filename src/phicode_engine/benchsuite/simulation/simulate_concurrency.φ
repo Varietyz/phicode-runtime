@@ -1,0 +1,91 @@
+# (φ) src/phicode_engine/benchsuite/simulation/simulate_concurrency.φ
+⇒ time
+⇒ threading
+← phicode_engine.core.transpilation.phicode_to_python ⇒ transpile_symbols
+← phicode_engine.core.cache.phicode_cache ⇒ _cache
+← phicode_engine.core.cache.phicode_bytecode ⇒ BytecodeManager, _flush_batch_writes
+← phicode_engine.config.config ⇒ PYTHON_TO_PHICODE, MAIN_FILE_TYPE
+
+
+π("🔄 Concurrent Engine Test - Real Components")
+
+symbols = list(PYTHON_TO_PHICODE.values())
+
+test_code = f"""
+def worker_function(worker_id):
+    results = []
+    for i in range(10):
+        if i % 2 == 0:
+            value = f"worker_{{worker_id}}_item_{{i}}"
+            results.append(value)
+    return results
+"""
+
+results = []
+errors = []
+
+ƒ worker_thread(worker_id):
+    ∴:
+        start = time.perf_counter()
+
+        # Each worker hits multiple engine components
+        ∀ operation ∈ range(50):
+            cache_key = f"worker_{worker_id}_op_{operation}"
+
+            # Hit transpiler
+            transpiled = transpile_symbols(test_code)
+
+            # Hit cache
+            _cache.get_python_source(cache_key, test_code)
+
+            # Hit bytecode manager
+            BytecodeManager.compile_and_cache(transpiled, f"{cache_key}{MAIN_FILE_TYPE}")
+
+        end = time.perf_counter()
+        results.append((worker_id, end - start))
+
+    ⛒ Exception ↦ e:
+        errors.append((worker_id, str(e)))
+
+# Test ∥ realistic concurrency
+thread_count = 8
+threads = []
+
+start_time = time.perf_counter()
+
+# Start all workers
+∀ i ∈ range(thread_count):
+    t = threading.Thread(target=worker_thread, args=(i,))
+    threads.append(t)
+    t.start()
+
+# Wait ∀ completion
+∀ t ∈ threads:
+    t.join()
+
+total_time = time.perf_counter() - start_time
+
+# Flush any pending writes
+_flush_batch_writes()
+
+# Results
+successful_workers = len(results)
+failed_workers = len(errors)
+
+¿ results:
+    avg_worker_time = sum(time ∀ _, time ∈ results) / len(results)
+    fastest_worker = min(time ∀ _, time ∈ results)
+    slowest_worker = max(time ∀ _, time ∈ results)
+⋄:
+    avg_worker_time = fastest_worker = slowest_worker = 0
+
+π(f"  Workers: {thread_count}")
+π(f"  Successful: {successful_workers}")
+π(f"  Failed: {failed_workers}")
+π(f"  Total time: {total_time*1000:.1f}ms")
+π(f"  Avg worker time: {avg_worker_time*1000:.1f}ms")
+π(f"  Fastest worker: {fastest_worker*1000:.1f}ms")
+π(f"  Slowest worker: {slowest_worker*1000:.1f}ms")
+
+¿ errors:
+    π(f"  Errors: {[f'Worker {w}: {e}' for w, e in errors[:3]]}")  # Show first 3

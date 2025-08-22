@@ -436,3 +436,8 @@ python_benchmark_results.json
 /phicode-transpiler-rs/.venv
 /phicode-transpiler-rs/target
 /phicode-transpiler-rs
+release.bat
+1.project_tree.py
+2.content_extract.py
+install.bat
+install.bat

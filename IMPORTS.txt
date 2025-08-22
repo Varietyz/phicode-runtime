@@ -1,0 +1,127 @@
+# ================================================================================================
+# PHICODE ENGINE - AVAILABLE IMPORTS FOR EXTERNAL PROJECTS
+# ================================================================================================
+# (φ) Phicode Engine v2.2.0 - Symbolic Programming for Python
+# Enable φ files to be imported as regular Python modules in your project
+# ================================================================================================
+
+# ========================================
+# QUICK START - PROJECT-WIDE φ SUPPORT
+# ========================================
+
+# Option 1: Auto-import (Recommended) - One line enables entire project
+import phicode_engine.core.importing.phicode_central
+# ↑ Automatically discovers project root and registers all φ files for import
+
+# Option 2: Explicit project-wide setup
+from phicode_engine.core.importing.phicode_central import install_project_wide_importer
+install_project_wide_importer()  # Scans entire project for φ files
+
+# Option 3: Manual directory-specific setup
+from phicode_engine import install_phicode_importer
+install_phicode_importer("/path/to/directory")  # Enable φ imports for specific directory
+
+# ========================================
+# CORE ENGINE IMPORTS
+# ========================================
+
+# Essential transpilation functions
+from phicode_engine import (
+    install_phicode_importer,    # Enable φ file imports for a directory
+    transpile_symbols,           # Convert φ code to Python code
+    get_symbol_mappings          # Get φ symbol to Python keyword mappings
+)
+
+# Project-wide φ file management
+from phicode_engine.core.importing.phicode_central import (
+    install_project_wide_importer,  # Enable φ imports across entire project
+    discover_phi_directories,       # Find all directories containing φ files
+    auto_install_on_import          # Automatic project detection and setup
+)
+
+# ========================================
+# BENCHMARKING & PERFORMANCE TOOLS
+# ========================================
+
+from phicode_engine.benchsuite import (
+    run_benchmarks,              # Execute performance validation suite
+    get_system_info,             # Get detailed system performance info
+    generate_performance_chart,   # Create Mermaid performance visualizations
+    report                       # Standardized benchmark reporting function
+)
+
+# ========================================
+# OPTIONAL RUST ACCELERATION
+# ========================================
+# Only available if rust module is installed
+
+try:
+    from phicode_engine import (
+        try_rust_acceleration,   # Attempt Rust-powered transpilation for large files
+        handle_rust_commands     # Process --phirust CLI commands
+    )
+except ImportError:
+    # Rust acceleration not available - engine will use Python fallback
+    pass
+
+# ========================================
+# ADVANCED IMPORTS (FOR LIBRARY DEVELOPERS)
+# ========================================
+
+# Direct access to core components
+from phicode_engine.core.cache.phicode_cache import _cache              # Access internal cache
+from phicode_engine.core.transpilation.phicode_to_python import transpile_symbols
+from phicode_engine.core.cache.phicode_bytecode import BytecodeManager   # Bytecode compilation
+from phicode_engine.core.phicode_logger import logger                    # Phicode logging system
+from phicode_engine.config.config import (
+    PYTHON_TO_PHICODE,          # Default symbol mappings
+    PROJECT_ROOT,               # Project detection markers
+    MAIN_FILE_TYPE,             # ".φ" file extension
+    SYMBOL,                     # "φ" symbol
+    ENGINE                      # "(φ) Phicode Engine" branding
+)
+
+# ========================================
+# API SERVER (FOR WEB APPLICATIONS)
+# ========================================
+
+from phicode_engine.api import (
+    start_server,               # Start HTTP API server
+    PhicodeSubprocessHandler    # Handle φ code execution via subprocess
+)
+
+# ========================================
+# USAGE EXAMPLES
+# ========================================
+
+# Example 1: Enable φ imports for your entire project
+# Place this in your main __init__.py:
+import phicode_engine.core.importing.phicode_central
+
+# Example 2: Now you can import φ files like regular Python modules:
+# import my_module        # Imports my_module.φ automatically
+# from utils import helper  # Imports utils/helper.φ
+
+# Example 3: Transpile φ code to Python manually:
+# phi_code = "∀ x ∈ range(10): π(x)"
+# python_code = transpile_symbols(phi_code)
+# # Result: "for x in range(10): print(x)"
+
+# Example 4: Run benchmark suite:
+# run_benchmarks()  # Interactive benchmark selection
+
+# ========================================
+# PACKAGE INTEGRATION
+# ========================================
+# For pip packages containing φ files, add to your setup.py:
+# install_requires=['phicode>=2.2.0']
+
+# Then in your package __init__.py:
+# import phicode_engine.core.importing.phicode_central
+# # Now users can import φ modules from your package normally
+
+# ================================================================================================
+# COMPATIBILITY: Python 3.8+ | PyPy 3.8+ | Windows/Linux/macOS
+# PERFORMANCE: ~1M chars/sec transpilation | Optional Rust acceleration for 300KB+ files
+# LICENSE: MIT | DOCS: https://github.com/Varietyz/pip-phicode
+# ================================================================================================
