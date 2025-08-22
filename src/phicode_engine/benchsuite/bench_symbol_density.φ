@@ -1,0 +1,51 @@
+⇒ time
+⇒ statistics
+⇒ gc
+
+← phicode_engine.core.transpilation.phicode_to_python ⇒ SymbolTranspiler
+← phicode_engine.benchsuite ⇒ report
+
+π("SYMBOL DENSITY IMPACT TESTING")
+π("=" * 60)
+
+transpiler = SymbolTranspiler()
+
+ƒ run_timing_test(content: str, iterations: int = 5) -> dict:
+    times = []
+    transpiler.transpile(content)
+
+    ∀ i ∈ range(iterations):
+        gc.collect()
+        start_time = time.perf_counter()
+        result = transpiler.transpile(content)
+        end_time = time.perf_counter()
+        times.append(end_time - start_time)
+
+    chars_per_sec = [len(content) / t ∀ t ∈ times]
+    ⟲ {
+        "content_size": len(content),
+        "avg_time_ms": statistics.mean(times) * 1000,
+        "avg_chars_per_sec": statistics.mean(chars_per_sec),
+    }
+
+base_text = "x = 1\ny = 2\nz = x + y\n"
+densities = [0, 10, 25, 50, 75, 100]
+
+∀ density ∈ densities:
+    ¿ density == 0:
+        content = base_text * 1000
+    ⋄:
+        symbol_chars = int(len(base_text) * density / 100)
+        symbol_part = "forinprintisandornot" * (symbol_chars // 7 + 1)
+        content = (symbol_part[:symbol_chars] + base_text) * 100
+
+    π(f"\nSymbol Density: {density}%")
+    π(f"Content Size: {len(content):,} chars")
+
+    result = run_timing_test(content)
+
+    π(f"Speed: {result['avg_chars_per_sec']:,.0f} chars/sec")
+
+    report(f"density_{density}_speed", f"{result['avg_chars_per_sec']:,.0f} chars/sec")
+    report(f"density_{density}_size", f"{len(content):,} chars")
+    report(f"density_{density}_efficiency", f"{result['avg_chars_per_sec'] / len(content) * 1000:.2f} speed/KB")

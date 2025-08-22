@@ -1,0 +1,108 @@
+# (φ) src/phicode_engine/benchsuite/bench_transpiler_patterns.φ
+⇒ time
+⇒ statistics
+⇒ gc
+
+← phicode_engine.core.transpilation.phicode_to_python ⇒ SymbolTranspiler
+← phicode_engine.benchsuite ⇒ report
+
+π("PATTERN COMPLEXITY TESTING")
+π("=" * 60)
+
+transpiler = SymbolTranspiler()
+
+test_patterns = {
+            "simple": "∀ x ∈ data: π(x)",
+            "medium": """
+∀ item ∈ items:
+    ¿ item.is_valid() ∧ item.status ≡ "active":
+        π(f"Processing {item}")
+        result = process_item(item)
+        ¿ result ≢ Ø:
+            π(f"Success: {result}")
+        ⋄:
+            π("Failed to process")
+            """,
+            "complex": """
+# Complex phi code ∥ many symbols
+Æ' process_data(data):
+    ∴:
+        ∀ item ∈ data:
+            ¿ item ≡ Ø ∨ notitem.is_valid():
+                ⇉  # ⇉
+
+            ¿ hasattr(item, 'value') ∧ item.value > 0:
+                result = calculate_result(item)
+                ¿ result ≢ Ø:
+                    π(f"Item {item.id}: {result}")
+                    yield_value = result * 2
+                    ⟰ yield_value  # ⟰
+                ⋄:
+                    π("Calculation failed")
+
+        ⟲ ✓  # ⟲
+    ⛒ Exception â†¦ e:
+        π(f"Error: {e}")
+        ↑ RuntimeError("Processing failed")  # ↑
+    ⇗:  # ⇗
+        π("Cleanup completed")
+
+⊤rue = ✓
+False = ⊥
+None = Ø
+            """,
+            "heavy_symbols": "forinandornotis≢continuebreaktryexceptfinallyraisereturnyieldprint" * 50,  # Symbol-dense
+            "mixed_content": '''
+"""
+This ≡ a string ∥ ∀ symbols that should NOT be transpiled
+"""
+Æ' main():
+    # This comment has ∀ symbols too
+    data = "∀ x ∈ test"  # String literals protected
+    ∀ i ∈ range(10):  # But this should be transpiled
+        π(f"Value: {i}")
+        ¿ i ≡ 5:
+            ⇲  # ⇲
+        ''',
+}
+
+ƒ run_timing_test(content: str, iterations: int = 5) -> dict:
+    times = []
+    transpiler.transpile(content)
+
+    ∀ i ∈ range(iterations):
+        gc.collect()
+        start_time = time.perf_counter()
+        result = transpiler.transpile(content)
+        end_time = time.perf_counter()
+        times.append(end_time - start_time)
+
+    chars_per_sec = [len(content) / t ∀ t ∈ times]
+    ⟲ {
+        "content_size": len(content),
+        "avg_time_ms": statistics.mean(times) * 1000,
+        "avg_chars_per_sec": statistics.mean(chars_per_sec),
+    }
+
+∀ name, pattern ∈ test_patterns.items():
+    π(f"\nPattern: {name}")
+    π(f"Size: {len(pattern):,} chars")
+
+    result = run_timing_test(pattern, iterations=10)
+
+    π(f"Average Time: {result['avg_time_ms']:.3f}ms")
+    π(f"Average Speed: {result['avg_chars_per_sec']:,.0f} chars/sec")
+
+    report(f"pattern_{name}_speed", f"{result['avg_chars_per_sec']:,.0f} chars/sec")
+    report(f"pattern_{name}_time", f"{result['avg_time_ms']:.3f}ms")
+    report(f"pattern_{name}_size", f"{len(pattern)} chars")
+
+    ¿ result['avg_chars_per_sec'] >= 1_200_000:
+        π("✅ Rust acceleration confirmed")
+        report(f"pattern_{name}_status", "RUST_CONFIRMED")
+    ⤷ result['avg_chars_per_sec'] >= 100_000:
+        π("⚠️ Possible acceleration, below target")
+        report(f"pattern_{name}_status", "POSSIBLE_ACCELERATION")
+    ⋄:
+        π("❌ Python fallback detected")
+        report(f"pattern_{name}_status", "PYTHON_FALLBACK")

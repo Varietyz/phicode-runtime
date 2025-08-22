@@ -39,8 +39,10 @@ def execute_benchmark_file(file_path: str):
         name = os.path.splitext(os.path.basename(file_path))[0]
         benchsuite_dir = os.path.dirname(file_path)
 
-        if "crash" in name:
-            timeout = 120
+        intesive_benchmarks = ["extreme", "crash"]
+
+        if any(keyword in name for keyword in intesive_benchmarks):
+            timeout = 180
         else:
             timeout = 60
 
@@ -66,34 +68,29 @@ def run_full_benchmark_report():
 
     logger.info("🔄 Running full benchmark suite...")
 
-    discovered = discover_benchmarks()
     results = {}
-    for benchmark in discovered['all']:
+    for benchmark in discover_benchmarks()['all']:
         name = os.path.splitext(os.path.basename(benchmark))[0]
         logger.info(f"⚡ Executing {name}...")
         results[name] = execute_benchmark_file(benchmark)
 
-    timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
-    datestamp = datetime.now().strftime("%Y%m%d")
+    now = datetime.now()
+    timestamp = now.strftime("%Y%m%d%H%M%S")
+    hour_dir = os.path.join(BENCHMARK_FOLDER_PATH, now.strftime("%Y%m%d"), now.strftime("%H"))
+    os.makedirs(hour_dir, exist_ok=True)
 
-    logger.info("📊 Generating complete benchmark report...")
+    # Write all outputs
+    files = {
+        f"{BADGE}bench_results_{timestamp}.json": lambda f: json.dump({"system": format_system_report(), "results": results}, f, indent=2),
+        f"{BADGE}bench_results_{timestamp}.csv": lambda f: f.write(export_results_csv(results)),
+        f"{BADGE}bench_results_{timestamp}.md": lambda f: f.write(generate_visualization_report(results))
+    }
 
-    results_dir = BENCHMARK_FOLDER_PATH
-    os.makedirs(results_dir, exist_ok=True)
+    for name, func in files.items():
+        with open(os.path.join(hour_dir, name), "w") as f:
+            func(f)
 
-    datestamp_dir = os.path.join(results_dir, datestamp)
-    os.makedirs(datestamp_dir, exist_ok=True)
-
-    with open(os.path.join(datestamp_dir, f"{BADGE}bench_results_{timestamp}.json"), "w") as f:
-        json.dump({"system": format_system_report(), "results": results}, f, indent=2)
-
-    with open(os.path.join(datestamp_dir, f"{BADGE}bench_results_{timestamp}.csv"), "w") as f:
-        f.write(export_results_csv(results))
-
-    with open(os.path.join(datestamp_dir, f"{BADGE}bench_results_{timestamp}.md"), "w") as f:
-        f.write(generate_visualization_report(results))
-
-    logger.info("✅ Complete report package generated in {datestamp_dir}")
+    logger.info(f"✅ Complete report package generated in {hour_dir}")
     logger.info(" → 📄 benchmark_results.json")
     logger.info(" → 📊 benchmark_results.csv")
     logger.info(" → 📈 benchmark_report.md (with Mermaid diagrams)")

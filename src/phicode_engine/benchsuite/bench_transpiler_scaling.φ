@@ -1,0 +1,82 @@
+⇒ time
+⇒ statistics
+⇒ gc
+
+← phicode_engine.core.transpilation.phicode_to_python ⇒ SymbolTranspiler
+← phicode_engine.benchsuite ⇒ report
+
+π("SCALING PERFORMANCE TESTING")
+π("=" * 60)
+
+transpiler = SymbolTranspiler()
+
+base_pattern = """
+Æ' process_data(data):
+    ∴:
+        ∀ item ∈ data:
+            ¿ item ≡ Ø ∨ notitem.is_valid():
+                ⇉
+            ¿ hasattr(item, 'value') ∧ item.value > 0:
+                result = calculate_result(item)
+                ¿ result ≢ Ø:
+                    ⟰ result * 2
+        ⟲ ✓
+    ⛒ Exception ←⃠ e:
+        ↑ RuntimeError("Processing failed")
+    ⇗:
+        π("Cleanup completed")
+"""
+
+ƒ generate_stress_content(base_pattern: str, target_size: int) -> str:
+    content = ""
+    ↻ len(content) < target_size:
+        content += base_pattern + "\n"
+    ⟲ content[:target_size]
+
+ƒ run_timing_test(content: str, iterations: int = 3) -> dict:
+    times = []
+    transpiler.transpile(content)
+
+    ∀ i ∈ range(iterations):
+        gc.collect()
+        start_time = time.perf_counter()
+        result = transpiler.transpile(content)
+        end_time = time.perf_counter()
+        times.append(end_time - start_time)
+
+    chars_per_sec = [len(content) / t ∀ t ∈ times]
+    ⟲ {
+        "content_size": len(content),
+        "avg_time_ms": statistics.mean(times) * 1000,
+        "avg_chars_per_sec": statistics.mean(chars_per_sec),
+    }
+
+sizes = [1_000, 10_000, 50_000, 100_000, 500_000, 1_000_000]
+results = {}
+
+∀ size ∈ sizes:
+    π(f"\nTesting {size:,} chars...")
+    content = generate_stress_content(base_pattern, size)
+
+    result = run_timing_test(content)
+    results[size] = result
+
+    π(f"Time: {result['avg_time_ms']:.3f}ms")
+    π(f"Speed: {result['avg_chars_per_sec']:,.0f} chars/sec")
+
+    report(f"scale_{size}_speed", f"{result['avg_chars_per_sec']:,.0f} chars/sec")
+    report(f"scale_{size}_time", f"{result['avg_time_ms']:.3f}ms")
+    report(f"scale_{size}_throughput", f"{result['avg_chars_per_sec'] / 1000:.1f}K chars/sec")
+
+    ¿ size > 1_000:
+        prev_size = sizes[sizes.index(size) - 1]
+        prev_speed = results[prev_size]["avg_chars_per_sec"]
+        current_speed = result["avg_chars_per_sec"]
+        degradation = (prev_speed - current_speed) / prev_speed * 100
+
+        ¿ degradation > 20:
+            π(f"⚠️ Performance degradation: {degradation:.1f}%")
+            report(f"scale_{size}_degradation", f"{degradation:.1f}% degradation")
+        ⋄:
+            π(f"Performance stable: {degradation:+.1f}%")
+            report(f"scale_{size}_stability", f"{degradation:+.1f}% change")

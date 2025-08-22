@@ -16,9 +16,13 @@ src/phicode_engine/api/http_server.py
 src/phicode_engine/api/subprocess_handler.py
 src/phicode_engine/benchsuite/__init__.py
 src/phicode_engine/benchsuite/bench_cache.φ
+src/phicode_engine/benchsuite/bench_extreme_stress.φ
 src/phicode_engine/benchsuite/bench_memory.φ
 src/phicode_engine/benchsuite/bench_stress.φ
+src/phicode_engine/benchsuite/bench_symbol_density.φ
 src/phicode_engine/benchsuite/bench_transpiler.φ
+src/phicode_engine/benchsuite/bench_transpiler_patterns.φ
+src/phicode_engine/benchsuite/bench_transpiler_scaling.φ
 src/phicode_engine/benchsuite/benchmark_cli.py
 src/phicode_engine/benchsuite/benchmark_commands.py
 src/phicode_engine/benchsuite/benchmark_core.py
@@ -35,6 +39,8 @@ src/phicode_engine/config/version.py
 src/phicode_engine/core/phicode_logger.py
 src/phicode_engine/core/cache/phicode_bytecode.py
 src/phicode_engine/core/cache/phicode_cache.py
+src/phicode_engine/core/cache/phicode_cache_ops.py
+src/phicode_engine/core/cache/phicode_cache_validation.py
 src/phicode_engine/core/cache/phicode_finder.py
 src/phicode_engine/core/importing/phicode_central.py
 src/phicode_engine/core/importing/phicode_importer.py

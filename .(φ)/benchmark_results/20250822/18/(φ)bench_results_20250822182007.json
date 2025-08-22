@@ -1,0 +1,50 @@
+{
+  "system": "System Information:\n  OS: Windows 10\n  Python: pypy 3.11\n  CPU: 6 cores (12 logical)\n  Memory: 31.9 GB\n  Architecture: AMD64\n  Performance Baseline: 103,124,672 ops/sec",
+  "results": {
+    "bench_cache": {
+      "status": "completed",
+      "output": "Cache Hit Rate: 0.67\nCache Growth: 5 entries\n",
+      "error": null
+    },
+    "bench_memory": {
+      "status": "completed",
+      "output": "Memory Usage: 49.5MB\nMemory Delta: +0.7MB\n",
+      "error": null
+    },
+    "bench_stress": {
+      "status": "completed",
+      "output": "Concurrent Stress Test: 0.06s total\nAverage Worker Time: 0.01s\nOperations Per Second: 325\n",
+      "error": null
+    },
+    "bench_transpiler": {
+      "status": "completed",
+      "output": "Transpile 1000 chars: 908926 chars/sec\nTranspile 10000 chars: 814021 chars/sec\nTranspile 100000 chars: 1086530 chars/sec\n",
+      "error": null
+    },
+    "simulate_concurrency": {
+      "status": "completed",
+      "output": "\ud83d\udd04 Concurrent Engine Test - Real Components\n  Workers: 8\n  Successful: 8\n  Failed: 0\n  Total time: 10010.5ms\n  Avg worker time: 9599.7ms\n  Fastest worker: 8968.6ms\n  Slowest worker: 9857.7ms\n",
+      "error": null
+    },
+    "simulate_crash": {
+      "status": "completed",
+      "output": "\ud83d\udd25 Crash Test - Finding Breaking Points\n  \ud83c\udfaf Transpiler overload test...\n    1100 transpilations: 13.6ms\n    Throughput: 57599693 chars/sec\n  \ud83c\udfaf Cache saturation test...\n    10000 cache ops: 65.6ms\n    Ops/sec: 152484\n  \ud83c\udfaf Concurrent chaos test...\n    16 workers \u00d7 150 ops = 2400 total operations\n    Total time: 83871.8ms\n    Successful workers: 16\n    Failed workers: 0\n    Ops/sec: 29\n  \ud83c\udfaf Memory pressure test...\n    10000 large cache entries: 123.1ms\n    Cache size: 6 entries\n\ud83d\udd25 Crash test completed - system stress tested\n",
+      "error": null
+    },
+    "simulate_import_burst": {
+      "status": "completed",
+      "output": "\ud83d\udce6 Importer Burst Test - Real Engine\n  Importer registrations: 500\n  Registration time: 309.2ms\n  Avg per registration: 0.62ms\n  PhicodeFinders \u2208 meta_path: 501\n  Deduplication test: 0.1ms\n  Finders after dedup: 501\n  Deduplication working: True\n  Module lookups: 5000\n  Lookup time: 2309.4ms\n  Avg per lookup: 0.46ms\n",
+      "error": null
+    },
+    "simulate_stress_transpiler": {
+      "status": "completed",
+      "output": "\u26a1 Transpiler Stress Test - Real Engine\n  Light symbols:\n    Iterations: 500\n    Time: 8.3ms\n    Throughput: 2695838 chars/sec\n  Medium symbols:\n    Iterations: 300\n    Time: 1.3ms\n    Throughput: 57236549 chars/sec\n  Heavy symbols:\n    Iterations: 200\n    Time: 0.7ms\n    Throughput: 134705894 chars/sec\n",
+      "error": null
+    },
+    "simulate_workload_cache": {
+      "status": "completed",
+      "output": "\ud83d\udcbe Cache Load Test - Real Engine\n  Operations: 400\n  Cache hits: 396\n  Hit rate: 0.99\n  Total time: 506.3ms\n  Avg per op: 1.3ms\n",
+      "error": null
+    }
+  }
+}

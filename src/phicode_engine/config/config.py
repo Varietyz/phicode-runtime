@@ -117,5 +117,5 @@ PROJECT_ROOT = [
     'pyproject.toml', 'setup.py', '.git', 'requirements.txt', '.env',
     '.φc', 'README.md', 'LICENSE', 'app', 'lib', 'tests', 'benchmark',
     'scripts', 'φ-src', 'φ-scripts', 'φ-files', 'φ-root', 'φ-branch',
-    '.pypirc', 'docs', 'phicode', '.gitignore',
+    '.pypirc', 'docs', 'phicode', '.gitignore', '.vscode', '.idea'
 ]

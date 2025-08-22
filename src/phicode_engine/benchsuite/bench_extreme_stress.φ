@@ -1,0 +1,69 @@
+# (φ) src/phicode_engine/benchsuite/bench_extreme_stress.φ
+⇒ time
+
+← phicode_engine.core.transpilation.phicode_to_python ⇒ SymbolTranspiler
+← phicode_engine.benchsuite ⇒ report
+
+π("EXTREME TRANSPILER STRESS TESTING")
+π("=" * 60)
+
+transpiler = SymbolTranspiler()
+
+base_pattern = """
+Æ' process_data(data):
+    ∴:
+        ∀ item ∈ data:
+            ¿ item ≡ Ø ∨ notitem.is_valid():
+                ⇉
+            ¿ hasattr(item, 'value') ∧ item.value > 0:
+                result = calculate_result(item)
+                ¿ result ≢ Ø:
+                    ⟰ result * 2
+        ⟲ ✓
+    ⛒ Exception ←⃠ e:
+        ↑ RuntimeError("Processing failed")
+    ⇗:
+        π("Cleanup completed")
+"""
+
+ƒ generate_stress_content(base_pattern: str, target_size: int) -> str:
+    content = ""
+    ↻ len(content) < target_size:
+        content += base_pattern + "\n"
+    ⟲ content[:target_size]
+
+stress_stages = [
+    ("stressed", 5_000_000),
+    ("extreme", 15_000_000),
+    ("deadly", 30_000_000),
+    ("atomic", 50_000_000)
+]
+
+∀ stage_name, size ∈ stress_stages:
+    π(f"\n{stage_name.upper()} STAGE: {size:,} chars ({size/1024/1024:.1f}MB)")
+
+    content = generate_stress_content(base_pattern, size)
+
+    start_time = time.perf_counter()
+    result = transpiler.transpile(content)
+    end_time = time.perf_counter()
+
+    elapsed = end_time - start_time
+    chars_per_sec = len(content) / elapsed
+
+    π(f"Time: {elapsed:.3f}s")
+    π(f"Speed: {chars_per_sec:,.0f} chars/sec")
+    π(f"Output size: {len(result):,} chars")
+
+    report(f"{stage_name}_input_size", f"{len(content):,} chars")
+    report(f"{stage_name}_output_size", f"{len(result):,} chars")
+    report(f"{stage_name}_time", f"{elapsed:.3f}s")
+    report(f"{stage_name}_speed", f"{chars_per_sec:,.0f} chars/sec")
+    report(f"{stage_name}_throughput_mb", f"{len(content)/1024/1024/elapsed:.2f} MB/sec")
+
+    ¿ chars_per_sec >= 100_000_000:
+        π("✅ Extreme performance achieved")
+        report(f"{stage_name}_status", "EXTREME_PERFORMANCE_ACHIEVED")
+    ⋄:
+        π("⚠️ Below target performance")
+        report(f"{stage_name}_status", "BELOW_TARGET_PERFORMANCE")

@@ -9,37 +9,37 @@ symbols = list(PYTHON_TO_PHICODE.values())
 
 # Create realistic φ code ∥ varying symbol density
 light_symbols = f"""
-def simple_func():
-    return "hello world"
+ƒ simple_func():
+    ⟲ "hello world"
 """
 
 medium_symbols = f"""
-def process_items(data):
+ƒ process_items(data):
     results = []
-    for item in data:
-        if item is not None:
-            if isinstance(item, str):
+    ∀ item ∈ data:
+        ¿ item ≡ ¬ Ø:
+            ¿ isinstance(item, str):
                 results.append(item.upper())
-            else:
+            ⋄:
                 results.append(str(item))
-    return results
+    ⟲ results
 """
 
 heavy_symbols = f"""
-def complex_workflow(items):
-    for item in items:
-        if item is not None and len(item) > 0:
-            try:
+ƒ complex_workflow(items):
+    ∀ item ∈ items:
+        ¿ item ≡ ¬ Ø ∧ len(item) > 0:
+            ∴:
                 processed = item.strip().lower()
-                if processed in ['valid', 'active']:
-                    print(f"Processing: {{processed}}")
-                    return processed
-            except Exception as e:
-                print(f"Error: {{e}}")
-                continue
-        else:
-            continue
-    return None
+                ¿ processed ∈ ['valid', 'active']:
+                    π(f"Processing: {{processed}}")
+                    ⟲ processed
+            ⛒ Exception ↦ e:
+                π(f"Error: {{e}}")
+                ⇉
+        ⋄:
+            ⇉
+    ⟲ Ø
 """
 
 test_cases = [
