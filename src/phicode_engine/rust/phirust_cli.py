@@ -17,14 +17,14 @@ def handle_rust_commands(argv: List[str]):
 
 def _handle_install():
     try:
-        from .phirust_installer import install_rust_binary
-        install_rust_binary()
+        from ..installers.phirust_installer import install_phirust_binary
+        install_phirust_binary()
     except ImportError as e:
         logger.error(f"{RUST_NAME} installer not available: {e}")
         sys.exit(1)
 
 def _handle_status():
-    from .phirust_installer import get_binary_path
+    from ..installers.phirust_installer import get_binary_path
     binary_path = get_binary_path()
     if os.path.exists(binary_path):
         logger.info(f"{RUST_NAME} Accelerator installed: {binary_path}")
@@ -32,7 +32,7 @@ def _handle_status():
         logger.info(f"{RUST_NAME} Accelerator not installed. Install with: phicode --phirust")
 
 def _handle_remove():
-    from .phirust_installer import get_binary_path
+    from ..installers.phirust_installer import get_binary_path
     binary_path = get_binary_path()
     if os.path.exists(binary_path):
         try:

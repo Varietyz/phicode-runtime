@@ -18,6 +18,7 @@ src/phicode_engine/benchsuite/__init__.py
 src/phicode_engine/benchsuite/bench_cache.φ
 src/phicode_engine/benchsuite/bench_extreme_stress.φ
 src/phicode_engine/benchsuite/bench_memory.φ
+src/phicode_engine/benchsuite/bench_phimmuno.φ
 src/phicode_engine/benchsuite/bench_stress.φ
 src/phicode_engine/benchsuite/bench_symbol_density.φ
 src/phicode_engine/benchsuite/bench_transpiler.φ
@@ -32,6 +33,7 @@ src/phicode_engine/benchsuite/system_info.py
 src/phicode_engine/benchsuite/simulation/simulate_concurrency.φ
 src/phicode_engine/benchsuite/simulation/simulate_crash.φ
 src/phicode_engine/benchsuite/simulation/simulate_import_burst.φ
+src/phicode_engine/benchsuite/simulation/simulate_phimmuno_threat.φ
 src/phicode_engine/benchsuite/simulation/simulate_stress_transpiler.φ
 src/phicode_engine/benchsuite/simulation/simulate_workload_cache.φ
 src/phicode_engine/config/config.py
@@ -49,8 +51,10 @@ src/phicode_engine/core/interpreter/phicode_executor.py
 src/phicode_engine/core/interpreter/phicode_exit_handlers.py
 src/phicode_engine/core/interpreter/phicode_interpreter.py
 src/phicode_engine/core/interpreter/phicode_interpreter_display.py
-src/phicode_engine/core/interpreter/phicode_parser.py
 src/phicode_engine/core/interpreter/phicode_switch.py
+src/phicode_engine/core/interpreter/cli/phicode_cli.py
+src/phicode_engine/core/interpreter/cli/phicode_cli_handlers.py
+src/phicode_engine/core/interpreter/cli/phicode_cli_parser.py
 src/phicode_engine/core/mod/phicode_config_generator.py
 src/phicode_engine/core/runtime/phicode_loader.py
 src/phicode_engine/core/runtime/phicode_runtime.py
@@ -58,7 +62,13 @@ src/phicode_engine/core/runtime/shutdown_handler.py
 src/phicode_engine/core/transpilation/phicode_to_python.py
 src/phicode_engine/core/transpilation/symbol_config.py
 src/phicode_engine/core/transpilation/symbol_optimization.py
+src/phicode_engine/installers/__init__.py
+src/phicode_engine/installers/binary_installer.py
+src/phicode_engine/installers/phimmuno_installer.py
+src/phicode_engine/installers/phirust_installer.py
 src/phicode_engine/rust/__init__.py
 src/phicode_engine/rust/phirust_accelerator.py
 src/phicode_engine/rust/phirust_cli.py
-src/phicode_engine/rust/phirust_installer.py
+src/phicode_engine/security/__init__.py
+src/phicode_engine/security/phimmuno_cli.py
+src/phicode_engine/security/phimmuno_validator.py

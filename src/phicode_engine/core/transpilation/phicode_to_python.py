@@ -103,7 +103,8 @@ class SymbolTranspiler:
 
         if len(source) >= RUST_SIZE_THRESHOLD:
             from ...rust.phirust_accelerator import try_rust_acceleration
-            rust_result = try_rust_acceleration(source, self.get_mappings())
+            bypass_security = _should_bypass_security()
+            rust_result = try_rust_acceleration(source, self.get_mappings(), bypass_security)
             if rust_result is not None:
                 return rust_result
 
@@ -126,3 +127,8 @@ _transpiler = SymbolTranspiler()
 
 def transpile_symbols(source: str) -> str:
     return _transpiler.transpile(source)
+
+def _should_bypass_security() -> bool:
+    from ...core.interpreter.phicode_args import get_current_args
+    current_args = get_current_args()
+    return current_args and current_args.bypass

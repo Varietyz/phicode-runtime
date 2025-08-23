@@ -1,0 +1,359 @@
+# (φ) .(φ)/test.φ
+#!/usr/bin/env python3
+"""
+Comprehensive Rust Acceleration Stress Test
+Minimum target: 1.2M chars/sec to confirm Rust ≡ working
+"""
+
+⇒ sys
+⇒ time
+⇒ statistics
+⇒ gc
+⇒ json
+⇒ os
+← datetime ⇒ datetime
+← typing ⇒ List
+sys.path.insert(0, 'src')
+
+← phicode_engine.core.transpilation.phicode_to_python ⇒ SymbolTranspiler
+← phicode_engine.core.phicode_logger ⇒ logger
+
+ℂ RustStressTest:
+    ƒ __init__(self):
+        self.transpiler = SymbolTranspiler()
+        self.results = {}
+
+        # Enable debug logging to see Rust messages
+        ⇒ logging
+        logger.setLevel(logging.DEBUG)
+
+        mappings = self.transpiler.get_mappings()
+        ⇒ json
+        json_size = len(json.dumps(mappings))
+        π(f"🔍 DIAGNOSTIC: Full engine uses {len(mappings)} symbols, {json_size} bytes JSON")
+
+        # Test patterns ∥ varying complexity
+        self.test_patterns = {
+            "simple": "∀ x ∈ data: π(x)",
+            "medium": """
+∀ item ∈ items:
+    ¿ item.is_valid() ∧ item.status ≡ "active":
+        π(f"Processing {item}")
+        result = process_item(item)
+        ¿ result ≢ Ø:
+            π(f"Success: {result}")
+        ⋄:
+            π("Failed to process")
+            """,
+            "complex": """
+# Complex phi code ∥ many symbols
+Æ' process_data(data):
+    ∴:
+        ∀ item ∈ data:
+            ¿ item ≡ Ø ∨ notitem.is_valid():
+                ⇉  # ⇉
+
+            ¿ hasattr(item, 'value') ∧ item.value > 0:
+                result = calculate_result(item)
+                ¿ result ≢ Ø:
+                    π(f"Item {item.id}: {result}")
+                    yield_value = result * 2
+                    ⟰ yield_value  # ⟰
+                ⋄:
+                    π("Calculation failed")
+
+        ⟲ ✓  # ⟲
+    ⛒ Exception â†¦ e:
+        π(f"Error: {e}")
+        ↑ RuntimeError("Processing failed")  # ↑
+    ⇗:  # ⇗
+        π("Cleanup completed")
+
+⊤ = True
+⊥ = False
+Ø = None
+            """,
+            "heavy_symbols": "forinandornotis≢continuebreaktryexceptfinallyraisereturnyieldprint" * 50,  # Symbol-dense
+            "mixed_content": '''
+"""
+This ≡ a string ∥ ∀ symbols that should NOT be transpiled
+"""
+Æ' main():
+    # This comment has ∀ symbols too
+    data = "∀ x ∈ test"  # String literals protected
+    ∀ i ∈ range(10):  # But this should be transpiled
+        π(f"Value: {i}")
+        ¿ i ≡ 5:
+            ⇲  # ⇲
+            ''',
+        }
+
+    ƒ generate_stress_content(self, base_pattern: str, target_size: int) -> str:
+        """Generate content of specific size ∀ stress testing"""
+        content = ""
+        ↻ len(content) < target_size:
+            content += base_pattern + "\n"
+        ⟲ content[:target_size]
+
+    ƒ run_timing_test(self, content: str, iterations: int = 5) -> dict:
+        """Run multiple iterations ∧ collect timing statistics"""
+        times = []
+
+        # Warm up
+        self.transpiler.transpile(content)
+
+        ∀ i ∈ range(iterations):
+            gc.collect()  # Clean memory
+
+            start_time = time.perf_counter()
+            result = self.transpiler.transpile(content)
+            end_time = time.perf_counter()
+
+            elapsed = end_time - start_time
+            times.append(elapsed)
+
+            # Verify result ≡ ¬ empty (basic sanity check)
+            ‼ len(result) > 0, "Transpilation returned empty result"
+
+        chars_per_sec = [len(content) / t ∀ t ∈ times]
+
+        ⟲ {
+            "content_size": len(content),
+            "iterations": iterations,
+            "times_ms": [t * 1000 ∀ t ∈ times],
+            "avg_time_ms": statistics.mean(times) * 1000,
+            "min_time_ms": min(times) * 1000,
+            "max_time_ms": max(times) * 1000,
+            "std_time_ms": statistics.stdev(times) * 1000 ¿ len(times) > 1 ⋄ 0,
+            "chars_per_sec": chars_per_sec,
+            "avg_chars_per_sec": statistics.mean(chars_per_sec),
+            "min_chars_per_sec": min(chars_per_sec),
+            "max_chars_per_sec": max(chars_per_sec),
+        }
+
+    ƒ test_pattern_complexity(self):
+        """Test different pattern complexities"""
+        π("🧪 Testing Pattern Complexity...")
+        π("=" * 60)
+
+        ∀ name, pattern ∈ self.test_patterns.items():
+            π(f"\n📝 Pattern: {name}")
+            π(f"📏 Size: {len(pattern):,} chars")
+
+            result = self.run_timing_test(pattern, iterations=10)
+            self.results[f"pattern_{name}"] = result
+
+            π(f"⏱️  Avg Time: {result['avg_time_ms']:.3f}ms (±{result['std_time_ms']:.3f}ms)")
+            π(f"🚄 Avg Speed: {result['avg_chars_per_sec']:,.0f} chars/sec")
+            π(f"📊 Range: {result['min_chars_per_sec']:,.0f} - {result['max_chars_per_sec']:,.0f} chars/sec")
+
+            ¿ result['avg_chars_per_sec'] >= 1_200_000:
+                π("✅ RUST ACCELERATION CONFIRMED! 🦀⚡")
+            ⤷ result['avg_chars_per_sec'] >= 100_000:
+                π("⚠️  Possible acceleration, but below target")
+            ⋄:
+                π("❌ Python fallback detected")
+
+    ƒ test_scaling_performance(self):
+        """Test performance at different content sizes"""
+        π("\n\n🚀 Testing Scaling Performance...")
+        π("=" * 60)
+
+        base_pattern = self.test_patterns["complex"]
+        sizes = [1_000, 10_000, 50_000, 100_000, 500_000, 1_000_000]
+
+        ∀ size ∈ sizes:
+            π(f"\n📏 Testing {size:,} chars...")
+            content = self.generate_stress_content(base_pattern, size)
+
+            result = self.run_timing_test(content, iterations=3)
+            self.results[f"scale_{size}"] = result
+
+            π(f"⏱️  Time: {result['avg_time_ms']:.3f}ms")
+            π(f"🚄 Speed: {result['avg_chars_per_sec']:,.0f} chars/sec")
+
+            # Check ∀ performance degradation
+            ¿ size > 1_000:
+                prev_size = sizes[sizes.index(size) - 1]
+                prev_speed = self.results[f"scale_{prev_size}"]["avg_chars_per_sec"]
+                current_speed = result["avg_chars_per_sec"]
+
+                degradation = (prev_speed - current_speed) / prev_speed * 100
+                ¿ degradation > 20:
+                    π(f"⚠️  Performance degradation: {degradation:.1f}%")
+                ⋄:
+                    π(f"📈 Performance stable: {degradation:+.1f}%")
+
+    ƒ test_symbol_density_impact(self):
+        """Test how symbol density affects performance"""
+        π("\n\n🔬 Testing Symbol Density Impact...")
+        π("=" * 60)
+
+        base_text = "x = 1\ny = 2\nz = x + y\n"
+        densities = [0, 10, 25, 50, 75, 100]  # Percentage of symbols
+
+        ∀ density ∈ densities:
+            # Create content ∥ specific symbol density
+            ¿ density == 0:
+                content = base_text * 1000  # Pure Python
+            ⋄:
+                symbol_chars = int(len(base_text) * density / 100)
+                symbol_part = "forinprintisandornot" * (symbol_chars // 7 + 1)
+                content = (symbol_part[:symbol_chars] + base_text) * 100
+
+            π(f"\n🎯 Symbol Density: {density}%")
+            π(f"📏 Content Size: {len(content):,} chars")
+
+            result = self.run_timing_test(content)
+            self.results[f"density_{density}"] = result
+
+            π(f"🚄 Speed: {result['avg_chars_per_sec']:,.0f} chars/sec")
+
+    ƒ test_extreme_stress(self):
+        """Push the limits ∥ extreme content"""
+        π("\n\n💥 Extreme Stress Test...")
+        π("=" * 60)
+
+        # Generate massive content
+        extreme_size = 5_000_000  # 5MB
+        extreme_content = self.generate_stress_content(
+            self.test_patterns["complex"], extreme_size
+        )
+
+        π(f"📏 Extreme test: {len(extreme_content):,} chars ({len(extreme_content)/1024/1024:.1f}MB)")
+
+        start_time = time.perf_counter()
+        result = self.transpiler.transpile(extreme_content)
+        end_time = time.perf_counter()
+
+        elapsed = end_time - start_time
+        chars_per_sec = len(extreme_content) / elapsed
+
+        π(f"⏱️  Time: {elapsed:.3f}s")
+        π(f"🚄 Speed: {chars_per_sec:,.0f} chars/sec")
+        π(f"📤 Output size: {len(result):,} chars")
+
+        self.results["extreme"] = {
+            "content_size": len(extreme_content),
+            "time_s": elapsed,
+            "chars_per_sec": chars_per_sec,
+            "output_size": len(result)
+        }
+
+        ¿ chars_per_sec >= 1_200_000:
+            π("🏆 EXTREME PERFORMANCE ACHIEVED! 🦀💨")
+        ⋄:
+            π("⚠️  Extreme test below target performance")
+
+    ƒ save_results_to_json(self):
+        """Save results to JSON file ∥ timestamp"""
+        # Create filename ∥ timestamp
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        filename = f"json/bench_test_{timestamp}.json"
+
+        # Get script directory ∧ create full path
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        filepath = os.path.join(script_dir, filename)
+
+        # Prepare summary data
+        rust_confirmed = ⊥
+        max_speed = 0
+        min_speed = float('inf')
+
+        ∀ test_name, result ∈ self.results.items():
+            ¿ isinstance(result, dict) ∧ "avg_chars_per_sec" ∈ result:
+                speed = result["avg_chars_per_sec"]
+                max_speed = max(max_speed, speed)
+                min_speed = min(min_speed, speed)
+                ¿ speed >= 1_200_000:
+                    rust_confirmed = ✓
+
+        # Build complete JSON structure
+        json_data = {
+            "test_metadata": {
+                "timestamp": datetime.now().isoformat(),
+                "target_threshold": 1_200_000,
+                "rust_confirmed": rust_confirmed,
+                "peak_performance": max_speed,
+                "min_performance": min_speed,
+                "performance_range": f"{min_speed:,.0f} - {max_speed:,.0f} chars/sec",
+                "estimated_speedup": f"{max_speed / 50_000:.1f}x" ¿ max_speed > 0 ⋄ "0x"
+            },
+            "detailed_results": self.results
+        }
+
+        # Save to JSON file
+        ∴:
+            ∥ open(filepath, 'w', encoding='utf-8') ↦ f:
+                json.dump(json_data, f, indent=2, ensure_ascii=⊥)
+            π(f"📁 Results saved to: {filename}")
+            ⟲ filepath
+        ⛒ Exception ↦ e:
+            π(f"❌ Failed to save JSON: {e}")
+            ⟲ Ø
+
+    ƒ print_summary(self):
+        """Print comprehensive test summary"""
+        π("\n\n" + "=" * 80)
+        π("🏁 COMPREHENSIVE TEST SUMMARY")
+        π("=" * 80)
+
+        rust_confirmed = ⊥
+        max_speed = 0
+        min_speed = float('inf')
+
+        ∀ test_name, result ∈ self.results.items():
+            ¿ isinstance(result, dict) ∧ "avg_chars_per_sec" ∈ result:
+                speed = result["avg_chars_per_sec"]
+                max_speed = max(max_speed, speed)
+                min_speed = min(min_speed, speed)
+
+                ¿ speed >= 1_200_000:
+                    rust_confirmed = ✓
+
+        π(f"📊 Performance Range: {min_speed:,.0f} - {max_speed:,.0f} chars/sec")
+        π(f"🎯 Target: 1,200,000 chars/sec")
+
+        ¿ rust_confirmed:
+            π("✅ RUST ACCELERATION CONFIRMED! 🦀⚡")
+            π(f"🏆 Peak Performance: {max_speed:,.0f} chars/sec")
+            speedup = max_speed / 50_000  # Assume 50K baseline ∀ Python
+            π(f"🚀 Estimated Speedup: {speedup:.1f}x over Python")
+        ⋄:
+            π("❌ RUST ACCELERATION NOT DETECTED")
+            π("🐍 Running on Python fallback")
+
+        π("\n🔍 Detailed Results:")
+        ∀ test_name, result ∈ self.results.items():
+            ¿ isinstance(result, dict):
+                ¿ "avg_chars_per_sec" ∈ result:
+                    speed = result["avg_chars_per_sec"]
+                    size = result.get("content_size", 0)
+                    π(f"  {test_name:20s}: {speed:>10,.0f} chars/sec ({size:,} chars)")
+                ⤷ "chars_per_sec" ∈ result:
+                    speed = result["chars_per_sec"]
+                    size = result.get("content_size", 0)
+                    π(f"  {test_name:20s}: {speed:>10,.0f} chars/sec ({size:,} chars)")
+
+ƒ main():
+    π("🦀 RUST ACCELERATION COMPREHENSIVE STRESS TEST")
+    π("=" * 80)
+    π("Target: Minimum 1.2M chars/sec to confirm Rust acceleration")
+    π("=" * 80)
+
+    tester = RustStressTest()
+
+    # Run all test suites
+    tester.test_pattern_complexity()
+    tester.test_scaling_performance()
+    tester.test_symbol_density_impact()
+    tester.test_extreme_stress()
+
+    # Print comprehensive summary
+    tester.print_summary()
+
+    # Save results to JSON
+    tester.save_results_to_json()
+
+¿ __name__ == "__main__":
+    main()

@@ -3,14 +3,20 @@ import os
 # Versioning
 PHICODE_VERSION = '2.2.0'
 
-PHIRUST_VERSION = '0.2.0'
+PHIRUST_VERSION = '0.3.1'
+
+PHIMMUNO_VERSION = "0.1.0"
 
 #--- -  - -  - ---#
 ## IN-HOUSE DEPS ##
 #---  --   --  ---#
 
 PHIRUST_BINARY_NAME = "phirust-transpiler"
-PHIRUST_RELEASE_BASE = f"https://github.com/Varietyz/phirust-transpiler/releases/download/v{PHIRUST_VERSION}"
+PHIMMUNO_BINARY_NAME = "phimmuno-engine"
+
+PHIRUST_RELEASE_BASE = f"https://github.com/Varietyz/{PHIRUST_BINARY_NAME}/releases/download/v{PHIRUST_VERSION}"
+PHIMMUNO_RELEASE_BASE = f"https://github.com/Varietyz/{PHIMMUNO_BINARY_NAME}/releases/download/v{PHIMMUNO_VERSION}"
+
 
 #--- -  - -  - ---#
 ## MAIN SETTINGS ##
@@ -20,6 +26,7 @@ PHIRUST_RELEASE_BASE = f"https://github.com/Varietyz/phirust-transpiler/releases
 ENGINE_NAME = "Phicode"
 API_NAME = "APHI"
 RUST_NAME = "PhiRust"
+SECURITY_NAME = "Phimmuno"
 
 # Branding Symbol(s)
 SYMBOL = "φ"
@@ -31,6 +38,7 @@ BADGE = f"({SYMBOL})" # (φ)
 ENGINE = f"{BADGE} {ENGINE_NAME} Engine"
 SERVER = f"{BADGE} {API_NAME} Server"
 SCRIPT = f"{BADGE} {RUST_NAME}"
+SECURITY = f"{BADGE} {SECURITY_NAME} Engine"
 
 # File types
 MAIN_FILE_TYPE = f".{SYMBOL}" # .φ
@@ -95,7 +103,6 @@ DEFAULT_C_EXTENSIONS = [
     'numpy', 'pandas', 'scipy', 'matplotlib', 'torch',
     'tensorflow', 'opencv-python', 'tracemalloc'
 ]
-
 
 # Default Phicode Map
 PYTHON_TO_PHICODE = {

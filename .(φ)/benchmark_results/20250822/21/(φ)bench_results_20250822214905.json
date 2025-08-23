@@ -1,0 +1,69 @@
+{
+  "system": "System Information:\n  OS: Windows 10\n  Python: pypy 3.11\n  CPU: 6 cores (12 logical)\n  Memory: 31.9 GB\n  Architecture: AMD64\n  Performance Baseline: 78,412,919 ops/sec",
+  "results": {
+    "bench_cache": {
+      "status": "completed",
+      "output": "Cache Hit Rate: 0.67\nCache Growth: 5 entries\n",
+      "error": null
+    },
+    "bench_extreme_stress": {
+      "status": "timeout",
+      "error": "Benchmark timeout (180s)"
+    },
+    "bench_memory": {
+      "status": "completed",
+      "output": "Memory Usage: 49.4MB\nMemory Delta: +0.7MB\n",
+      "error": null
+    },
+    "bench_stress": {
+      "status": "completed",
+      "output": "Concurrent Stress Test: 0.07s total\nAverage Worker Time: 0.01s\nOperations Per Second: 307\n",
+      "error": null
+    },
+    "bench_symbol_density": {
+      "status": "completed",
+      "output": "SYMBOL DENSITY IMPACT TESTING\n============================================================\n\nSymbol Density: 0%\nContent Size: 22,000 chars\nSpeed: 176,410,266 chars/sec\n\nSymbol Density: 10%\nContent Size: 2,400 chars\nSpeed: 26,899,254 chars/sec\n\nSymbol Density: 25%\nContent Size: 2,700 chars\nSpeed: 27,991,357 chars/sec\n\nSymbol Density: 50%\nContent Size: 3,300 chars\nSpeed: 30,886,483 chars/sec\n\nSymbol Density: 75%\nContent Size: 3,800 chars\nSpeed: 38,126,760 chars/sec\n\nSymbol Density: 100%\nContent Size: 4,400 chars\nSpeed: 47,177,634 chars/sec\n",
+      "error": null
+    },
+    "bench_transpiler": {
+      "status": "completed",
+      "output": "Transpile 1000 chars: 863782 chars/sec\nTranspile 10000 chars: 785503 chars/sec\nTranspile 100000 chars: 1051195 chars/sec\n",
+      "error": null
+    },
+    "bench_transpiler_patterns": {
+      "status": "completed",
+      "output": "PATTERN COMPLEXITY TESTING\n============================================================\n\nPattern: simple\nSize: 16 chars\nAverage Time: 0.112ms\nAverage Speed: 145,369 chars/sec\n\u26a0\ufe0f Possible acceleration, below target\n\nPattern: medium\nSize: 249 chars\nAverage Time: 0.233ms\nAverage Speed: 1,079,645 chars/sec\n\u26a0\ufe0f Possible acceleration, below target\n\nPattern: complex\nSize: 687 chars\nAverage Time: 0.607ms\nAverage Speed: 1,237,939 chars/sec\n\u2705 Rust acceleration confirmed\n\nPattern: heavy_symbols\nSize: 1,550 chars\nAverage Time: 3.187ms\nAverage Speed: 495,030 chars/sec\n\u26a0\ufe0f Possible acceleration, below target\n\nPattern: mixed_content\nSize: 291 chars\nAverage Time: 0.241ms\nAverage Speed: 1,212,240 chars/sec\n\u2705 Rust acceleration confirmed\n",
+      "error": null
+    },
+    "bench_transpiler_scaling": {
+      "status": "completed",
+      "output": "SCALING PERFORMANCE TESTING\n============================================================\n\nTesting 1,000 chars...\nTime: 0.549ms\nSpeed: 1,830,951 chars/sec\n\nTesting 10,000 chars...\nTime: 5.506ms\nSpeed: 1,857,345 chars/sec\nPerformance stable: -1.4%\n\nTesting 50,000 chars...\nTime: 18.898ms\nSpeed: 2,655,296 chars/sec\nPerformance stable: -43.0%\n\nTesting 100,000 chars...\nTime: 35.029ms\nSpeed: 2,855,338 chars/sec\nPerformance stable: -7.5%\n\nTesting 500,000 chars...\nTime: 213.754ms\nSpeed: 2,355,993 chars/sec\nPerformance stable: +17.5%\n\nTesting 1,000,000 chars...\nTime: 271.081ms\nSpeed: 3,689,114 chars/sec\nPerformance stable: -56.6%\n",
+      "error": null
+    },
+    "simulate_concurrency": {
+      "status": "completed",
+      "output": "\ud83d\udd04 Concurrent Engine Test - Real Components\n  Workers: 8\n  Successful: 8\n  Failed: 0\n  Total time: 6684.7ms\n  Avg worker time: 6454.3ms\n  Fastest worker: 6153.5ms\n  Slowest worker: 6591.7ms\n",
+      "error": null
+    },
+    "simulate_crash": {
+      "status": "completed",
+      "output": "\ud83d\udd25 Crash Test - Finding Breaking Points\n  \ud83c\udfaf Transpiler overload test...\n    1100 transpilations: 13.1ms\n    Throughput: 59769798 chars/sec\n  \ud83c\udfaf Cache saturation test...\n    10000 cache ops: 69.1ms\n    Ops/sec: 144752\n  \ud83c\udfaf Concurrent chaos test...\n    16 workers \u00d7 150 ops = 2400 total operations\n    Total time: 84657.8ms\n    Successful workers: 16\n    Failed workers: 0\n    Ops/sec: 28\n  \ud83c\udfaf Memory pressure test...\n    10000 large cache entries: 142.1ms\n    Cache size: 6 entries\n\ud83d\udd25 Crash test completed - system stress tested\n",
+      "error": null
+    },
+    "simulate_import_burst": {
+      "status": "completed",
+      "output": "\ud83d\udce6 Importer Burst Test - Real Engine\n  Importer registrations: 500\n  Registration time: 299.3ms\n  Avg per registration: 0.60ms\n  PhicodeFinders \u2208 meta_path: 501\n  Deduplication test: 0.1ms\n  Finders after dedup: 501\n  Deduplication working: True\n  Module lookups: 5000\n  Lookup time: 2283.6ms\n  Avg per lookup: 0.46ms\n",
+      "error": null
+    },
+    "simulate_stress_transpiler": {
+      "status": "completed",
+      "output": "\u26a1 Transpiler Stress Test - Real Engine\n  Light symbols:\n    Iterations: 500\n    Time: 27.0ms\n    Throughput: 704816 chars/sec\n  Medium symbols:\n    Iterations: 300\n    Time: 27.9ms\n    Throughput: 2529193 chars/sec\n  Heavy symbols:\n    Iterations: 200\n    Time: 37.8ms\n    Throughput: 2097774 chars/sec\n",
+      "error": null
+    },
+    "simulate_workload_cache": {
+      "status": "completed",
+      "output": "\ud83d\udcbe Cache Load Test - Real Engine\n  Operations: 400\n  Cache hits: 396\n  Hit rate: 0.99\n  Total time: 536.0ms\n  Avg per op: 1.3ms\n",
+      "error": null
+    }
+  }
+}

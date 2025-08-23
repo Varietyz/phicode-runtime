@@ -10,25 +10,25 @@ _json_encoder = json.JSONEncoder(separators=(',', ':'), ensure_ascii=False)
 _cached_symbols_json = None
 _cached_mappings_hash = None
 
-def try_rust_acceleration(source: str, mappings: Dict[str, str]) -> Optional[str]:
+def try_rust_acceleration(source: str, mappings: Dict[str, str], bypass_security: bool = False) -> Optional[str]:
     try:
-        return _try_rust_transpile(source, mappings)
+        return _try_rust_transpile(source, mappings, bypass_security)
     except Exception as e:
         logger.debug(f"{RUST_NAME} acceleration failed: {e}")
         return None
 
 def _get_cached_symbols_json(mappings: Dict[str, str]) -> str:
     global _cached_symbols_json, _cached_mappings_hash
-    
+
     current_hash = str(hash(frozenset(mappings.items())))
-    
+
     if _cached_symbols_json is None or _cached_mappings_hash != current_hash:
         _cached_symbols_json = _json_encoder.encode(mappings)
         _cached_mappings_hash = current_hash
-        
+
     return _cached_symbols_json
 
-def _try_rust_transpile(source: str, mappings: Dict[str, str]) -> Optional[str]:
+def _try_rust_transpile(source: str, mappings: Dict[str, str], bypass_security: bool) -> Optional[str]:
     global _rust_binary_path
 
     if _rust_binary_path is None:
@@ -46,8 +46,13 @@ def _try_rust_transpile(source: str, mappings: Dict[str, str]) -> Optional[str]:
 
     try:
         symbols_json = _get_cached_symbols_json(mappings)
+
+        cmd = [_rust_binary_path, "--symbols", symbols_json]
+        if bypass_security:
+            cmd.append("--bypass")
+
         result = subprocess.run(
-            [_rust_binary_path, "--symbols", symbols_json],
+            cmd,
             input=source,
             capture_output=True,
             text=True,

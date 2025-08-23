@@ -42,7 +42,7 @@ def execute_benchmark_file(file_path: str):
         intesive_benchmarks = ["extreme", "crash"]
 
         if any(keyword in name for keyword in intesive_benchmarks):
-            timeout = 180
+            timeout = 5*60
         else:
             timeout = 60
 

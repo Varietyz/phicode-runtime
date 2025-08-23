@@ -4,6 +4,7 @@ import json
 from .subprocess_handler import PhicodeSubprocessHandler
 from ..config.config import SERVER, ENGINE
 from ..core.phicode_logger import logger
+from ..security.phimmuno_validator import is_content_safe, is_security_enabled
 
 class PhicodeHTTPServer(http.server.BaseHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
@@ -40,6 +41,10 @@ class PhicodeHTTPServer(http.server.BaseHTTPRequestHandler):
                 self._send_error(400, "Missing 'code' or 'target' field")
                 return
 
+            if is_security_enabled() and not is_content_safe(payload.get('code', '')):
+                self._send_error(403, "Security threat detected")
+                return
+
             result = self.handler.convert_code(payload['code'], payload['target'])
             self._send_json_response(result)
 
@@ -64,6 +69,10 @@ class PhicodeHTTPServer(http.server.BaseHTTPRequestHandler):
 
             if 'code' not in payload:
                 self._send_error(400, "Missing 'code' field")
+                return
+
+            if is_security_enabled() and not is_content_safe(payload.get('code', '')):
+                self._send_error(403, "Security threat detected")
                 return
 
             result = self.handler.execute_code(
@@ -102,12 +111,18 @@ def start_server(host: str = "localhost", port: int = 8000):
     try:
         with socketserver.TCPServer((host, port), PhicodeHTTPServer) as httpd:
             logger.info(f"🌐 {SERVER} running on http://{host}:{port}")
-            logger.info("🔍 Endpoints:")
+            logger.info("📋 Endpoints:")
             logger.info("   POST /execute - Execute φ or Python code")
             logger.info("   POST /convert - Convert Python ↔ φ")
             logger.info(f"   GET  /info    - {ENGINE} info")
             logger.info("   GET  /symbols - Symbol mappings")
-            logger.info("📄 Press Ctrl+C to stop")
+
+            if is_security_enabled():
+                logger.info("🛡️  Security validation: ENABLED")
+            else:
+                logger.info("🛡️  Security validation: DISABLED (install with --phimmuno)")
+
+            logger.info("🔄 Press Ctrl+C to stop")
             httpd.serve_forever()
     except KeyboardInterrupt:
         logger.info(f"\nℹ️  {SERVER} stopped")

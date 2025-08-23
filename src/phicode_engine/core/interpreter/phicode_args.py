@@ -17,6 +17,7 @@ def _argv_context(target_argv: List[str]):
 class PhicodeArgs:
     module_or_file: str = "main"
     debug: bool = False
+    bypass: bool = False
     remaining_args: List[str] = field(default_factory=list)
     interpreter: Optional[str] = None
     list_interpreters: bool = False

@@ -1,0 +1,79 @@
+{
+  "system": "System Information:\n  OS: Windows 10\n  Python: pypy 3.11\n  CPU: 6 cores (12 logical)\n  Memory: 31.9 GB\n  Architecture: AMD64\n  Performance Baseline: 73,136,836 ops/sec",
+  "results": {
+    "bench_cache": {
+      "status": "completed",
+      "output": "Cache Hit Rate: 0.67\nCache Growth: 5 entries\n",
+      "error": null
+    },
+    "bench_extreme_stress": {
+      "status": "completed",
+      "output": "EXTREME TRANSPILER STRESS TESTING\n============================================================\n\nSTRESSED STAGE: 5,000,000 chars (4.8MB)\nTime: 0.960s\nSpeed: 5,210,037 chars/sec\nOutput size: 5,737,498 chars\n\u26a0\ufe0f Below target performance\n\nEXTREME STAGE: 6,500,000 chars (6.2MB)\nTime: 1.258s\nSpeed: 5,165,804 chars/sec\nOutput size: 7,458,748 chars\n\u26a0\ufe0f Below target performance\n\nDEADLY STAGE: 8,000,000 chars (7.6MB)\nTime: 1.616s\nSpeed: 4,949,211 chars/sec\nOutput size: 9,179,998 chars\n\u26a0\ufe0f Below target performance\n\nATOMIC STAGE: 10,000,000 chars (9.5MB)\nTime: 1.821s\nSpeed: 5,490,176 chars/sec\nOutput size: 11,474,998 chars\n\u26a0\ufe0f Below target performance\n",
+      "error": null
+    },
+    "bench_memory": {
+      "status": "completed",
+      "output": "Memory Usage: 49.5MB\nMemory Delta: +0.4MB\n",
+      "error": null
+    },
+    "bench_phimmuno": {
+      "status": "timeout",
+      "error": "Benchmark timeout (60s)"
+    },
+    "bench_stress": {
+      "status": "completed",
+      "output": "Concurrent Stress Test: 0.07s total\nAverage Worker Time: 0.02s\nOperations Per Second: 299\n",
+      "error": null
+    },
+    "bench_symbol_density": {
+      "status": "completed",
+      "output": "SYMBOL DENSITY IMPACT TESTING\n============================================================\n\nSymbol Density: 0%\nContent Size: 22,000 chars\nSpeed: 170,079,814 chars/sec\n\nSymbol Density: 10%\nContent Size: 2,400 chars\nSpeed: 21,332,890 chars/sec\n\nSymbol Density: 25%\nContent Size: 2,700 chars\nSpeed: 27,148,100 chars/sec\n\nSymbol Density: 50%\nContent Size: 3,300 chars\nSpeed: 29,935,484 chars/sec\n\nSymbol Density: 75%\nContent Size: 3,800 chars\nSpeed: 32,359,712 chars/sec\n\nSymbol Density: 100%\nContent Size: 4,400 chars\nSpeed: 36,972,652 chars/sec\n",
+      "error": null
+    },
+    "bench_transpiler": {
+      "status": "completed",
+      "output": "Transpile 1000 chars: 937032 chars/sec\nTranspile 10000 chars: 880165 chars/sec\nTranspile 100000 chars: 1125396 chars/sec\n",
+      "error": null
+    },
+    "bench_transpiler_patterns": {
+      "status": "completed",
+      "output": "PATTERN COMPLEXITY TESTING\n============================================================\n\nPattern: simple\nSize: 16 chars\nAverage Time: 0.124ms\nAverage Speed: 129,262 chars/sec\n\u26a0\ufe0f Possible acceleration, below target\n\nPattern: medium\nSize: 249 chars\nAverage Time: 0.268ms\nAverage Speed: 945,370 chars/sec\n\u26a0\ufe0f Possible acceleration, below target\n\nPattern: complex\nSize: 687 chars\nAverage Time: 0.647ms\nAverage Speed: 1,160,127 chars/sec\n\u26a0\ufe0f Possible acceleration, below target\n\nPattern: heavy_symbols\nSize: 1,550 chars\nAverage Time: 3.293ms\nAverage Speed: 480,146 chars/sec\n\u26a0\ufe0f Possible acceleration, below target\n\nPattern: mixed_content\nSize: 291 chars\nAverage Time: 0.273ms\nAverage Speed: 1,089,002 chars/sec\n\u26a0\ufe0f Possible acceleration, below target\n",
+      "error": null
+    },
+    "bench_transpiler_scaling": {
+      "status": "completed",
+      "output": "SCALING PERFORMANCE TESTING\n============================================================\n\nTesting 1,000 chars...\nTime: 0.485ms\nSpeed: 2,060,409 chars/sec\n\nTesting 10,000 chars...\nTime: 4.957ms\nSpeed: 2,108,032 chars/sec\nPerformance stable: -2.3%\n\nTesting 50,000 chars...\nTime: 18.842ms\nSpeed: 2,684,670 chars/sec\nPerformance stable: -27.4%\n\nTesting 100,000 chars...\nTime: 33.195ms\nSpeed: 3,013,857 chars/sec\nPerformance stable: -12.3%\n\nTesting 500,000 chars...\nTime: 207.713ms\nSpeed: 2,407,698 chars/sec\n\u26a0\ufe0f Performance degradation: 20.1%\n\nTesting 1,000,000 chars...\nTime: 282.594ms\nSpeed: 3,540,354 chars/sec\nPerformance stable: -47.0%\n",
+      "error": null
+    },
+    "simulate_concurrency": {
+      "status": "completed",
+      "output": "\ud83d\udd04 Concurrent Engine Test - Real Components\n  Workers: 8\n  Successful: 8\n  Failed: 0\n  Total time: 7767.6ms\n  Avg worker time: 6407.5ms\n  Fastest worker: 3449.8ms\n  Slowest worker: 7612.1ms\n",
+      "error": null
+    },
+    "simulate_crash": {
+      "status": "completed",
+      "output": "\ud83d\udd25 Crash Test - Finding Breaking Points\n  \ud83c\udfaf Transpiler overload test...\n    1100 transpilations: 15.0ms\n    Throughput: 51933026 chars/sec\n  \ud83c\udfaf Cache saturation test...\n    10000 cache ops: 69.3ms\n    Ops/sec: 144319\n  \ud83c\udfaf Concurrent chaos test...\n    16 workers \u00d7 150 ops = 2400 total operations\n    Total time: 87151.3ms\n    Successful workers: 16\n    Failed workers: 0\n    Ops/sec: 28\n  \ud83c\udfaf Memory pressure test...\n    10000 large cache entries: 120.4ms\n    Cache size: 6 entries\n\ud83d\udd25 Crash test completed - system stress tested\n",
+      "error": null
+    },
+    "simulate_import_burst": {
+      "status": "completed",
+      "output": "\ud83d\udce6 Importer Burst Test - Real Engine\n  Importer registrations: 500\n  Registration time: 291.9ms\n  Avg per registration: 0.58ms\n  PhicodeFinders \u2208 meta_path: 501\n  Deduplication test: 0.1ms\n  Finders after dedup: 501\n  Deduplication working: True\n  Module lookups: 5000\n  Lookup time: 2231.1ms\n  Avg per lookup: 0.45ms\n",
+      "error": null
+    },
+    "simulate_phimmuno_threat": {
+      "status": "completed",
+      "output": "ENGINE-SPECIFIC THREAT DETECTION\n===================================\n\nTesting Direct Python Threats...\n  Python #1: \u2705 Blocked - eval('malicious')...\n  Python #2: \u2705 Blocked - exec(user_input)...\n  Python #3: \u2705 Blocked - subprocess.call(['rm', '-rf', ...\n  Python #4: \u2705 Blocked - os.system('dangerous command')...\n  Python #5: \u2705 Blocked - __import__('subprocess').call(...\n  Python #6: \u2705 Blocked - getattr(__builtins__, 'exec')(...\n  Python #7: \u2705 Blocked - compile(untrusted, '<string>',...\n  Python #8: \u2705 Blocked - globals()['eval']('payload')...\nPython threat block rate: 100.0%\n\nTesting \u03c6\u2192Python Transpilation Threats...\n  \u03c6 #1: \u2705 Blocked after transpilation\n    \u03c6: eval('bad_code')...\n    \u2192: eval('bad_code')...\n  \u03c6 #2: \u2705 Blocked after transpilation\n    \u03c6: \u21d2 subprocess\nsubprocess.c...\n    \u2192: import subprocess\nsubproc...\n  \u03c6 #3: \u2705 Blocked after transpilation\n    \u03c6: \u21d2 os\nos.system('malware')...\n    \u2192: import os\nos.system('malw...\n  \u03c6 #4: \u2705 Blocked after transpilation\n    \u03c6: __import__('eval')('code'...\n    \u2192: __import__('eval')('code'...\n\u03c6 transpilation block rate: 100.0%\n\nTesting Engine-Specific Vectors...\n  Engine #1: \u26a0\ufe0f Allowed\n  Engine #2: \u26a0\ufe0f Allowed\n  Engine #3: \u2705 Blocked\nEngine-specific block rate: 33.3%\n\nTHREAT DETECTION SUMMARY:\n  Direct Python: 8/8 blocked\n  \u03c6 Transpilation: 4/4 blocked\n  Engine-specific: 1/3 blocked\nOverall threat protection: 86.7%\n\u2705 Good threat protection\n",
+      "error": null
+    },
+    "simulate_stress_transpiler": {
+      "status": "completed",
+      "output": "\u26a1 Transpiler Stress Test - Real Engine\n  Light symbols:\n    Iterations: 500\n    Time: 25.2ms\n    Throughput: 752845 chars/sec\n  Medium symbols:\n    Iterations: 300\n    Time: 27.3ms\n    Throughput: 2583175 chars/sec\n  Heavy symbols:\n    Iterations: 200\n    Time: 35.3ms\n    Throughput: 2245917 chars/sec\n",
+      "error": null
+    },
+    "simulate_workload_cache": {
+      "status": "completed",
+      "output": "\ud83d\udcbe Cache Load Test - Real Engine\n  Operations: 400\n  Cache hits: 396\n  Hit rate: 0.99\n  Total time: 519.3ms\n  Avg per op: 1.3ms\n",
+      "error": null
+    }
+  }
+}

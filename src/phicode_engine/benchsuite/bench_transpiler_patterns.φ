@@ -7,7 +7,6 @@
 ← phicode_engine.benchsuite ⇒ report
 
 π("PATTERN COMPLEXITY TESTING")
-π("=" * 60)
 
 transpiler = SymbolTranspiler()
 
@@ -51,7 +50,7 @@ test_patterns = {
 False = ⊥
 None = Ø
             """,
-            "heavy_symbols": "forinandornotis≢continuebreaktryexceptfinallyraisereturnyieldprint" * 50,  # Symbol-dense
+            "heavy_symbols": "∀ ∈ ∧ ∨ ¬ ≡ ≢ ⇉ ⇲ ∴ ⛒ ⇗ ↑ ⟲ ⟰ π" * 50,  # Symbol-dense
             "mixed_content": '''
 """
 This ≡ a string ∥ ∀ symbols that should NOT be transpiled

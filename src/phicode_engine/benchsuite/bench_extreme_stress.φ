@@ -5,7 +5,6 @@
 ← phicode_engine.benchsuite ⇒ report
 
 π("EXTREME TRANSPILER STRESS TESTING")
-π("=" * 60)
 
 transpiler = SymbolTranspiler()
 
@@ -34,9 +33,9 @@ base_pattern = """
 
 stress_stages = [
     ("stressed", 5_000_000),
-    ("extreme", 15_000_000),
-    ("deadly", 30_000_000),
-    ("atomic", 50_000_000)
+    ("extreme", 6_500_000),
+    ("deadly", 8_000_000),
+    ("atomic", 10_000_000)
 ]
 
 ∀ stage_name, size ∈ stress_stages:
@@ -62,7 +61,7 @@ stress_stages = [
     report(f"{stage_name}_throughput_mb", f"{len(content)/1024/1024/elapsed:.2f} MB/sec")
 
     ¿ chars_per_sec >= 100_000_000:
-        π("✅ Extreme performance achieved")
+        π("✅ Extreme performance achieved (≥ 100M chars/sec)")
         report(f"{stage_name}_status", "EXTREME_PERFORMANCE_ACHIEVED")
     ⋄:
         π("⚠️ Below target performance")

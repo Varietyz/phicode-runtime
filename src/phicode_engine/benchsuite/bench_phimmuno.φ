@@ -1,0 +1,115 @@
+# (φ) src/phicode_engine/benchsuite/bench_phimmuno.φ
+⇒ time
+⇒ os
+← phicode_engine.security.phimmuno_validator ⇒ is_content_safe
+← phicode_engine.benchsuite ⇒ report
+
+ƒ report(name, result):
+    π(f"{name}: {result}")
+
+π("SECURITY VALIDATION BENCHMARK")
+
+phimmuno_path = os.path.join(os.path.expanduser("~"), ".phicode", "bin", "phimmuno-engine")
+¿ os.name == 'nt':
+    phimmuno_path += ".exe"
+
+binary_available = os.path.exists(phimmuno_path)
+report("Phimmuno binary available", "✅ Yes" if binary_available else "❌ No")
+
+¿ ¬ binary_available:
+    π("⚠️ Running fallback mode (always returns safe)")
+    π("💡 Install ∥: phicode --security-install")
+
+safe_patterns = [
+    "π('Hello World')",
+    "x = 1 + 2",
+    "∀ i ∈ range(10): π(i)",
+    "ƒ hello(): ⟲ 'world'",
+    "⇒ math; π(math.pi)",
+]
+
+dangerous_patterns = [
+    "eval('malicious_code')",
+    "exec(user_input)",
+    "subprocess.call(['rm', '-rf'])",
+    "os.system('dangerous')",
+    "__import__('subprocess')",
+    "getattr(__builtins__, 'eval')",
+    "compile(source, '<string>', 'exec')",
+    "globals()['eval']",
+]
+
+π("\nTesting Safe Patterns...")
+safe_blocked = 0
+∀ i, pattern ∈ enumerate(safe_patterns):
+    result = is_content_safe(pattern)
+    status = "✅ Allowed" if result else "❌ Blocked"
+    π(f"  Safe #{i+1}: {status}")
+    ¿ ¬ result:
+        safe_blocked += 1
+
+safe_pass_rate = ((len(safe_patterns) - safe_blocked) / len(safe_patterns)) * 100
+report("Safe pattern pass rate", f"{safe_pass_rate:.1f}%")
+
+π("\nTesting Dangerous Patterns...")
+dangerous_allowed = 0
+∀ i, pattern ∈ enumerate(dangerous_patterns):
+    result = is_content_safe(pattern)
+    status = "✅ Blocked" ¿ ¬ result ⋄ "❌ Allowed"
+    π(f"  Threat #{i+1}: {status}")
+    ¿ result:
+        dangerous_allowed += 1
+
+threat_block_rate = ((len(dangerous_patterns) - dangerous_allowed) / len(dangerous_patterns)) * 100
+report("Threat block rate", f"{threat_block_rate:.1f}%")
+
+π("\nTesting Performance...")
+
+start = time.perf_counter()
+∀ _ ∈ range(1000):
+    is_content_safe("print('test')")
+end = time.perf_counter()
+small_avg = (end - start) / 1000 * 1000
+
+large_pattern = "print('test')\n" * 100
+start = time.perf_counter()
+∀ _ ∈ range(100):
+    is_content_safe(large_pattern)
+end = time.perf_counter()
+large_avg = (end - start) / 100 * 1000
+
+π("Testing concurrent validation...")
+patterns_mix = safe_patterns + dangerous_patterns
+start = time.perf_counter()
+∀ pattern ∈ patterns_mix * 10:
+    is_content_safe(pattern)
+end = time.perf_counter()
+concurrent_avg = (end - start) / (len(patterns_mix) * 10) * 1000
+
+report("Small pattern avg time", f"{small_avg:.3f}ms")
+report("Large pattern avg time", f"{large_avg:.3f}ms")
+report("Mixed workload avg time", f"{concurrent_avg:.3f}ms")
+
+¿ binary_available:
+    ¿ small_avg < 1.0 ∧ large_avg < 5.0:
+        π("✅ Performance excellent")
+    ⤷ small_avg < 2.0 ∧ large_avg < 10.0:
+        π("✅ Performance good")
+    ⋄:
+        π("⚠️ Performance may need optimization")
+⋄:
+    π("ℹ️ Performance test skipped (binary not available)")
+
+# Summary
+π(f"\nSUMMARY:")
+π(f"  Safe patterns: {len(safe_patterns) - safe_blocked}/{len(safe_patterns)} passed")
+π(f"  Threats blocked: {len(dangerous_patterns) - dangerous_allowed}/{len(dangerous_patterns)}")
+π(f"  Binary status: {'Available' if binary_available else 'Missing'}")
+
+overall_score = (safe_pass_rate + threat_block_rate) / 2
+¿ overall_score >= 95:
+    π("✅ Security system working excellently")
+⤷ overall_score >= 85:
+    π("✅ Security system working well")
+⋄:
+    π("⚠️ Security system needs attention")
