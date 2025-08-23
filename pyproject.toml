@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "phicode"
-version = "2.2.0"
+version = "2.3.0"
 description = "(φ) PHICODE Engine — run φ code directly in Python/PyPy with optional Rust acceleration"
 readme = "README.md"
 license = {text = "MIT"}

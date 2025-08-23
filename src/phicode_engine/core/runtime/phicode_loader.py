@@ -33,7 +33,7 @@ class PhicodeLoader(importlib.abc.Loader):
             if IMPORT_ANALYSIS_ENABLED and not _switch_executed:
                 optimal_interpreter = _cache.get_interpreter_hint(self.path, phicode_source)
                 if optimal_interpreter != __import__('sys').executable:
-                    _original_module_name = self._get_module_name()
+                    _original_module_name = os.path.abspath(self.path)
                     _switch_executed = True
                     if InterpreterSwitcher.attempt_switch(optimal_interpreter, _original_module_name):
                         return

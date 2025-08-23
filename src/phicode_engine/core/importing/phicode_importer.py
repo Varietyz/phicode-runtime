@@ -1,6 +1,6 @@
 import sys
 import os
-from ..cache.phicode_finder import PhicodeFinder
+from .phicode_finder import PhicodeFinder
 
 def install_phicode_importer(base_path: str):
     base_path = os.path.abspath(base_path)

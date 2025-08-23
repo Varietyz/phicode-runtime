@@ -8,9 +8,15 @@ class InterpreterSwitcher:
     @staticmethod
     def attempt_switch(optimal_interpreter: str, original_module_name: str):
         if optimal_interpreter == sys.executable:
-            logger.debug(f"✅ Using Optimal interpreter: {optimal_interpreter}")
+            logger.debug(f"✅ Already using optimal interpreter: {optimal_interpreter}")
             return False
-        
+
+        # Check environment variable to prevent infinite switching loops
+        env_switched = os.environ.get('PHICODE_ALREADY_SWITCHED', '0') == '1'
+        if env_switched:
+            logger.debug(f"🔄 Switch already attempted, staying with: {sys.executable}")
+            return False
+
         if not os.path.sep in optimal_interpreter:
             interpreter_path = shutil.which(optimal_interpreter)
             if not interpreter_path:
@@ -33,15 +39,29 @@ class InterpreterSwitcher:
             except:
                 target_args = []
 
-            cmd_parts = [interpreter_path, '-m', 'phicode_engine']
-            cmd_parts.append(original_module_name)
-            if target_args:
-                cmd_parts.extend(target_args)
+            # Get the original command line arguments to preserve the exact invocation
+            original_argv = sys.argv.copy()
+            
+            # Replace the current interpreter with the optimal one
+            cmd_parts = [interpreter_path]
+            
+            # Preserve the original command structure
+            if original_argv[0] == sys.executable:
+                # If originally invoked as "python -m phicode_engine ..."
+                cmd_parts.extend(original_argv[1:])
+            else:
+                # If originally invoked as "phi ..."
+                cmd_parts.extend(['-m', 'phicode_engine'])
+                cmd_parts.extend(original_argv[1:])
 
             logger.debug(f"⚡ Interpreter switch command: {cmd_parts}")
             logger.info(f"🔄 Switching to optimal interpreter: {optimal_interpreter}")
-
-            result = subprocess.run(cmd_parts, cwd=os.getcwd())
+            
+            # Pass the switch state to the subprocess via environment variable
+            env = os.environ.copy()
+            env['PHICODE_ALREADY_SWITCHED'] = '1'
+            
+            result = subprocess.run(cmd_parts, cwd=os.getcwd(), env=env)
             sys.exit(result.returncode)
 
         except Exception as e:

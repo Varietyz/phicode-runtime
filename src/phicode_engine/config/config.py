@@ -1,7 +1,7 @@
 import os
 
 # Versioning
-PHICODE_VERSION = '2.2.0'
+PHICODE_VERSION = '2.3.0'
 
 PHIRUST_VERSION = '0.3.1'
 

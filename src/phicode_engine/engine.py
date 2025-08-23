@@ -1,3 +1,4 @@
+import os
 from .core.interpreter.cli.phicode_cli import parse_args
 from .core.interpreter.phicode_exit_handlers import handle_early_exit_flags
 from .core.runtime.phicode_runtime import run
@@ -10,14 +11,17 @@ def main():
         if handle_early_exit_flags(args):
             return
 
-        if args.bypass:
-            logger.warning("   🔓 SECURITY BYPASS ENABLED")
-            logger.warning("Threat detection is DISABLED for this execution.")
-        else:
-            logger.warning("   ⚠️  SECURITY WARNING ⚠️")
-            logger.warning("This engine executes code on your machine.")
-            logger.warning("Only provide input from trusted sources.")
-            logger.warning("🔍 All code is screened for dangerous patterns before execution.")
+        is_switched = os.environ.get('PHICODE_ALREADY_SWITCHED', '0') == '1'
+
+        if not is_switched:
+            if args.bypass:
+                logger.warning("   🔓 SECURITY BYPASS ENABLED")
+                logger.warning("Threat detection is DISABLED for this execution.")
+            else:
+                logger.warning("   ⚠️  SECURITY WARNING ⚠️")
+                logger.warning("This engine executes code on your machine.")
+                logger.warning("Only provide input from trusted sources.")
+                logger.warning("🔍 All code is screened for dangerous patterns before execution.")
 
         if args.debug:
             logger.setLevel("DEBUG")

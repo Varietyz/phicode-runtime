@@ -5,7 +5,7 @@ import os
 import sys
 from functools import lru_cache
 from typing import Optional, Tuple
-from .phicode_cache import _cache
+from ..cache.phicode_cache import _cache
 from ..runtime.phicode_loader import PhicodeLoader
 from ...config.config import MAIN_FILE_TYPE, SECONDARY_FILE_TYPE
 

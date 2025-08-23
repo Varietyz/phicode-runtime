@@ -43,8 +43,8 @@ src/phicode_engine/core/cache/phicode_bytecode.py
 src/phicode_engine/core/cache/phicode_cache.py
 src/phicode_engine/core/cache/phicode_cache_ops.py
 src/phicode_engine/core/cache/phicode_cache_validation.py
-src/phicode_engine/core/cache/phicode_finder.py
 src/phicode_engine/core/importing/phicode_central.py
+src/phicode_engine/core/importing/phicode_finder.py
 src/phicode_engine/core/importing/phicode_importer.py
 src/phicode_engine/core/interpreter/phicode_args.py
 src/phicode_engine/core/interpreter/phicode_executor.py

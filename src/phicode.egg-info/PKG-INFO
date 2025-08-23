@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: phicode
-Version: 2.2.0
+Version: 2.3.0
 Summary: (φ) PHICODE Engine — run φ code directly in Python/PyPy with optional Rust acceleration
 Author-email: Jay Baleine <jay@banes-lab.com>
 License: MIT

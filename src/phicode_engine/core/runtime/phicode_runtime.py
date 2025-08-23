@@ -14,7 +14,10 @@ from ...config.config import STARTUP_WARNING_MS, ENGINE_NAME, MAIN_FILE_TYPE, SE
 def run(args: PhicodeArgs):
     start_time = time.perf_counter()
 
-    _show_interpreter_recommendations()
+    is_switched = os.environ.get('PHICODE_ALREADY_SWITCHED', '0') == '1'
+    if not is_switched:
+        _show_interpreter_recommendations()
+
     install_shutdown_handler()
     register_cleanup(cleanup_cache_temp_files)
     register_cleanup(_flush_batch_writes)
@@ -47,9 +50,8 @@ def run(args: PhicodeArgs):
 def _show_interpreter_recommendations():
     selector = InterpreterSelector()
     current = selector.get_current_info()
-
-    if not current["is_pypy"]:
-        recommended = selector.get_recommended_interpreter()
+    recommended = selector.get_recommended_interpreter()
+    if not current["is_pypy"] and selector.is_pypy(recommended):
         if recommended and selector.is_pypy(recommended):
             logger.info("💡 For 3x faster symbolic processing, use PyPy:")
             logger.info(f"   pypy3 -m phicode_engine <module>")
