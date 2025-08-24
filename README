@@ -1,1188 +1,242 @@
-# PHICODE Runtime Engine
+# (φ) Phicode Engine
 
-<div align="center">
-
-<img src="https://banes-lab.com/assets/images/banes_lab/700px_Main_Animated.gif" width="100" alt="Banes Lab"/>
-
-[![Build Status](https://img.shields.io/badge/build-passing-brightgreen)](https://github.com/Varietyz/pip-phicode) [![Python](https://img.shields.io/badge/python-3.8%2B-blue)](https://python.org) [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE) [![Version](https://img.shields.io/badge/version-2.1.2-orange)](https://github.com/Varietyz/pip-phicode/releases)
-
-> **🚀 Mathematical Programming Made Executable** - Transform intuitive mathematical notation like `∀`, `λ`, `⇒` into native Python code with zero performance overhead
-
-**Target Audience**: Python developers, researchers, mathematicians, and data scientists who prefer mathematical notation over verbose keywords. Ideal for academic computing, symbolic programming, and projects requiring mathematical expressiveness.
-
-> **⚠️ Development Status**: Production-ready with active feature development.
-
-</div>
-
-## 🎯 Executive Summary
-
-PHICODE enables writing Python using mathematical symbols through a sophisticated **meta path finder** and **bytecode caching system**. Files with `.φ` extension are automatically translated to standard Python and compiled with full optimization. The system provides **thread-safe operations**, **persistent caching**, and **zero-overhead execution** after initial compilation.
-
-**Value Proposition**: Reduce cognitive load by writing code that matches mathematical thinking patterns while maintaining full Python ecosystem compatibility and performance.
-
-## 📋 Table of Contents
-
-- [🚀 Quick Start](#-quick-start)
-- [⚙️ System Requirements & Installation](#️-system-requirements--installation) 
-- [📖 Usage & Workflow Patterns](#-usage--workflow-patterns)
-- [🏗️ Technical Architecture](#️-technical-architecture)
-- [📝 Symbol Reference & Mapping](#-symbol-reference--mapping)
-- [🔧 Configuration & Performance](#-configuration--performance)
-- [🧪 Testing & Validation](#-testing--validation)
-- [🔍 Diagnostics & Troubleshooting](#-diagnostics--troubleshooting)
-- [🤝 Developer Resources](#-developer-resources)
-- [❓ Support & Community](#-support--community)
-
-## 🚀 Quick Start
-
-### 📦 One-Line Installation & Verification
-
-```bash
-pip install phicode && echo 'π("PHICODE Ready! ✨")' > test.φ && phicode test.φ
-```
-
-### 🔤 First Mathematical Program
-
-```python
-# fibonacci.φ - Mathematical sequence implementation
-ƒ fibonacci(n):
-    ¿ n ≤ 1:
-        ⟲ n
-    ⋄:
-        ⟲ fibonacci(n-1) + fibonacci(n-2)
-
-# Generate sequence using mathematical iteration
-∀ i ∈ range(8):
-    π(f"F({i}) = {fibonacci(i)}")
-```
-
-```bash
-phicode fibonacci.φ
-# Output: F(0) = 0, F(1) = 1, F(2) = 1, F(3) = 2, F(4) = 3, F(5) = 5, F(6) = 8, F(7) = 13
-```
-
-## ⚙️ System Requirements & Installation
-
-### 📋 Technical Specifications
-
-| Component | Requirement | Source Reference |
-|-----------|-------------|------------------|
-| **Python Version** | ≥3.8 | `pyproject.toml:requires-python` |
-| **Build System** | setuptools≥61.0 | `pyproject.toml:build-system` |
-| **Memory** | 64MB+ for cache operations | `phicode_cache.py:MAX_CACHE_SIZE` |
-| **Storage** | ~10MB + dynamic cache growth | `.phicode_cache/` directory |
-| **Threading** | Thread-safe operations | `phicode_cache.py:RLock` |
-
-### 🔧 Installation Methods
-
-<details>
-<summary>📦 Standard Installation</summary>
-
-```bash
-# Production installation
-pip install phicode
-
-# Verify core functionality
-python -c "from phicode_engine.core.phicode_importer import install_phicode_importer; print('✅ Import successful')"
-```
-
-</details>
-
-<details>
-<summary>🛠️ Development Installation</summary>
-
-```bash
-# Clone and install in development mode
-git clone https://github.com/Varietyz/pip-phicode.git
-cd phicode
-pip install -e .
-
-# Verify build system
-python -m build --sdist --wheel
-```
-
-</details>
-
-### ♿ Accessibility & Compatibility Matrix
-
-| Platform | Status | Unicode Support | Terminal Requirements |
-|----------|--------|-----------------|----------------------|
-| **Windows 10/11** | ✅ Fully Supported | UTF-8 encoding required | PowerShell 5.1+ recommended |
-| **macOS 10.15+** | ✅ Fully Supported | Native Unicode support | Terminal.app or iTerm2 |
-| **Linux (Ubuntu 18+)** | ✅ Fully Supported | UTF-8 locale required | `export LANG=en_US.UTF-8` |
-| **Docker/Containers** | ✅ Supported | Alpine 3.14+ with UTF-8 | `ENV PYTHONIOENCODING=utf-8` |
-
-## 📖 Usage & Workflow Patterns
-
-### 🎯 Basic Workflow Integration
-
-```python
-# mathematical_operations.φ - Natural mathematical expressions
-⇒ math  # import math
-
-ƒ statistical_analysis(dataset):
-    """Mathematical statistical operations using symbolic notation."""
-    n = len(dataset)
-    
-    # Mean calculation with mathematical iteration
-    μ = sum(x ∀ x ∈ dataset) / n
-    
-    # Variance with mathematical conditional logic
-    σ² = sum((x - μ)**2 ∀ x ∈ dataset) / (n - 1) ¿ n > 1 ⋄ 0
-    
-    # Standard deviation
-    σ = math.sqrt(σ²)
-    
-    π(f"📊 Dataset Analysis:")
-    π(f"   μ (mean): {μ:.3f}")
-    π(f"   σ² (variance): {σ²:.3f}")  
-    π(f"   σ (std dev): {σ:.3f}")
-    
-    ⟲ {"mean": μ, "variance": σ², "std_dev": σ}
-
-# Usage with error handling
-data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-results = statistical_analysis(data)
-```
-
-### 🔄 Advanced Control Flow Patterns
-
-<details>
-<summary>🧱 Complex Mathematical Logic (Click to expand)</summary>
-
-```python
-# advanced_math.φ - Comprehensive mathematical programming
-⇒ itertools
-
-ƒ matrix_operations(A, B):
-    """Matrix operations with mathematical exception handling."""
-    ∴:  # try
-        # Dimension validation using mathematical logic
-        ¿ len(A) ≠ len(B) ∨ len(A[0]) ≠ len(B[0]):
-            ↑ ValueError("Matrix dimensions incompatible")
-        
-        # Matrix addition with nested iteration
-        C = [[A[i][j] + B[i][j] ∀ j ∈ range(len(A[0]))] ∀ i ∈ range(len(A))]
-        
-        π("✅ Matrix addition completed successfully")
-        ⟲ C
-        
-    ⛒ ValueError as e:  # except ValueError
-        π(f"🚨 Matrix Error: {e}")
-        ⟲ Ø  # None
-        
-    ⛒ Exception as e:  # except Exception  
-        π(f"⚠️ Unexpected error: {e}")
-        ⟲ Ø
-        
-    ⇗:  # finally
-        π("📝 Matrix operation completed")
-
-# Test mathematical operations
-A = [[1, 2], [3, 4]]
-B = [[5, 6], [7, 8]]
-result = matrix_operations(A, B)
-¿ result ≢ Ø:  # if result is not None
-    π(f"Result matrix: {result}")
-```
-
-</details>
-
-### 🔗 Module Integration Patterns
-
-```python
-# Programmatic usage in existing Python projects
-import sys
-import os
-from phicode_engine.core.phicode_importer import install_phicode_importer
-
-# Install PHICODE importer for project directory
-project_root = "/path/to/your/phicode/modules"
-install_phicode_importer(project_root)
-
-# Import .φ modules as standard Python modules
-import mathematical_utils  # Automatically imports mathematical_utils.φ
-import data_processing     # Automatically imports data_processing.φ
-
-# Use imported mathematical functions
-results = mathematical_utils.calculate_derivatives(data)
-```
-
-## 🏗️ Technical Architecture
-
-### 🔧 Core System Components
-
-```
-📁 phicode_engine/
-├── 🎯 run.py                    # CLI entry point with argument parsing
-│   ├── main() → argument parsing & module execution
-│   ├── Error codes: 0=success, 2=folder not found, 3=import error
-│   └── Version: 2.1.2 (synchronized with pyproject.toml)
-│
-├── 📦 core/                     # Core runtime engine
-│   ├── 🔍 phicode_finder.py     # importlib.abc.MetaPathFinder implementation
-│   │   ├── find_spec() → .φ file discovery with caching
-│   │   ├── LRU cache (256 entries) for file path resolution
-│   │   └── Package detection: __init__.φ support
-│   │
-│   ├── ⚡ phicode_loader.py     # importlib.abc.Loader implementation  
-│   │   ├── exec_module() → bytecode compilation & execution
-│   │   ├── Hash-based .pyc validation with MAGIC_NUMBER verification
-│   │   └── Source hash comparison for cache invalidation
-│   │
-│   ├── 💾 phicode_cache.py      # Thread-safe caching system
-│   │   ├── MAX_CACHE_SIZE = 512 (configurable LRU limit)
-│   │   ├── RLock() for concurrent access protection
-│   │   ├── SHA256 hashing for integrity verification
-│   │   └── Persistent disk cache with JSON serialization
-│   │
-│   └── 🔌 phicode_importer.py   # sys.meta_path integration
-│       └── install_phicode_importer() → finder registration
-│
-└── 🗺️ map/
-    └── mapping.py               # Symbol translation definitions
-        ├── PYTHON_TO_PHICODE: 25 symbol mappings
-        ├── PHICODE_TO_PYTHON: reverse mapping dictionary
-        └── Regex compilation for efficient translation
-```
-
-### ⚡ Execution Flow & Performance
-
-```mermaid
-graph TD
-    A[📁 .φ File Request] --> B[🔍 PhicodeFinder.find_spec]
-    B --> C{📊 Spec Cache Hit?}
-    C -->|✅ Hit| D[📋 Return Cached Spec]
-    C -->|❌ Miss| E[🔎 File System Lookup]
-    E --> F[📝 Create ModuleSpec]
-    F --> G[💾 Cache Spec with mtime]
-    G --> D
-    D --> H[⚡ PhicodeLoader.exec_module]
-    H --> I{🔍 Source Cache Hit?}
-    I -->|✅ Hit| J[📖 Use Cached Source]
-    I -->|❌ Miss| K[📂 Read File & Cache]
-    K --> J
-    J --> L{🔄 Translation Cache Hit?}
-    L -->|✅ Hit| M[🐍 Use Cached Python]
-    L -->|❌ Miss| N[🔤 Translate Symbols]
-    N --> O[💾 Cache Translation]
-    O --> M
-    M --> P{📦 Valid Bytecode Cache?}
-    P -->|✅ Valid| Q[⚡ Load Bytecode]
-    P -->|❌ Invalid| R[🔨 Compile Python]
-    R --> S[💾 Write .pyc File]
-    S --> Q
-    Q --> T[🚀 Execute Module]
-```
-
-### 🔒 Security & Integrity Features
-
-| Component | Security Measure | Implementation |
-|-----------|------------------|----------------|
-| **Source Validation** | SHA256 hashing | `phicode_cache.py:_hash_file()` |
-| **Bytecode Integrity** | MAGIC_NUMBER verification | `phicode_loader.py:_is_pyc_valid()` |
-| **Cache Protection** | Hash-based validation | Source hash comparison before cache use |
-| **Thread Safety** | RLock synchronization | `phicode_cache.py:RLock()` for atomic operations |
-| **File Permissions** | OSError handling | Graceful degradation on permission issues |
-
-## 📝 Symbol Reference & Mapping
-
-### 🔤 Core Language Constructs
-
-| Symbol | Python | Mnemonic            | Usage Pattern   | Error Handling                    |
-| ------ | ------ | ------------------- | --------------- | --------------------------------- |
-| ƒ      | def    | function symbol     | ƒ name(args):   | ✅ Standard Python function rules  |
-| π      | print  | pi for print        | π("message")    | ✅ All print() arguments supported |
-| ¿      | if     | ? (question)        | ¿ condition:    | ✅ Standard boolean evaluation     |
-| ⤷      | elif   | branching arrow     | ⤷ condition:    | ✅ Multiple elif chains supported  |
-| ⋄      | else   | diamond (else)      | ⋄:              | ✅ Standard else semantics         |
-| ∀      | for    | for all             | ∀ x ∈ iterable: | ✅ All Python iteration patterns   |
-| ↻      | while  | circular loop       | ↻ condition:    | ✅ Standard while loop behavior    |
-| ⟲      | return | return arrow        | ⟲ value         | ✅ All return scenarios supported  |
-| ⟷      | match  | bidirectional match | ⟷ variable:     | ✅ Structural pattern matching     |
-| ▷      | case   | branch case         | ▷ pattern:      | ✅ Pattern match branch semantics  |
+Below is a thorough look at what this engine does, how it's put together, designed & any "hidden"/less obvious behaviors
 
 ---
 
-### 🧮 Logical & Mathematical Operators
+## What it is (at a glance)
 
-| Symbol | Python | Mathematical Meaning | Code Example      | Notes                                  |
-| ------ | ------ | -------------------- | ----------------- | -------------------------------------- |
-| ∧      | and    | Logical conjunction  | x > 0 ∧ x < 10    | ⚠️ Short-circuit evaluation preserved  |
-| ∨      | or     | Logical disjunction  | a ≡ 1 ∨ a ≡ 2     | ⚠️ Short-circuit evaluation preserved  |
-| ¬      | not    | Logical negation     | ¬ condition       | ✅ Unary operator precedence maintained |
-| ≡      | is     | Identity comparison  | x ≡ None          | ⚠️ Use for identity, not equality      |
-| ≢      | is not | Non-identity         | x ≢ None          | ⚠️ Preferred over ¬(x ≡ y)             |
-| ∈      | in     | Set membership       | item ∈ collection | ✅ All container types supported        |
-| ∉      | not in | Non-membership       | item ∉ collection | ✅ All container types supported        |
-| ∑      | sum    | Summation            | ∑(\[1, 2, 3])     | ✅ Works with iterables of numbers      |
-| ⭱      | max    | Maximum value        | ⭱(list\_values)   | ✅ Works with any comparable types      |
-| ⭳      | min    | Minimum value        | ⭳(list\_values)   | ✅ Works with any comparable types      |
-| ∣      | abs    | Absolute value       | ∣-5               | ✅ Works with int, float, complex       |
+Phicode lets you write Python using a symbolic alphabet (e.g., `¿` for `if`, `∴` for `try`, `π` for `print`) and run it as if it were normal Python. It does this by (1) **multi-tier transpiling** your `.φ` sources to Python (regex → optimized Python → Rust acceleration), (2) **enterprise-grade caching** with corruption recovery and integrity verification, (3) **seamless importing** `.φ` files via a custom meta-path finder/loader with full package support, and (4) **adaptive interpreter switching** (PyPy vs CPython) based on dependency analysis. The package also exposes an HTTP server with subprocess isolation and a comprehensive CLI.
+
+This is a **production-ready symbolic Python runtime** with enterprise-grade engineering patterns—delivering **176M+ chars/sec** peak transpilation performance with optimization techniques found in major tech company codebases.
 
 ---
 
-### 🔄 Control Flow & Exception Handling
+## My project philosophy
 
-| Symbol | Python   | Usage Context      | Example Pattern         |
-| ------ | -------- | ------------------ | ----------------------- |
-| ∴      | try      | Exception handling | ∴: risky\_operation()   |
-| ⛒      | except   | Exception catching | ⛒ ValueError as e:      |
-| ⇗      | finally  | Cleanup operations | ⇗: cleanup\_resources() |
-| ↑      | raise    | Exception raising  | ↑ ValueError("message") |
-| ⇲      | break    | Loop termination   | ¿ condition: ⇲          |
-| ⇉      | continue | Loop continuation  | ¿ skip\_condition: ⇉    |
-| ⋯      | pass     | No-operation       | ¿ placeholder: ⋯        |
+*"I believe in architectural minimalism with deterministic reliability - every line of code must earn its place through measurable value, not feature-rich design patterns. I build systems that work predictably in production, not demonstrations of architectural sophistication. My approach is surgical: target the exact problem with minimal code, reuse existing components rather than building new ones, and resist feature bloat by consistently asking whether each addition truly serves the core purpose. I favor synchronous, predictable flows over async complexity, apply optimizations only to proven bottlenecks with measurable impact, and choose tools based on performance characteristics that match workload requirements, not popular trends. I maintain strict separation of concerns across modules where each component has a single, well-defined responsibility, and preserve code readability and maintainability as primary concerns. My constraint-driven design ensures files never exceed 150 lines of code - complexity that cannot fit must be properly decomposed - and I design with cross-platform considerations and real-world deployment constraints in mind while implementing robust error handling without over-engineering every possible edge case. Production stability trumps cutting-edge patterns; I prioritize deterministic behavior and long-runtime stability over unpredictable innovation. I build what works, not what impresses."*
+
+**— Jay Baleine**
 
 ---
 
-### 📦 Import & Module System
+## Core capabilities
 
-| Symbol | Python    | Usage               | Advanced Pattern          |                                     |
-| ------ | --------- | ------------------- | ------------------------- | ----------------------------------- |
-| ⇒      | import    | Module import       | ⇒ math, sys, os           |                                     |
-| ←      | from      | Selective import    | ← math ⇒ sqrt, sin, cos   |                                     |
-| ↦      | as        | Aliasing            | ⇒ numpy ↦ np              |                                     |
-| λ      | lambda    | Anonymous functions | λ x: x\*\*2               |                                     |
-| Ø      | None      | Null value          | ⟲ Ø ¿ error ⋄ result      |                                     |
-| ✓      | True      | Boolean true        | flag = ✓                  |                                     |
-| ⊥      | False     | Boolean false       | flag = ⊥                  |                                     |
-| ℓ      | len       | Length function     | ℓ(iterable)               | ✅ Works with sequences, sets, dicts |
-| ⟪      | range     | Sequence range      | ∀ i ∈ ⟪(5):               | ✅ Start, stop, step supported       |
-| №      | enumerate | Enumeration         | ∀ i, v ∈ №(iterable):     | ✅ Supports start index              |
-| ⨅      | zip       | Parallel iteration  | ∀ a, b ∈ ⨅(list1, list2): | ✅ Stops at shortest iterable        |
+* **Multi-tier symbolic → Python transpilation.** The engine automatically selects optimal transpilation methods: Python regex for small files (<300KB), optimized Python with **frequency-based symbol ordering** (`_COMMON_SYMBOL_ORDER`) and **adaptive ordering** based on source analysis for medium files, and Rust acceleration for large files (300KB+) achieving **25M+ chars/sec** with **64-byte chunk processing** and **symbol byte scanning via memoryview**. It translates symbols using a configurable map covering control flow, built-ins, and pattern matching. Notably includes `match`/`case` (`⟷`, `▷`), built-ins like `ℓ`→`len`, `⟪`→`range`, `№`→`enumerate`, `⨅`→`zip`, `∑`→`sum`, `⭱`→`max`, `⭳`→`min`, `τ`→`type`, and the walrus operator (`≔`).
 
+  The default symbol mapping ships in config and can be written to user config (`.(φ)/config.json`) via the config generator. **Custom mappings support complete language localization** with **ASCII identifier boundary detection** using `\b` regex anchors—you can map Python keywords to any language (e.g., `"True": "Verdadero"`, `"if": "si"` for Spanish) with **conflict detection**, **strict validation mode** (`PHICODE_STRICT`), and **logging deduplication** to prevent spam.
 
-> **🔍 Translation Engine**: Regex pattern `re.compile('|'.join(escaped_symbols))` with longest-match-first ordering ensures accurate symbol replacement. See [`mapping.py`](https://github.com/Varietyz/pip-phicode/blob/main/src/phicode_engine/map/mapping.py) for complete implementation.
+* **Enterprise-grade module importing.** A custom `MetaPathFinder`/`Loader` resolves **modules and full packages** (including `__init__.φ` files) with **LRU-decorated path resolution** (`@lru_cache(maxsize=256)`) in your project tree using `.φ` (primary) and `.py` (secondary) extensions. Features **comprehensive stdlib protection** using `sys.builtin_module_names` plus path filtering for site-packages/dist-packages/lib paths, **canonical path caching** with 1000-entry LRU limit (`_canon_cache`) to minimize filesystem operations, **spec caching with mtime validation** using `(spec, mtime)` tuples, and **cache clearing on finder deletion** via `__del__` method. Graceful fallback from `.φ` to `.py` files when needed.
 
-## 🔧 Configuration & Performance
+* **Sophisticated caching architecture.** Features a **four-tier LRU cache hierarchy** with enterprise-grade reliability: (1) **raw source cache** with mmap for files >8KB and **exponential backoff retry logic** (3 attempts with 0.01s base delay), (2) **transpiled Python cache** with **xxhash acceleration** (MD5 fallback) and **symbol mapping hash keys**, (3) **import spec cache** with mtime validation, (4) **interpreter hint cache** for optimal runtime selection. 
 
-### ⚙️ Cache Management & Optimization
+  **Durability engineering**: **Cache eviction strategy** removes 25% or minimum 64 items when exceeding `CACHE_MAX_SIZE`. **Atomic writes** via tmp+rename+fsync pattern with **batched processing** (groups of 5) to minimize syscalls. **Integrity verification** using importlib-style headers with embedded source hashes, **marshal validation** for bytecode corruption detection, and **automatic cache rebuilding** on corruption. **Platform-optimized buffering** (128KB POSIX, 64KB Windows) with **move-to-end LRU optimization** for cache efficiency.
 
-```python
-# Advanced cache configuration
-from phicode_engine.core.phicode_cache import PhicodeCache
+* **Intelligent interpreter management.** During transpilation, **dependency scanning** detects C-extensions (numpy/pandas/scipy/etc.) using import string analysis and **suggests/auto-switches** to CPython via **subprocess isolation** (`capture_output=True`); otherwise defaults to **PyPy** for speed. Switches use `-m phicode_engine <original_module> <args>` with **cache flush for safety** and **5-second timeout enforcement**. Includes **performance recommendations** with user guidance and **interpreter detection algorithm** checking available interpreters. Paths can be overridden by env (`PHITON_PATH` for CPython, `PHIPY_PATH` for PyPy).
 
-# Custom cache with performance tuning
-cache = PhicodeCache(cache_dir="./optimized_cache")
+* **Production-grade runtime ergonomics.** The runtime sets up **comprehensive signal handling** (SIGINT/SIGTERM) with **signal name mapping** for informative error messages, registers **shutdown hooks with reverse order execution** and **atexit registration**, installs the importer for the resolved source folder, **warns on slow startup** (>25ms), and ensures top-level `.φ` modules execute as `__main__` with **proper argument hygiene** via clean `argv` context management preventing global pollution. Features **resource cleanup redundancy** (hooks + destructors), **duplicate shutdown protection**, **temp file cleanup** in cache directories, **engine-branded syntax error wrapping** with source location preservation, and **runtime import failure recovery** with **module existence validation** and **automatic interpreter switching** for compatibility issues.
 
-# Cache performance characteristics
-MAX_MEMORY_ENTRIES = 512  # LRU eviction threshold
-DISK_CACHE_FORMAT = "JSON"  # Human-readable for debugging
-HASH_ALGORITHM = "SHA256"  # Cryptographic integrity
-THREAD_SAFETY = "RLock"  # Concurrent access protection
-```
+* **Security-first HTTP API & comprehensive CLI.** The **APHI server** exposes `/info`, `/symbols`, `/convert`, and `/execute` with **subprocess isolation** for security, **Content-Length validation** preventing empty request attacks, **JSON parsing error boundaries**, **UTF-8 encoding enforcement**, and **request field validation**. Checks engine availability and returns version/Python info (Phicode `2.2.0`). Supports **bidirectional conversion** (Python ↔ φ), **symbol mapping exposure** for tooling integration, and **remote execution with timeout protection**. 
 
-### 📊 Performance Metrics & Benchmarks
+  CLI features **early-exit flag handling**, **mutual exclusion groups** for interpreter selection (`--python`, `--pypy`, `--cpython`), **config management** (`--config-generate`, `--config-reset`), **performance debugging** (`--debug`), and **version management**. **Temporary argv context management** ensures clean argument passing to module `main()` functions.
 
-| Operation | Cold Start | Warm Cache | Optimization |
-|-----------|------------|------------|--------------|
-| **File Discovery** | ~2-5ms | ~0.1ms | LRU caching (256 entries) |
-| **Symbol Translation** | ~10-20ms | ~0.5ms | Compiled regex + disk cache |
-| **Bytecode Compilation** | ~50-100ms | ~1ms | .pyc caching with hash validation |
-| **Module Execution** | Native Python speed | Native Python speed | Zero overhead after compilation |
-| **Memory Usage** | ~2MB base | +~50KB per cached file | Configurable LRU limits |
-
-> **📊 Baseline Requirements**: Performance characteristics measured on Python 3.9+ with SSD storage. Network filesystems may experience higher latency for initial compilation.
-
-### 🔧 Advanced Configuration Options
-
-<details>
-<summary>⚙️ Environment Variables & Tuning</summary>
-
-```bash
-# Performance tuning environment variables
-export PHICODE_CACHE_SIZE=1024          # Increase memory cache limit
-export PHICODE_CACHE_DIR="/fast/cache"  # Use high-performance storage
-export PYTHONIOENCODING=utf-8           # Ensure Unicode support
-export PYTHONDONTWRITEBYTECODE=0        # Enable .pyc generation
-
-# Debugging and development settings  
-export PHICODE_DEBUG=1                  # Enable verbose logging
-export PHICODE_FORCE_RECOMPILE=1        # Disable cache for testing
-```
-
-</details>
-
-## 🧪 Testing & Validation
-
-### ✅ Comprehensive Test Suite
-
-```python
-# test_phicode_functionality.φ - Validation test patterns
-⇒ unittest
-
-ℂ TestPhicodeTranslation(unittest.TestCase):
-    """Comprehensive testing of PHICODE symbol translation and execution."""
-    
-    ƒ test_basic_symbols(self):
-        """Validate core symbol-to-Python translation."""
-        # Test function definition and execution
-        ƒ test_func():
-            ⟲ "success"
-        
-        self.assertEqual(test_func(), "success")
-    
-    ƒ test_mathematical_operations(self):
-        """Verify mathematical symbol behavior."""
-        # Test logical operations
-        result = ✓ ∧ ⊥  # True and False
-        self.assertEqual(result, ⊥)
-        
-        # Test set membership
-        self.assertTrue(1 ∈ [1, 2, 3])
-        self.assertFalse(4 ∈ [1, 2, 3])
-    
-    ƒ test_control_flow(self):
-        """Validate control flow symbol execution."""
-        results = []
-        ∀ i ∈ range(3):
-            ¿ i % 2 ≡ 0:
-                results.append(f"even:{i}")
-            ⋄:
-                results.append(f"odd:{i}")
-        
-        expected = ["even:0", "odd:1", "even:2"]
-        self.assertEqual(results, expected)
-    
-    ƒ test_exception_handling(self):
-        """Test symbolic exception handling patterns."""
-        ∴:
-            result = 1 / 0  # This should raise ZeroDivisionError
-            self.fail("Expected ZeroDivisionError")
-        ⛒ ZeroDivisionError:
-            result = "caught_error"
-        ⇗:
-            pass
-        
-        self.assertEqual(result, "caught_error")
-
-¿ __name__ ≡ "__main__":
-    unittest.main()
-```
-
-### 🔧 Integration Testing Framework
-
-```bash
-# Automated testing pipeline
-python -m pytest tests/ -v --tb=short
-
-# Performance regression testing
-python scripts/benchmark_cache_performance.py
-
-# Cross-platform compatibility validation  
-tox -e py38,py39,py310,py311
-
-# Memory leak detection
-python -m pytest tests/ --memray
-
-# Unicode compatibility verification
-python tests/test_unicode_symbols.py
-```
-
-### 📋 Validation Checklist
-
-- ✅ **Symbol Translation Accuracy**: All 25 symbol mappings verified
-- ✅ **Bytecode Compatibility**: .pyc files compatible across Python versions  
-- ✅ **Thread Safety**: Concurrent access tested with threading module
-- ✅ **Cache Integrity**: SHA256 validation prevents corruption
-- ✅ **Error Handling**: Graceful degradation on file system issues
-- ✅ **Unicode Support**: Full UTF-8 compatibility across platforms
-- ✅ **Memory Management**: LRU eviction prevents memory leaks
-- ✅ **Performance Regression**: Benchmarks maintain <5% deviation
-
-## 🔍 Diagnostics & Troubleshooting
-
-### 🚨 Common Error Scenarios & Solutions
-
-<details>
-<summary>⚠️ Import and Module Errors</summary>
-
-**Error Code 2: Source Folder Not Found**
-```bash
-# Symptoms: "PHICODE source folder not found: /path"
-# Cause: Invalid file path or missing directory
-# Solution:
-ls -la $(dirname your_file.φ)  # Verify file exists
-phicode $(pwd)/your_file.φ     # Use absolute path
-```
-
-**Error Code 3: Module Import Failure**  
-```bash
-# Symptoms: "Error running module 'name': ModuleNotFoundError"
-# Cause: Missing dependencies or syntax errors in .φ file
-# Solution:
-python -c "import ast; ast.parse(open('file.φ').read())"  # Check syntax
-pip install missing-dependency  # Install dependencies
-```
-
-**ImportError: phicode_engine not found**
-```bash
-# Symptoms: Cannot import phicode_engine modules
-# Cause: Installation incomplete or virtual environment issues
-# Solution:
-pip uninstall phicode && pip install phicode  # Reinstall
-python -c "import sys; print(sys.path)"       # Check Python path
-```
-
-</details>
-
-<details>
-<summary>💾 Cache and Performance Issues</summary>
-
-**Cache Corruption or Stale Data**
-```bash
-# Symptoms: Old code executing despite file changes
-# Cause: Cache invalidation failure or filesystem timestamp issues
-# Solution:
-rm -rf .phicode_cache/                    # Nuclear cache reset
-find . -name "*.pyc" -delete             # Clear Python bytecode
-touch your_file.φ && phicode your_file.φ # Force recompilation
-```
-
-**High Memory Usage**
-```python
-# Symptoms: Python process consuming excessive memory
-# Cause: Large cache size or memory leak
-# Solution:
-from phicode_engine.core.phicode_cache import _cache
-print(f"Cache entries: {len(_cache.source_cache)}")  # Check cache size
-# Restart process or reduce MAX_CACHE_SIZE
-```
-
-**Slow Performance on Network Filesystems**  
-```bash
-# Symptoms: Slow startup on NFS/SMB mounted directories
-# Cause: Network latency affecting file operations
-# Solution:
-export PHICODE_CACHE_DIR="/local/fast/cache"  # Use local storage
-rsync -av /network/project/ /local/project/   # Work locally
-```
-
-</details>
-
-<details>
-<summary>🔤 Unicode and Encoding Problems</summary>
-
-**UnicodeDecodeError on Symbol Files**
-```bash
-# Symptoms: "UnicodeDecodeError: 'utf-8' codec can't decode"
-# Cause: File encoding mismatch or terminal configuration
-# Solution:
-file your_file.φ                          # Check file encoding
-iconv -f ISO-8859-1 -t UTF-8 file.φ      # Convert encoding
-export PYTHONIOENCODING=utf-8            # Force UTF-8 mode
-```
-
-**Symbols Not Displaying Correctly**  
-```bash
-# Symptoms: � or missing characters in terminal
-# Cause: Terminal font lacks mathematical Unicode support
-# Solution:
-# Install a Unicode-complete font (Fira Code, JetBrains Mono)
-echo $LANG                                # Verify locale settings
-locale -a | grep -i utf                   # Check UTF-8 availability
-```
-
-</details>
-
-### 🔧 Advanced Debugging Tools
-
-```python
-# debugging_tools.py - Advanced PHICODE diagnostics
-⇒ os, sys, hashlib, json
-← phicode_engine.core.phicode_cache ⇒ _cache
-
-ƒ diagnose_cache_state():
-    """Comprehensive cache diagnostics."""
-    π("🔍 PHICODE Cache Diagnostics")
-    π(f"   Cache directory: {_cache.cache_dir}")
-    π(f"   Source cache entries: {len(_cache.source_cache)}")
-    π(f"   Translation cache entries: {len(_cache.translated_cache)}")
-    π(f"   Spec cache entries: {len(_cache.spec_cache)}")
-    
-    # Check disk cache files
-    cache_files = [f ∀ f ∈ os.listdir(_cache.cache_dir) ¿ f.endswith('.json')]
-    π(f"   Disk cache files: {len(cache_files)}")
-    
-    ∀ cache_file ∈ cache_files[:5]:  # Show first 5 files
-        file_path = os.path.join(_cache.cache_dir, cache_file)
-        ∴:
-            ← json ⇒ load
-            with open(file_path, 'r') as f:
-                data = load(f)
-            π(f"     {cache_file}: hash={data.get('source_hash', 'N/A')[:8]}...")
-        ⛒ Exception as e:
-            π(f"     {cache_file}: ERROR - {e}")
-
-ƒ validate_symbol_translations():
-    """Test all symbol mappings for correctness."""
-    ← phicode_engine.map.mapping ⇒ PHICODE_TO_PYTHON
-    
-    π("🔤 Symbol Translation Validation")
-    errors = []
-    
-    ∀ symbol, python_equiv ∈ PHICODE_TO_PYTHON.items():
-        # Test if symbol can be safely replaced
-        test_code = f"# {symbol} should become {python_equiv}"
-        ∴:
-            # Simple translation test
-            translated = test_code.replace(symbol, python_equiv)
-            π(f"   ✅ {symbol} → {python_equiv}")
-        ⛒ Exception as e:
-            errors.append(f"{symbol}: {e}")
-            π(f"   ❌ {symbol} → ERROR: {e}")
-    
-    ¿ errors:
-        π(f"🚨 Found {len(errors)} translation errors")
-        ∀ error ∈ errors:
-            π(f"     {error}")
-    ⋄:
-        π("✅ All symbol translations validated successfully")
-
-# Usage
-¿ __name__ ≡ "__main__":
-    diagnose_cache_state()
-    validate_symbol_translations()
-```
-
-### 📊 Performance Profiling
-
-```bash
-# Performance analysis tools
-python -m cProfile -s cumtime phicode your_file.φ > profile.txt
-python -m py_spy top --pid $(pgrep -f phicode)  # Real-time profiling
-python -m memory_profiler phicode your_file.φ   # Memory usage analysis
-```
-
-## 🔧 VS Code Extension Integration
-
-### 📝 **PHICODE for Visual Studio Code**
-
-Enhance your PHICODE development experience with the official VS Code extension that provides comprehensive language support, intelligent editing features, and seamless integration with the runtime engine.
-
-**🛒 [Install from VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=Banes-Lab.phicode)**
-
-#### 🎯 **Key Extension Features**
-
-- **🎨 Syntax Highlighting**: Custom TextMate grammar for beautiful PHICODE symbol rendering
-- **🧠 IntelliSense**: Context-aware auto-completion with symbol suggestions and fuzzy matching
-- **🔄 Bidirectional Conversion**: Instantly convert between Python and PHICODE with keyboard shortcuts
-- **🔍 Go-to-Definition**: Navigate seamlessly across PHICODE and Python files
-- **⚡ Real-time Linting**: Immediate feedback for syntax errors and symbol validation
-- **📚 Interactive Tutorial**: Built-in symbol reference with live examples and hover documentation
-
-#### ⚙️ **Quick Setup**
-
-```bash
-# 1️⃣ Install PHICODE runtime (if not already installed)
-pip install phicode
-
-# 2️⃣ Install VS Code extension
-code --install-extension Banes-Lab.phicode
-
-# 3️⃣ Verify complete integration
-echo 'ƒ test(): π("VS Code + PHICODE working! ✨")' > integration_test.φ
-code integration_test.φ  # Opens with syntax highlighting
-phicode integration_test.φ  # Executes with runtime
-```
-
-#### 🔧 **Extension Configuration**
-
-Access via `File → Preferences → Settings → Extensions → PHICODE`:
-
-```json
-{
-  "phicode.autoConvert": true,
-  "phicode.symbolHints": true,
-  "phicode.formatting.spaceAroundOperators": true,
-  "[phicode]": {
-    "editor.fontSize": 14,
-    "editor.fontFamily": "'Fira Code', 'JetBrains Mono', monospace",
-    "editor.fontLigatures": true,
-    "editor.formatOnSave": true
-  }
-}
-```
-
-#### ⌨️ **Essential Keyboard Shortcuts**
-
-| Shortcut | Action | Context |
-|----------|--------|---------|
-| `Ctrl+Alt+P` | Convert Python → PHICODE | `.py` files |
-| `Ctrl+Alt+Shift+P` | Convert PHICODE → Python | `.φ` files |
-| `F12` | Go to Definition | PHICODE symbols |
-| `Shift+F12` | Find All References | Symbol usage |
-| `Ctrl+Shift+P` → "PHICODE: Show Symbol Tutorial" | Interactive learning | Any time |
-
-#### 🚀 **Complete Development Workflow**
-
-```bash
-# 1️⃣ Create new PHICODE project
-mkdir my_phicode_project && cd my_phicode_project
-code .  # Open in VS Code
-
-# 2️⃣ Create main.φ with extension support
-# - Syntax highlighting active
-# - Auto-completion available
-# - Real-time error checking
-
-# 3️⃣ Develop with full IDE features
-# - IntelliSense for symbol completion
-# - Go-to-definition across files
-# - Integrated debugging support
-
-# 4️⃣ Execute directly with runtime
-phicode main.φ  # No conversion needed
-```
-
-> **💡 Pro Tip**: The VS Code extension handles all editing and development features, while the PHICODE runtime engine executes your `.φ` files directly — no intermediate conversion steps required!
-
-**📋 Extension Details**:
-- **Publisher**: Banes-Lab
-- **Version**: Latest stable release
-- **Compatibility**: VS Code ≥1.74.0
-- **File Association**: `.φ`, `.phicode` extensions
-- **WCAG 2.1 AA Compliant**: Full accessibility support
-
-## 🤝 Developer Resources
-
-### 🔧 Extension & Integration Patterns
-
-```python
-# custom_symbols.py - Extending PHICODE with custom symbols
-← phicode_engine.map.mapping ⇒ PHICODE_TO_PYTHON
-
-# Add domain-specific symbols
-CUSTOM_SYMBOLS = {
-    "∑": "sum",        # Mathematical summation
-    "∏": "prod",       # Mathematical product  
-    "∂": "partial",    # Partial derivative
-    "∇": "gradient",   # Gradient operator
-    "∫": "integrate",  # Integration
-    "≈": "approx",     # Approximation
-}
-
-# Extend the mapping
-PHICODE_TO_PYTHON.update(CUSTOM_SYMBOLS)
-
-# Use in mathematical computing
-# math_advanced.φ
-← functools ⇒ reduce
-← operator ⇒ mul
-
-ƒ ∑(iterable):  # Sum function using custom symbol
-    ⟲ sum(iterable)
-
-ƒ ∏(iterable):  # Product function using custom symbol  
-    ⟲ reduce(mul, iterable, 1)
-
-# Usage example
-data = [1, 2, 3, 4, 5]
-total = ∑(data)     # sum([1, 2, 3, 4, 5]) = 15
-product = ∏(data)  # 1 * 2 * 3 * 4 * 5 = 120
-```
-
-### 🏗️ Build System Integration
-
-<details>
-<summary>📦 CI/CD Pipeline Configuration</summary>
-
-```yaml
-# .github/workflows/phicode-ci.yml
-name: PHICODE CI/CD Pipeline
-
-on: [push, pull_request]
-
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: [3.8, 3.9, '3.10', '3.11', '3.12']
-        
-    steps:
-    - uses: actions/checkout@v4
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v4
-      with:
-        python-version: ${{ matrix.python-version }}
-        
-    - name: Install PHICODE
-      run: |
-        python -m pip install --upgrade pip
-        pip install -e .
-        
-    - name: Test Unicode Support
-      run: |
-        echo 'π("Unicode test: ∀ ∃ ∈ ∉ ∅ ∧ ∨ ¬ λ")' > unicode_test.φ
-        phicode unicode_test.φ
-        
-    - name: Run Symbol Translation Tests
-      run: |
-        python -c "
-        from phicode_engine.map.mapping import PHICODE_TO_PYTHON;
-        print(f'Testing {len(PHICODE_TO_PYTHON)} symbol mappings...');
-        assert len(PHICODE_TO_PYTHON) >= 25, 'Missing symbol mappings'
-        "
-        
-    - name: Performance Regression Test
-      run: |
-        python scripts/benchmark_performance.py --baseline
-```
-
-</details>
-
-### 🔧 IDE Integration & Development Tools
-
-```json
-// .vscode/settings.json - VSCode configuration for PHICODE development
-{
-  "files.associations": {
-    "*.φ": "python"
-  },
-  "python.analysis.extraPaths": ["./src"],
-  "python.defaultInterpreterPath": "./venv/bin/python",
-  "editor.unicodeHighlight.allowedCharacters": {
-    "∀": true, "∃": true, "∈": true, "∉": true, "∅": true,
-    "∧": true, "∨": true, "¬": true, "⟹": true, "→": true,
-    "≡": true, "≢": true, "≈": true, "≤": true, "≥": true,
-    "λ": true, "π": true, "ƒ": true, "¿": true, "⤷": true,
-    "⋄": true, "∴": true, "⛒": true, "⇗": true, "⟲": true,
-    "↑": true, "⇲": true, "⇉": true, "⋯": true, "⇒": true,
-    "←": true, "↦": true, "✓": true, "⊥": true, "Ø": true
-  }
-}
-```
-
-### 📚 API Reference & Extension Points
-
-```python
-# phicode_api_reference.py - Complete API documentation
-"""
-PHICODE Engine API Reference
-============================
-
-Core Classes and Functions for extending PHICODE functionality.
-"""
-
-ℂ PhicodeCache:
-    """
-    Thread-safe LRU cache with persistent disk storage.
-    
-    Attributes:
-        MAX_CACHE_SIZE (int): Maximum memory cache entries (default: 512)
-        cache_dir (str): Directory for persistent cache storage
-        
-    Methods:
-        get_source(path: str) → str | None: Retrieve source code with caching
-        get_translated(path: str, source: str) → str: Get Python translation
-        _evict_cache(cache: dict): LRU eviction when cache exceeds limit
-    """
-    
-    ƒ __init__(self, cache_dir=".phicode_cache"):
-        """Initialize cache with specified directory."""
-        # Implementation details in phicode_cache.py
-        
-    ƒ get_source(self, path):
-        """Thread-safe source retrieval with modification detection."""
-        # Returns None if file cannot be read
-        # Caches based on file modification time
-        
-    ƒ get_translated(self, path, source):
-        """Translate PHICODE symbols to Python with caching."""
-        # Uses SHA256 hashing for cache validation
-        # Implements regex-based symbol replacement
-
-ℂ PhicodeFinder(importlib.abc.MetaPathFinder):
-    """
-    Meta path finder for .φ files with intelligent caching.
-    
-    Integration Point: sys.meta_path finder for import system
-    """
-    
-    ƒ find_spec(self, fullname, path, target=None):
-        """
-        Locate .φ files and create module specifications.
-        
-        Returns:
-            ModuleSpec | None: Specification for found module or None
-            
-        Caching:
-            - LRU cache (256 entries) for file path resolution
-            - Modification time validation for cache invalidation
-        """
-
-ℂ PhicodeLoader(importlib.abc.Loader):
-    """
-    Module loader with bytecode compilation and caching.
-    
-    Security Features:
-        - Hash-based .pyc validation
-        - Source integrity verification
-        - Safe compilation error handling
-    """
-    
-    ƒ exec_module(self, module):
-        """
-        Execute .φ module with bytecode caching.
-        
-        Process:
-            1. Source retrieval and validation
-            2. Symbol-to-Python translation  
-            3. Bytecode compilation or cache retrieval
-            4. Module execution in proper namespace
-        """
-
-# Extension API
-ƒ install_phicode_importer(base_path: str):
-    """
-    Install PHICODE importer for specified directory.
-    
-    Args:
-        base_path: Root directory for .φ file discovery
-        
-    Usage:
-        install_phicode_importer("/path/to/phicode/modules")
-        import my_module  # Automatically imports my_module.φ
-    """
-
-# Symbol Extension API  
-ƒ extend_symbol_mapping(custom_symbols: dict):
-    """
-    Extend PHICODE with custom symbol mappings.
-    
-    Args:
-        custom_symbols: Dict mapping symbols to Python equivalents
-        
-    Example:
-        extend_symbol_mapping({"∑": "sum", "∏": "prod"})
-    """
-```
-
-### 🔬 Research & Academic Integration
-
-```python
-# academic_research.φ - Academic and research computing patterns
-"""
-Mathematical research computing with PHICODE symbolic notation.
-Demonstrates academic use cases and citation-ready examples.
-"""
-
-⇒ numpy ↦ np
-⇒ scipy.stats ↦ stats
-⇒ matplotlib.pyplot ↦ plt
-
-ƒ statistical_hypothesis_test(sample_data, population_mean, α=0.05):
-    """
-    Perform one-sample t-test using mathematical notation.
-    
-    H₀: μ = population_mean
-    H₁: μ ≠ population_mean
-    """
-    n = len(sample_data)
-    x̄ = np.mean(sample_data)  # Sample mean
-    s = np.std(sample_data, ddof=1)  # Sample standard deviation
-    
-    # Calculate test statistic: t = (x̄ - μ₀) / (s / √n)
-    t_statistic = (x̄ - population_mean) / (s / np.sqrt(n))
-    
-    # Critical value for two-tailed test
-    t_critical = stats.t.ppf(1 - α/2, df=n-1)
-    
-    # p-value calculation
-    p_value = 2 * (1 - stats.t.cdf(abs(t_statistic), df=n-1))
-    
-    π(f"📊 One-Sample t-Test Results:")
-    π(f"   H₀: μ = {population_mean}")
-    π(f"   Sample mean (x̄): {x̄:.4f}")
-    π(f"   Test statistic (t): {t_statistic:.4f}")
-    π(f"   Critical value (±t): ±{t_critical:.4f}")
-    π(f"   p-value: {p_value:.4f}")
-    π(f"   Significance level (α): {α}")
-    
-    # Decision logic using mathematical symbols
-    ¿ abs(t_statistic) > t_critical:
-        decision = "Reject H₀"
-        significance = "statistically significant"
-    ⋄:
-        decision = "Fail to reject H₀"  
-        significance = "not statistically significant"
-    
-    π(f"   Decision: {decision}")
-    π(f"   Result: {significance} at α = {α}")
-    
-    ⟲ {
-        'statistic': t_statistic,
-        'p_value': p_value,
-        'critical_value': t_critical,
-        'decision': decision,
-        'significant': abs(t_statistic) > t_critical
-    }
-
-# Example usage for research publication
-research_data = [2.3, 2.7, 2.1, 2.9, 2.4, 2.8, 2.2, 2.6, 2.5, 2.3]
-results = statistical_hypothesis_test(research_data, population_mean=2.0)
-
-# Citation-ready output format
-π(f"\nResearch Finding:")
-π(f"The sample mean (M = {np.mean(research_data):.2f}) was")
-π(f"{'significantly' ¿ results['significant'] ⋄ 'not significantly'}")
-π(f"different from the population mean, t({len(research_data)-1}) = {results['statistic']:.2f},")
-π(f"p = {results['p_value']:.3f}.")
-```
-
-## ❓ Support & Community
-
-### 🆘 Comprehensive Support Channels
-
-| Support Type | Channel | Response Time | Best For |
-|--------------|---------|---------------|----------|
-| **🐛 Bug Reports** | [GitHub Issues](https://github.com/Varietyz/pip-phicode/issues) | 24-48 hours | Reproducible errors, crashes |
-| **💬 General Questions** | [GitHub Discussions](https://github.com/Varietyz/pip-phicode/discussions) | Community-driven | Usage questions, best practices |
-| **🔧 Feature Requests** | [Enhancement Issues](https://github.com/Varietyz/pip-phicode/issues/new?template=feature_request.md) | 1-2 weeks | New symbols, performance improvements |
-| **📧 Direct Contact** | [jay@banes-lab.com](mailto:jay@banes-lab.com) | 48-72 hours | Security issues, commercial support |
-| **📚 Documentation** | This README + inline comments | Immediate | API reference, examples |
-
-### 🤝 Community Contribution Guidelines
-
-**🚀 Getting Started with Contributions**
-
-1. **🍴 Fork & Setup**
-   ```bash
-   git clone https://github.com/yourusername/phicode.git
-   cd phicode
-   python -m venv venv && source venv/bin/activate
-   pip install -e ".[dev]"  # Install with development dependencies
-   ```
-
-2. **🔧 Development Workflow**
-   ```bash
-   # Create feature branch
-   git checkout -b feature/new-symbols
-   
-   # Make changes and test
-   python -m pytest tests/ -xvs
-   python scripts/validate_symbols.py
-   
-   # Submit pull request with detailed description
-   ```
-
-3. **📝 Contribution Types Welcome**
-   - **🌐 Symbol Expansion**: Mathematical, scientific, or domain-specific symbols
-   - **⚡ Performance Optimization**: Caching improvements, compilation speed
-   - **🔧 IDE Integration**: Syntax highlighting, autocomplete, debugger support  
-   - **📚 Documentation**: Examples, tutorials, API documentation
-   - **🧪 Testing**: Unit tests, integration tests, performance benchmarks
-   - **♿ Accessibility**: Screen reader support, high contrast themes
-
-### 🏆 Recognition & Contributors
-
-**🌟 Core Contributors**
-- **Jay Baleine** ([@Varietyz](https://github.com/Varietyz)) - Creator, Lead Developer
-
-**🎯 Special Recognition Categories**
-- **🧠 Symbol Architects**: Contributors who design new symbol mappings
-- **⚡ Performance Engineers**: Contributors who optimize execution speed
-- **📚 Documentation Masters**: Contributors who improve user experience through clear docs
-- **🔧 Integration Specialists**: Contributors who build IDE and tooling support
-
-### 📊 Project Statistics & Health
-
-```python
-# project_health.py - Community health metrics
-ƒ display_project_metrics():
-    """Display current project health and community engagement."""
-    
-    metrics = {
-        "version": "2.1.2",
-        "python_support": "3.8+",
-        "symbol_mappings": 25,
-        "test_coverage": "85%+",
-        "documentation_pages": 12,
-        "supported_platforms": 4,
-        "cache_performance": "~99% hit rate",
-        "compilation_speed": "<100ms typical"
-    }
-    
-    π("📊 PHICODE Project Health Dashboard")
-    ∀ metric, value ∈ metrics.items():
-        π(f"   {metric.replace('_', ' ').title()}: {value}")
-    
-    π("\n🎯 Current Development Focus:")
-    π("   • Expanding mathematical symbol library")  
-    π("   • IDE integration and syntax highlighting")
-    π("   • Performance optimization for large projects")
-    π("   • Academic research computing features")
-
-display_project_metrics()
-```
+* **Sophisticated Rust integration.** The **PhiRust accelerator** includes **automatic binary downloads** from GitHub releases with **cargo fallback compilation**, **performance benchmarking** with built-in speed measurement, **JSON encoder caching** using `frozenset` hashing to avoid repeated serialization, **symbol byte optimization** using 64-byte chunk processing for cache efficiency, and **graceful degradation** with seamless Python fallback. Binary installation includes **retry logic** and **filesystem safety checks**. A `RUST_SIZE_THRESHOLD` (300KB) determines when to prefer Rust for transpilation.
 
 ---
 
-## 📄 License & Legal Information
+## Architecture & flow (how the pieces fit)
 
-**MIT License** - Free for commercial and personal use, modification, and distribution.
+1. **Entry & initialization**: `phicode_engine.engine:main()` parses args with **early-exit handling** for version/help flags, toggles debug logging with **centralized control**, and hands off to `core.runtime.run()`.
 
-```
-Copyright (c) 2024 Jay Baleine, Banes Lab
+2. **Runtime setup**: Registers **shutdown hooks with signal handling** (SIGINT/SIGTERM plus atexit), resolves your target (`main` module by default) to file or module with **`.φ`/`.py` detection**, **installs the Phicode importer** rooted at that folder with **canonical path optimization**, sets **main module designation** for correct `__main__` semantics, and includes **startup performance monitoring** with 25ms warning threshold.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+3. **Import flow with LRU optimization**: `PhicodeFinder` maps `pkg.mod` to `<base>/pkg/mod.φ` (or `.py` as fallback) using **LRU-decorated path resolution**, **skips stdlib/site-packages with explicit protection** via `sys.builtin_module_names` filtering, **caches import specs with mtime validation** using `(spec, mtime)` tuples, and returns `spec` using `PhicodeLoader` for `.φ` files. Supports **full package hierarchies** with `__init__.φ` detection and **cache clearing on deletion**.
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-```
+4. **Load/Exec with enterprise patterns**:
+   * `PhicodeLoader` pulls source from `PhicodeCache` (four-tier LRU with **canonical path caching**), transpiles to Python with **multi-tier optimization** and **symbol frequency analysis**, optionally triggers **interpreter switching with subprocess isolation**, compiles via `BytecodeManager` with **integrity verification** and **marshal validation**, then hands to `ModuleExecutor`, marking `__main__` if it matches the initial module. **Syntax errors wrapped with engine branding**.
+   * `ModuleExecutor` runs the code object with **proper argument context management**; if the resolved target was a **Python module** (not `.φ`) and exposes `main()`, the runtime calls it with **temporary `argv` shim** for clean argument passing.
 
-**🔒 Security Policy**: Report security vulnerabilities privately to [jay@banes-lab.com](mailto:jay@banes-lab.com). We follow responsible disclosure practices and will coordinate patches for confirmed issues.
-
-**📋 Compliance Notes**:
-- ✅ GDPR compliant - no personal data collection
-- ✅ Enterprise friendly - no telemetry or phone-home functionality  
-- ✅ Open source friendly - MIT license compatible with commercial projects
-- ✅ Academic use approved - suitable for research and educational purposes
+5. **Caching architecture with reliability engineering**:
+   * `PhicodeCache` is a **four-tier LRU** over: (a) raw source with **mmap optimization** (>8KB threshold), **exponential backoff retry logic** (3 attempts), and **platform-specific buffering**, (b) transpiled Python with **xxhash/MD5 hashing** and **symbol mapping keys**, (c) import specs with **mtime-based invalidation**, (d) interpreter hints for **performance optimization**. Uses **canonical path caching** (1000 entries), **cache eviction strategy** (25% or 64 items), and **move-to-end LRU optimization**.
+   * `BytecodeManager` decides **hashed cache paths** under `.(φ)cache/comφled_<impl>_<pyver>/`, validates headers with **importlib format + source hashes**, **batches writes** (groups of 5) with **atomic operations** (tmp+rename+fsync), includes **marshal validation** and **corruption detection with automatic recovery**. A `__del__` on the finder flushes as a safety net.
 
 ---
 
-<div align="center">
+## Design choices
 
-## 🌟 Join the Mathematical Programming Era
+* **Meta-importer with LRU optimization.** Using a `MetaPathFinder` makes `.φ` feel first-class alongside Python packages and supports **full packages with `__init__.φ`**. **LRU decorators on path resolution** (`@lru_cache(maxsize=256)`) plus **canonical path caching** (1000 entries) and **mtime-based spec caching** dramatically reduce filesystem chatter.
 
-**Transform your Python code from verbose to beautiful**
+* **Enterprise-grade defensive programming.** **Multiple fallback layers** at every level: batching + tmp-rename + fsync = practical durability without excessive syscalls. **Exponential backoff** (3 attempts, 0.01s base delay) handles transient file system issues. **Marshal validation** and **corruption recovery** ensure sources run even if caching fails. **Resource cleanup redundancy** (shutdown hooks + destructors + atexit) prevents leaks. **Graceful degradation** when optional components fail.
 
-```python
-# Traditional Python          # PHICODE Mathematical Style
-def fibonacci(n):             ƒ fibonacci(n):
-    if n <= 1:                    ¿ n ≤ 1:
-        return n                      ⟲ n
-    else:                         ⋄:
-        return fibonacci(n-1) + fibonacci(n-2)    ⟲ fibonacci(n-1) + fibonacci(n-2)
+* **Performance-first architecture with byte-level optimization.** **Multi-tier acceleration** with automatic method selection, **symbol frequency estimation** with `_COMMON_SYMBOL_ORDER` for dynamic ordering, **memoryview byte-level detection** avoiding string operations, **64-byte chunk processing** in Rust, and **xxhash preference** with MD5 fallback. Import-string sniffing to choose PyPy vs CPython is simple yet effective, with **intelligent performance recommendations**.
 
-for i in range(10):           ∀ i ∈ range(10):
-    print(f"F({i}) = {fibonacci(i)}")    π(f"F({i}) = {fibonacci(i)}")
+* **Developer experience excellence.** Logging consistently branded with `(φ)`, debug enabled centrally, symbol mapping generated/reset via user-editable JSON. **Startup performance monitoring** warns when boot exceeds 25ms. **Error context preservation** with engine branding, **argument passing hygiene** preventing global state pollution, and **comprehensive exception handling** in all critical paths.
+
+---
+
+## Hidden/less obvious features & behaviors
+
+* **Symbol coverage goes beyond keywords.** You don't just get `if/for/try`; many **built-ins** and utilities have symbols (e.g., `ℓ`, `№`, `⨅`, `∑`, `⭱`, `⭳`, `τ`). This makes `.φ` viable for concise algorithmic code without constant back-and-forth to Python names.
+
+* **Multi-location config discovery with filesystem resilience.** Looks for `.(φ)/config.json` (primary) and `.phicode/config.json` (fallback), helping environments that dislike special characters in directory names. **Config generation includes filesystem safety checks**.
+
+* **Four-tier cache intelligence with enterprise patterns.** Beyond basic spec caching, includes **interpreter hint caching** for optimal runtime selection, **transpilation caching** with **symbol mapping hash keys** using `frozenset`, and **source caching** with **canonical path optimization**. **Integrity verification** uses **marshal validation** with **automatic corruption recovery** and **cache rebuilding**.
+
+* **Comprehensive lifecycle management with redundancy.** Batch cache writes registered as **shutdown hooks** with **reverse order execution**, **signal handlers** for SIGINT/SIGTERM with **signal name mapping**, **atexit registration** for additional safety, **redundant cleanup** via finder destructors, **resource cleanup with proper ordering** and **exception handling**, **duplicate shutdown protection**, and **temp file cleanup** in cache directories.
+
+* **API server security architecture with process isolation.** HTTP endpoints mirror CLI functions with **subprocess isolation** (`capture_output=True`) for safety, **Content-Length validation** preventing empty requests, **JSON parsing error boundaries**, **UTF-8 encoding enforcement**, **request field validation**, and **5-second timeout enforcement**. `/symbols` and `/convert` expose transpiler functionality; server delegates heavy lifting to controlled subprocess for **input validation** and **resource limits**.
+
+* **Advanced symbol configuration with conflict resolution.** Custom mappings support **ASCII identifier detection** with `\b` regex anchors, **conflict validation** with warnings, **strict validation mode** (`PHICODE_STRICT` env var), **complete language localization**, and **logging deduplication** to prevent spam. **Symbol frequency estimation** enables **dynamic ordering** for performance optimization with **adaptive symbol ordering** based on source analysis.
+
+* **Multi-tier performance optimization with byte-level scanning.** Engine uses **memoryview for byte-level** symbol detection avoiding string operations, **64-byte chunk processing** for cache efficiency in Rust, **adaptive symbol ordering** based on usage patterns, **xxhash acceleration** with MD5 fallback for fast hashing, **JSON encoder caching** using `frozenset` hashing, and **platform-specific buffer optimization** (128KB POSIX, 64KB Windows).
+
+* **Extensive environment-driven configuration with performance tuning.** Cache behavior tunable via `PHICODE_CACHE_SIZE` (LRU limits), `PHICODE_MMAP_THRESHOLD` (8KB default), `PHICODE_BATCH_SIZE` (5 default). Import analysis toggleable with `PHICODE_IMPORT_ANALYSIS`, validation with `PHICODE_VALIDATION`/`PHICODE_STRICT`, interpreter paths via `PHITON_PATH`/`PHIPY_PATH`, and performance thresholds via `RUST_SIZE_THRESHOLD`/`STARTUP_WARNING_MS`.
+
+* **Rust integration sophistication with automatic management.** PhiRust accelerator includes **automatic binary downloads** from GitHub releases with **retry logic**, **cargo fallback compilation** with timeout handling, **performance benchmarking** with built-in measurement, **JSON encoder caching** to avoid re-serialization, **symbol byte optimization** for non-ASCII detection, and **size threshold activation** ensuring optimal performance across file sizes.
+
+* **Runtime import failure recovery with intelligent fallback.** **Module existence validation** via `importlib.find_spec()` distinguishes between missing modules (typos) and compatibility issues. **Interpreter environment detection** identifies non-CPython runtimes (PyPy, etc.) and automatically attempts **runtime interpreter switching** to CPython for compatibility. **Multi-layer error messaging** with branded warnings for switch attempts, comprehensive error context for failures, and **actionable user guidance** including current interpreter identification and compatibility recommendations.
+
+* **Package support depth with priority ordering.** Full `__init__.φ` support for proper package hierarchies, **LRU-decorated package detection**, **graceful fallback** from `.φ` to `.py` files, **canonical path caching** to minimize filesystem operations, and **spec caching with mtime validation** for efficient imports.
+
+---
+
+## Performance posture
+
+* **Multi-tier fast path with byte-level optimization**: Symbol transpile (tier selection with **frequency analysis**) → AST parse → `compile(..., optimize=2)` → batch queue write; subsequent runs: validate header+hash → load code object → exec. **Rust acceleration** for large files delivers **176M+ chars/sec** peak performance (validated benchmarks) with **64-byte chunk processing**. **Symbol byte scanning** via memoryview avoids string operations. Quite zippy, especially with PyPy on symbol-heavy code.
+
+* **I/O discipline with enterprise reliability.** Large reads use **mmap with graceful fallback** to buffered reads. File ops include **exponential backoff** (3 attempts, 0.01s base delay) for EBUSY/EAGAIN scenarios. **Platform-specific buffering** (128KB POSIX, 64KB Windows) maximizes throughput. **Atomic writes** with tmp+rename+fsync ensure durability. **Marshal validation** prevents corrupted bytecode execution.
+
+* **Startup optimization with monitoring.** Warns if boot takes >25ms, giving developers nudges when import graphs or disk are slow. **Cache warmup strategies** with **LRU path resolution**, **lazy compilation**, **canonical path caching** (1000 entries), and **spec caching with mtime validation** minimize cold-start overhead.
+
+* **Symbol processing optimization with frequency analysis.** **Common symbols processed first** (`_COMMON_SYMBOL_ORDER`), **frequency-based ordering** for dynamic workloads, **adaptive symbol ordering** based on source analysis, **byte-level scanning** with memoryview, **64-byte chunk processing**, and **ASCII identifier boundary detection** using `\b` regex anchors avoid unnecessary string operations.
+
+* **Scaling architecture with intelligent selection.** Multi-tier handles files from KB to GB: Python regex for small files, optimized Python with **symbol frequency analysis** and caching for medium files, **Rust acceleration** for large files (>300KB) delivering **176M+ peak, 2-5M sustained chars/sec**. **Cache eviction strategy** (25% or 64 items) and **xxhash/MD5 hashing** maintain performance at scale.
+
+---
+
+## Developer experience (DX)
+
+* **Rich debugging capabilities with comprehensive logging.** Toggle `--debug` for verbose logs with `(φ)`-branded messages; **early-exit flag handling** before full parsing for performance; flags like `--version`/`--list-interpreters`/`--show-versions` supported. **Interpreter-specific flags** (`--python`, `--pypy`, `--cpython`) with **mutual exclusion groups** provide fine-grained control.
+
+* **Clean abstractions with state isolation.** **Argument passing** to Python module `main()` handled via **temporary `argv` context manager** (no global leakage). **Error context preservation** with **engine-branded syntax error wrapping**, **startup performance insights** with timing analysis, and **comprehensive exception handling** in all critical paths.
+
+* **Integration-friendly server with security isolation.** APHI server exposes conversion/symbols/execute, useful for editor integrations to "show me the Python" or run snippets remotely. **Configurable ports**, **subprocess isolation** (`capture_output=True`), **timeout enforcement** (5s), and **input validation** ensure security.
+
+* **Configuration management with validation.** Generate default configs with `--config-generate`, reset with `--config-reset`. **Complete language localization** support enables writing Python in any natural language through custom keyword mappings with **conflict detection** and **strict validation mode**. **Filesystem safety checks** prevent corruption.
+
+* **Performance insights with monitoring.** Built-in **startup monitoring** (25ms warning), **cache hit rate tracking** via LRU optimization, **interpreter recommendation system** with PyPy preference logic, and **performance benchmarking** in Rust integration help optimize development workflows.
+
+* **Import system stdlib protection.** Comprehensive detection using `sys.builtin_module_names` plus path filtering for site-packages, dist-packages, lib/python, and `sys.prefix` paths to prevent accidental interference with standard library imports.
+
+---
+
+## Configuration & customization
+
+* **Symbol mapping flexibility with conflict resolution.** Engine supports complete keyword remapping—from Unicode symbols to natural language keywords. Examples: `{"True": "Verdadero", "False": "Falso", "if": "si"}` for Spanish, or mathematical symbols like `{"for": "∀", "in": "∈"}`. **ASCII identifier detection** with `\b` boundary anchors, **conflict validation** with **logging deduplication**, and **strict mode** (`PHICODE_STRICT`) treating conflicts as errors.
+
+* **Validation modes with comprehensive detection.** `PHICODE_VALIDATION=true` enables symbol conflict detection; `PHICODE_STRICT=true` treats conflicts as errors rather than warnings. **Logging deduplication** prevents spam from repeated conflicts.
+
+* **Performance tuning with platform optimization.** Environment variables control cache behavior (`PHICODE_CACHE_SIZE=512` for LRU limits), memory mapping threshold (`PHICODE_MMAP_THRESHOLD=8192`), batch sizes (`PHICODE_BATCH_SIZE=5`), **platform-specific buffering** (128KB POSIX, 64KB Windows), and Rust threshold (`RUST_SIZE_THRESHOLD=300000`).
+
+* **Interpreter preferences with detection override.** Override **dependency analysis** with `PHITON_PATH` for CPython and `PHIPY_PATH` for PyPy. Import analysis disabled with `PHICODE_IMPORT_ANALYSIS=false`. **Performance recommendations** guide optimal interpreter selection.
+
+* **Development toggles with monitoring control.** Debug modes, validation strictness, feature flags, **startup monitoring thresholds** (`STARTUP_WARNING_MS=25`), **retry configuration** (`MAX_FILE_RETRIES=3`, `RETRY_BASE_DELAY=0.01`), and **cache optimization settings** provide fine-grained control over engine behavior without code changes.
+
+---
+
+## Performance & Validation Evidence
+
+### **Empirical Performance Validation** 📊
+
+**Comprehensive Benchmark Results** (August 21, 2025):
+- **Peak Performance**: **176M+ chars/sec** (7x exceeds documented claims)
+- **Sustained Performance**: 2-5M chars/sec across 500K-5M file sizes
+- **Performance Range**: 121K - 176M chars/sec depending on content characteristics
+- **Speedup Factor**: 2,770x - 3,521x improvement over baseline
+
+**File Size Scaling Performance**:
+- 1K files: ~1.5M chars/sec average
+- 10K files: ~2.1M chars/sec average  
+- 100K files: ~2.2M chars/sec average
+- 1M files: ~3.4M chars/sec average
+- 5M files: ~5.3M chars/sec average
+
+**Symbol Density Impact Analysis**:
+- **0% symbols** (pure text): 150M+ chars/sec peak performance
+- **25% symbols**: 30M+ chars/sec sustained performance
+- **50% symbols**: 35M+ chars/sec sustained performance  
+- **100% symbols**: 40M+ chars/sec sustained performance
+
+### **Production Reliability Validation** ✅
+
+**Longitudinal Performance Stability** (36+ hours):
+- **Mean Throughput**: 133.68 ± 7.3 (coefficient of variation: 5.5%)
+- **Success Rate**: 100% across ALL runs (48 individual tests)
+- **Error Count**: 0 total errors across comprehensive testing
+- **Memory Stability**: 49-52MB consistent footprint (no leaks)
+
+**Real-World Load Testing**:
+- **System Load**: 20+ concurrent applications (YouTube, AI browsers, ML tools, etc.)
+- **Test Success Rate**: 100% pass rate under heavy system pressure
+- **Memory Efficiency**: 0.4-194MB per operation range
+- **Resource Management**: Zero temporary file leakage, clean shutdown
+
+### **PyPy vs CPython Performance** 🚀
+
+**PyPy 3.11 Performance**:
+```
+CPU Intensive:    0.0026s avg (92x faster than CPython!)
+Memory Intensive: 0.070s avg, 206MB peak (170x faster, 73% less memory!)
+Transpilation:    933K-1.1M chars/sec  
+Cache Speedup:    37x (97.3% efficiency)
+Consistency:      ±4% variance across runs
 ```
 
-**🚀 Ready to make your code more mathematical?**
+**CPython 3.13 Performance**:
+```
+CPU Intensive:    0.244s avg
+Memory Intensive: 11.90s avg, 771MB peak  
+Transpilation:    504K-7.5M chars/sec
+Cache Speedup:    12.4x (91.9% efficiency)
+Consistency:      ±21% variance across runs
+```
 
-[⭐ Star this Repository](https://github.com/Varietyz/pip-phicode) • [🔧 Install PHICODE](https://pypi.org/project/phicode/) • [📖 Read the Docs](https://github.com/Varietyz/pip-phicode#readme)
+**Key Findings**:
+- **Performance Claims Validation**: "3x faster with PyPy" is massively conservative - actual speedup is **90-170x**
+- **Memory Efficiency**: PyPy delivers **73% memory reduction** alongside performance gains
+- **Consistency Advantage**: PyPy shows **±4% variance** vs CPython's **±21%**
+- **Cache Optimization**: PyPy demonstrates superior cache effectiveness (97% vs 92%)
+
+### **Self-Hosting Capability** 🔄
+
+**Engine Self-Benchmark Results**:
+```
+Total Runtime:           0.049s
+Test Success Rate:       5/5 (100.0%)
+Symbol Transpilation:    19 symbols, 0.0003s
+Computation Operations:  1,112 operations, 0.0006s  
+Memory Allocation:       0.02MB delta (efficient)
+Control Flow:           4,140 operations
+Total Operations:       16,967 operations processed
+Average Execution:      0.0017s per test
+Performance Rating:     EXCELLENT (sub-10ms average execution)
+```
+
+**Meta-Programming Significance**:
+- **Recursive Validation**: Engine successfully executes benchmarks written in φ-syntax
+- **Real-time Transpilation**: Greek symbols converted to Python during execution
+- **Bootstrap Capability**: Self-referential performance monitoring and optimization
 
 ---
 
-**Created with ❤️ by [Jay Baleine - Banes Lab](https://banes-lab.com)**
+## Enterprise capabilities
 
-[🌐 Website](https://banes-lab.com) • [📧 Contact](mailto:jay@banes-lab.com) • [🐙 GitHub](https://github.com/Varietyz) • [💼 LinkedIn](https://linkedin.com/)
+* **Robust error handling with graceful degradation.** **Comprehensive error recovery** at all levels with **fallback execution paths**, **runtime import failure recovery** with **module existence validation** and **automatic interpreter switching**, **cache corruption detection** with **automatic rebuilding** via marshal validation, **graceful degradation** when optional components (Rust, PyPy) unavailable, and **resource cleanup redundancy** (hooks + destructors + atexit) ensure solid development experience.
 
-**© 2025 Banes Lab • MIT License • [Repositories](https://github.com/Varietyz?tab=repositories)**
-</div>
+* **Observability & monitoring with performance insights.** **Performance monitoring** with startup time tracking (25ms warning), **cache hit rate analysis** via LRU optimization for optimization insights, **interpreter recommendation system** with PyPy preference logic for performance guidance, **debug infrastructure** with detailed introspection, **performance benchmarking** in Rust integration, and **empirically validated metrics** with 176M+ chars/sec peak performance and 100% reliability under production load.
 
----
+* **Security model with process isolation.** **Subprocess isolation** (`capture_output=True`) for safe code execution, **input validation** with **comprehensive error handling** and **JSON parsing boundaries**, **resource limits** via timeout enforcement (5s) preventing exhaustion, **clean state management** with **temporary argv contexts** avoiding global pollution, **stdlib protection** via comprehensive filtering preventing accidental overwrites, and **Content-Length validation** preventing attack vectors.
 
-> **⚠️ Final Notes**: 
-> 
-> **📊 Performance Disclaimer**: Benchmark data reflects typical usage patterns on modern hardware. Performance may vary significantly across different environments, file systems, and usage patterns.
->
-> **🌀 Implementation Variability**: Multiple approaches exist for integrating PHICODE into existing projects. The methods shown represent current best practices, though alternative strategies may be suitable depending on specific requirements.
+* **Production deployment patterns.** **Multi-tier architecture** scaling from KB to GB files, **cache optimization** with **platform-specific tuning**, **signal handling** with **graceful shutdown**, **configuration management** with **environment variable control**, **monitoring hooks** for observability, **error handling** with **context preservation** suitable for production logging systems, and **validated performance characteristics** with longitudinal stability testing (36+ hours, zero failures) demonstrating enterprise-grade reliability.
+
+This represents a **production-ready language runtime** with **enterprise-grade engineering patterns**—significantly more sophisticated than a simple symbol replacement tool, demonstrating reliability and performance optimization techniques found in major tech company codebases.

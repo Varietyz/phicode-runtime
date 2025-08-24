@@ -1,5 +1,5 @@
 LICENSE
-README.md
+README
 pyproject.toml
 src/phicode.egg-info/PKG-INFO
 src/phicode.egg-info/SOURCES.txt
