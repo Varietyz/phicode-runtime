@@ -6,9 +6,9 @@ import os
 # Versioning
 PHICODE_VERSION = '2.4.0'
 
-PHIRUST_VERSION = '0.3.1'
+PHIRUST_VERSION = '1.0.0'
 
-PHIMMUNO_VERSION = "0.1.0"
+PHIMMUNO_VERSION = "1.0.0"
 
 #--- -  - -  - ---#
 ## IN-HOUSE DEPS ##
