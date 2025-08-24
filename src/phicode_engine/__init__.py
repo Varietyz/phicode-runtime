@@ -1,3 +1,6 @@
+# Copyright 2025 Baleine Jay
+# Licensed under the Phicode Non-Commercial License (https://banes-lab.com/licensing)
+# Commercial use requires a paid license. See link for details.
 from .core.importing.phicode_importer import install_phicode_importer
 from .core.transpilation.phicode_to_python import transpile_symbols, get_symbol_mappings
 from .config.version import __version__

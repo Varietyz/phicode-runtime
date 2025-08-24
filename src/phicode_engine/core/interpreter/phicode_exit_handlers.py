@@ -1,3 +1,6 @@
+# Copyright 2025 Baleine Jay
+# Licensed under the Phicode Non-Commercial License (https://banes-lab.com/licensing)
+# Commercial use requires a paid license. See link for details.
 import sys
 from .phicode_args import PhicodeArgs
 from .phicode_interpreter_display import print_interpreters, show_interpreter_info

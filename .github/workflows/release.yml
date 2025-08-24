@@ -1,0 +1,100 @@
+name: Release phicode
+
+on:
+  push:
+    tags: [ 'v*' ]
+
+permissions:
+  contents: write
+
+jobs:
+  test:
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install dependencies
+      shell: pwsh
+      run: |
+        python -m pip install --upgrade pip
+        python -m pip install .[utility]  # Install your package with extras
+        python -m pip install pytest
+
+    - name: Run tests
+      shell: pwsh
+      run: |
+        python -m pytest -v
+
+  build-and-publish:
+    needs: test
+    runs-on: windows-latest
+    environment: release
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.12"
+
+    - name: Install build dependencies
+      shell: pwsh
+      run: |
+        python -m pip install --upgrade pip build twine
+
+    - name: Build package
+      shell: pwsh
+      run: |
+        python -m build
+
+    - name: Verify package
+      shell: pwsh
+      run: |
+        python -m twine check dist/*
+
+    - name: Publish to PyPI
+      shell: pwsh
+      run: |
+        python -m twine upload --verbose dist/*
+      env:
+        TWINE_USERNAME: __token__
+        TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
+
+    - name: Upload distributions as artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: python-package-windows
+        path: dist/*
+
+  create-github-release:
+    needs: build-and-publish
+    runs-on: windows-latest
+    permissions:
+      contents: write
+
+    steps:
+    - name: Download build artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: python-package-windows
+        path: dist/
+
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: dist/*
+        generate_release_notes: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

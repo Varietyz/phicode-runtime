@@ -1,4 +1,7 @@
 # (φ) src/phicode_engine/benchsuite/bench_memory.φ
+# Copyright 2025 Baleine Jay
+# Licensed under the PhiCode Non-Commercial License (https://banes-lab.com/licensing)
+# Commercial use requires a paid license. See link for details.
 ← phicode_engine.core.cache.phicode_bytecode ⇒ BytecodeManager
 ← phicode_engine.config.config ⇒ PYTHON_TO_PHICODE, MAIN_FILE_TYPE
 ⇒ os

@@ -1,3 +1,6 @@
+# Copyright 2025 Baleine Jay
+# Licensed under the Phicode Non-Commercial License (https://banes-lab.com/licensing)
+# Commercial use requires a paid license. See link for details.
 import os
 from .phicode_importer import install_phicode_importer
 from ...config.config import PROJECT_ROOT, MAIN_FILE_TYPE

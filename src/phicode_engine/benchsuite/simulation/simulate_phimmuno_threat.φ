@@ -1,5 +1,7 @@
 # (φ) src/phicode_engine/benchsuite/simulation/simulate_phimmuno_threat.φ
-# src/phicode_engine/benchsuite/bench_security_threats.py
+# Copyright 2025 Baleine Jay
+# Licensed under the PhiCode Non-Commercial License (https://banes-lab.com/licensing)
+# Commercial use requires a paid license. See link for details.
 ← phicode_engine.security.phimmuno_validator ⇒ is_content_safe
 ← phicode_engine.core.transpilation.phicode_to_python ⇒ transpile_symbols
 

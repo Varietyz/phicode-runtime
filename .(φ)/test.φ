@@ -1,4 +1,7 @@
 # (φ) .(φ)/test.φ
+# Copyright 2025 Baleine Jay
+# Licensed under the PhiCode Non-Commercial License (https://banes-lab.com/licensing)
+# Commercial use requires a paid license. See link for details.
 #!/usr/bin/env python3
 """
 Comprehensive Rust Acceleration Stress Test

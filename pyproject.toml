@@ -4,10 +4,10 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "phicode"
-version = "2.3.0"
-description = "(φ) PHICODE Engine — run φ code directly in Python/PyPy with optional Rust acceleration"
-readme = "README.md"
-license = {text = "MIT"}
+version = "2.4.0"
+description = "(φ) PHICODE Runtime Engine — Optimized production engine with smart adaption and syntax freedom for Python (PyPy Supported)"
+readme = "README"
+license = {file = "LICENSE"}
 authors = [
     { name="Jay Baleine", email="jay@banes-lab.com" }
 ]

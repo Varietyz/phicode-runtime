@@ -1,4 +1,7 @@
 # (φ) src/phicode_engine/benchsuite/bench_phimmuno.φ
+# Copyright 2025 Baleine Jay
+# Licensed under the PhiCode Non-Commercial License (https://banes-lab.com/licensing)
+# Commercial use requires a paid license. See link for details.
 ⇒ time
 ⇒ os
 ← phicode_engine.security.phimmuno_validator ⇒ is_content_safe

@@ -1,4 +1,7 @@
-# (φ) src/phicode_engine/benchsuite/bench_scripts/bench_stress.φ
+# (φ) src/phicode_engine/benchsuite/bench_stress.φ
+# Copyright 2025 Baleine Jay
+# Licensed under the PhiCode Non-Commercial License (https://banes-lab.com/licensing)
+# Commercial use requires a paid license. See link for details.
 ← phicode_engine.core.transpilation.phicode_to_python ⇒ transpile_symbols
 ← phicode_engine.config.config ⇒ PYTHON_TO_PHICODE, CACHE_BATCH_SIZE
 ⇒ time

@@ -1,7 +1,10 @@
+# Copyright 2025 Baleine Jay
+# Licensed under the Phicode Non-Commercial License (https://banes-lab.com/licensing)
+# Commercial use requires a paid license. See link for details.
 import os
 
 # Versioning
-PHICODE_VERSION = '2.3.0'
+PHICODE_VERSION = '2.4.0'
 
 PHIRUST_VERSION = '0.3.1'
 
