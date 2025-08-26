@@ -3,8 +3,8 @@
 # Commercial use requires a paid license. See link for details.
 import os
 
-SEPARATE_FILES = True
-INCLUDE_PATHS = ['src', 'pyproject.toml', 'LICENSE', 'rust_scripts']
+SEPARATE_FILES = False
+INCLUDE_PATHS = ['src', 'pyproject.toml', 'LICENSE', 'rust_scripts', '.(φ)/benchmark_results/20250823/03']
 EXCLUDE_PATTERNS = ['phicode.egg-info', '__pycache__', '.(φ)cache', '.pypirc']
 OUTPUT_DIR = '.GENERATIONS'
 OUTPUT_FILE = 'PROJECT_ANALYSIS.md'

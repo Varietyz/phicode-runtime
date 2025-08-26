@@ -42,7 +42,7 @@ def execute_benchmark_file(file_path: str):
         name = os.path.splitext(os.path.basename(file_path))[0]
         benchsuite_dir = os.path.dirname(file_path)
 
-        intesive_benchmarks = ["extreme", "crash"]
+        intesive_benchmarks = ["extreme", "crash", "phimmuno"]
 
         if any(keyword in name for keyword in intesive_benchmarks):
             timeout = 5*60

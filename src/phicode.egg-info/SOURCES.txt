@@ -1,5 +1,5 @@
 LICENSE
-README
+README.md
 pyproject.toml
 src/phicode.egg-info/PKG-INFO
 src/phicode.egg-info/SOURCES.txt
@@ -18,7 +18,6 @@ src/phicode_engine/benchsuite/__init__.py
 src/phicode_engine/benchsuite/bench_cache.φ
 src/phicode_engine/benchsuite/bench_extreme_stress.φ
 src/phicode_engine/benchsuite/bench_memory.φ
-src/phicode_engine/benchsuite/bench_phimmuno.φ
 src/phicode_engine/benchsuite/bench_stress.φ
 src/phicode_engine/benchsuite/bench_symbol_density.φ
 src/phicode_engine/benchsuite/bench_transpiler.φ

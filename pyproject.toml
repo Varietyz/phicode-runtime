@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "phicode"
-version = "2.4.0"
+version = "2.5.0"
 description = "(φ) PHICODE Runtime Engine — Optimized production engine (CPython/PyPy Supported)"
 readme = "README"
 license = {file = "LICENSE"}
@@ -35,6 +35,9 @@ where = ["src"]
 include = ["phicode_engine*"]
 
 [tool.setuptools.package-data]
+"phicode_engine.api" = ["*.py"]
 "phicode_engine.rust" = ["*.py"]
+"phicode_engine.security" = ["*.py"]
+"phicode_engine.installers" = ["*.py"]
 "phicode_engine.benchsuite" = ["*.φ"]
 "phicode_engine.benchsuite.simulation" = ["*.φ"]
