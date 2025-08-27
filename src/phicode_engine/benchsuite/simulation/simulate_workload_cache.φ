@@ -1,4 +1,3 @@
-# (φ) src/phicode_engine/benchsuite/simulation/simulate_workload_cache.φ
 # Copyright 2025 Baleine Jay
 # Licensed under the PhiCode Non-Commercial License (https://banes-lab.com/licensing)
 # Commercial use requires a paid license. See link for details.
@@ -7,11 +6,8 @@
 ← phicode_engine.core.cache.phicode_bytecode ⇒ BytecodeManager, _flush_batch_writes
 ← phicode_engine.config.config ⇒ PYTHON_TO_PHICODE, MAIN_FILE_TYPE
 
-π("💾 Cache Load Test - Real Engine")
-
 symbols = list(PYTHON_TO_PHICODE.values())
 
-# Realistic φ code patterns (your style - small, focused)
 patterns = [
     "def process_data(items):\n    return [x*2 for x in items]",
     "if condition:\n    print('executed')\nelse:\n    print('skipped')",
@@ -23,27 +19,21 @@ start_time = time.perf_counter()
 cache_hits = 0
 cache_misses = 0
 
-# Simulate realistic project load - 100 small files
-∀ file_id ∈ range(100):
-    ∀ pattern_id, pattern ∈ enumerate(patterns):
+∀ file_id ∈ ⟪(100):
+    ∀ pattern_id, pattern ∈ №(patterns):
         cache_key = f"file_{file_id}_pattern_{pattern_id}"
 
-        # Check ¿ already cached
-        initial_size = len(_cache.python_cache)
+        initial_size = ℓ(_cache.python_cache)
 
-        # Use real cache
         result = _cache.get_python_source(cache_key, pattern)
 
-        # Use real bytecode manager
         BytecodeManager.compile_and_cache(result, f"{cache_key}{MAIN_FILE_TYPE}")
 
-        # Track hit/miss
-        ¿ len(_cache.python_cache) > initial_size:
+        ¿ ℓ(_cache.python_cache) > initial_size:
             cache_misses += 1
         ⋄:
             cache_hits += 1
 
-# Flush real batch writes
 _flush_batch_writes()
 
 total_time = time.perf_counter() - start_time

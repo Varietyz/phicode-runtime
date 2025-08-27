@@ -1,4 +1,3 @@
-# (φ) src/phicode_engine/benchsuite/bench_transpiler_patterns.φ
 # Copyright 2025 Baleine Jay
 # Licensed under the PhiCode Non-Commercial License (https://banes-lab.com/licensing)
 # Commercial use requires a paid license. See link for details.
@@ -9,62 +8,60 @@
 ← phicode_engine.core.transpilation.phicode_to_python ⇒ SymbolTranspiler
 ← phicode_engine.benchsuite ⇒ report
 
-π("PATTERN COMPLEXITY TESTING")
-
 transpiler = SymbolTranspiler()
 
 test_patterns = {
             "simple": "∀ x ∈ data: π(x)",
             "medium": """
 ∀ item ∈ items:
-    ¿ item.is_valid() ∧ item.status ≡ "active":
+    ¿ item.is_valid() ∧ item.status == "active":
         π(f"Processing {item}")
         result = process_item(item)
-        ¿ result ≢ Ø:
+        ¿ result ≡ ¬ Ø:
             π(f"Success: {result}")
         ⋄:
             π("Failed to process")
             """,
             "complex": """
-# Complex phi code ∥ many symbols
-Æ' process_data(data):
+# Complex phi code with many symbols
+ƒ process_data(data):
     ∴:
         ∀ item ∈ data:
-            ¿ item ≡ Ø ∨ notitem.is_valid():
-                ⇉  # ⇉
+            ¿ item ≡ Ø ∨ ¬ item.is_valid():
+                ⇉
 
             ¿ hasattr(item, 'value') ∧ item.value > 0:
                 result = calculate_result(item)
-                ¿ result ≢ Ø:
+                ¿ result ≡ ¬ Ø:
                     π(f"Item {item.id}: {result}")
                     yield_value = result * 2
-                    ⟰ yield_value  # ⟰
+                    ⟰ yield_value
                 ⋄:
                     π("Calculation failed")
 
-        ⟲ ✓  # ⟲
-    ⛒ Exception â†¦ e:
+        ⟲ ✓
+    ⛒ Exception ↦ e:
         π(f"Error: {e}")
-        ↑ RuntimeError("Processing failed")  # ↑
-    ⇗:  # ⇗
+        ↑ RuntimeError("Processing failed") ← e
+    ⇗:
         π("Cleanup completed")
 
-⊤rue = ✓
-False = ⊥
-None = Ø
+True_val = ✓
+False_val = ⊥
+None_val = Ø
             """,
-            "heavy_symbols": "∀ ∈ ∧ ∨ ¬ ≡ ≢ ⇉ ⇲ ∴ ⛒ ⇗ ↑ ⟲ ⟰ π" * 50,  # Symbol-dense
+            "heavy_symbols": "∀ ∈ ∧ ∨ ¬ ≡ ≢ ⇉ ⇲ ∴ ⛒ ⇗ ↑ ⟲ ⟰ π" * 50,
             "mixed_content": '''
 """
-This ≡ a string ∥ ∀ symbols that should NOT be transpiled
+This == a string with ∀ symbols that should NOT be transpiled
 """
-Æ' main():
+ƒ main():
     # This comment has ∀ symbols too
     data = "∀ x ∈ test"  # String literals protected
-    ∀ i ∈ range(10):  # But this should be transpiled
-        π(f"Value: {i}")
-        ¿ i ≡ 5:
-            ⇲  # ⇲
+    for i in ⟪(10):  # This should be transpiled
+        print(f"Value: {i}")
+        ¿ i == 5:
+            break  # ⇲
         ''',
 }
 
@@ -72,16 +69,16 @@ This ≡ a string ∥ ∀ symbols that should NOT be transpiled
     times = []
     transpiler.transpile(content)
 
-    ∀ i ∈ range(iterations):
+    ∀ i ∈ ⟪(iterations):
         gc.collect()
         start_time = time.perf_counter()
         result = transpiler.transpile(content)
         end_time = time.perf_counter()
         times.append(end_time - start_time)
 
-    chars_per_sec = [len(content) / t ∀ t ∈ times]
+    chars_per_sec = [ℓ(content) / t ∀ t ∈ times]
     ⟲ {
-        "content_size": len(content),
+        "content_size": ℓ(content),
         "avg_time_ms": statistics.mean(times) * 1000,
         "avg_chars_per_sec": statistics.mean(chars_per_sec),
     }

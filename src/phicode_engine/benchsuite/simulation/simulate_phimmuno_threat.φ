@@ -1,4 +1,3 @@
-# (φ) src/phicode_engine/benchsuite/simulation/simulate_phimmuno_threat.φ
 # Copyright 2025 Baleine Jay
 # Licensed under the PhiCode Non-Commercial License (https://banes-lab.com/licensing)
 # Commercial use requires a paid license. See link for details.
@@ -7,9 +6,6 @@
 
 ƒ report(name, result):
     π(f"{name}: {result}")
-
-π("ENGINE-SPECIFIC THREAT DETECTION")
-π("=" * 35)
 
 python_threats = [
     "eval('malicious')",
@@ -29,21 +25,19 @@ phi_threats = [
     "__import__('eval')('code')",
 ]
 
-π("\nTesting Direct Python Threats...")
 python_blocked = 0
-∀ i, threat ∈ enumerate(python_threats):
+∀ i, threat ∈ №(python_threats):
     is_safe = is_content_safe(threat)
-    status = "✅ Blocked" if ¬ is_safe ⋄ "❌ Allowed"
+    status = "✅ Blocked" ¿ ¬ is_safe ⋄ "❌ Allowed"
     π(f"  Python #{i+1}: {status} - {threat[:30]}...")
     ¿ ¬ is_safe:
         python_blocked += 1
 
-python_block_rate = (python_blocked / len(python_threats)) * 100
+python_block_rate = (python_blocked / ℓ(python_threats)) * 100
 report("Python threat block rate", f"{python_block_rate:.1f}%")
 
-π("\nTesting φ→Python Transpilation Threats...")
 phi_blocked = 0
-∀ i, phi_code ∈ enumerate(phi_threats):
+∀ i, phi_code ∈ №(phi_threats):
     ∴:
         transpiled = transpile_symbols(phi_code)
         is_safe = is_content_safe(transpiled)
@@ -66,10 +60,9 @@ phi_blocked = 0
         ⋄:
             π(f"  φ #{i+1}: ❌ Error - {str(e)[:30]}...")
 
-phi_block_rate = (phi_blocked / len(phi_threats)) * 100 ¿ phi_threats ⋄ 100
+phi_block_rate = (phi_blocked / ℓ(phi_threats)) * 100 ¿ phi_threats ⋄ 100
 report("φ transpilation block rate", f"{phi_block_rate:.1f}%")
 
-π("\nTesting Engine-Specific Vectors...")
 engine_threats = [
     "← phicode_engine.core ⇒ *",
     "⇒ phicode_engine; phicode_engine.__file__",
@@ -77,19 +70,17 @@ engine_threats = [
 ]
 
 engine_blocked = 0
-∀ i, threat ∈ enumerate(engine_threats):
+∀ i, threat ∈ №(engine_threats):
     is_safe = is_content_safe(threat)
     status = "✅ Blocked" ¿ ¬ is_safe ⋄ "⚠️ Allowed"
     π(f"  Engine #{i+1}: {status}")
     ¿ ¬ is_safe:
         engine_blocked += 1
 
-engine_block_rate = (engine_blocked / len(engine_threats)) * 100
+engine_block_rate = (engine_blocked / ℓ(engine_threats)) * 100
 report("Engine-specific block rate", f"{engine_block_rate:.1f}%")
 
-# Summary
-π(f"\nTHREAT DETECTION SUMMARY:")
-total_threats = len(python_threats) + len(phi_threats) + len(engine_threats)
+total_threats = ℓ(python_threats) + ℓ(phi_threats) + ℓ(engine_threats)
 total_blocked = python_blocked + phi_blocked + engine_blocked
 overall_rate = (total_blocked / total_threats) * 100
 
@@ -99,10 +90,10 @@ overall_rate = (total_blocked / total_threats) * 100
 report("Overall threat protection", f"{overall_rate:.1f}%")
 
 ¿ overall_rate >= 95:
-    π("✅ Excellent threat protection")
+    π("Excellent threat protection")
 ⤷ overall_rate >= 85:
-    π("✅ Good threat protection")
+    π("Good threat protection")
 ⤷ overall_rate >= 70:
-    π("⚠️ Moderate threat protection")
+    π("Moderate threat protection")
 ⋄:
-    π("❌ Insufficient threat protection")
+    π("Insufficient threat protection")

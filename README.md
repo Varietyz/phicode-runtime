@@ -1,12 +1,12 @@
 <div align="center">
 
-# Phicode Engine
+# [![Phicode](https://img.shields.io/badge/(φ)_Phicode_Runtime_Engine-v2.5.0-red.svg)](https://python.org)
 
 <img src="https://banes-lab.com/assets/images/banes_lab/700px_Main_Animated.gif" width="100" alt="Banes Lab" />
 
 **Python execution engine with caching and import extensions**
 
-[![Python](https://img.shields.io/badge/Python-3.8%2B-blue.svg)](https://python.org)
+[![Python](https://img.shields.io/badge/Python-v3.8%2B-blue.svg)](https://python.org)
 [![PyPy Supported](https://img.shields.io/badge/PyPy-Supported-green.svg)](https://pypy.org)
 [![License](https://img.shields.io/badge/LICENSE-Non--Commercial-blue.svg)](https://banes-lab.com/licensing)
 
@@ -16,11 +16,13 @@
 [![VS Code Extension Version](https://img.shields.io/visual-studio-marketplace/v/Banes-Lab.phicode.svg?label=VS+Code+Extension)](https://marketplace.visualstudio.com/items?itemName=Banes-Lab.phicode)
 [![VS Code Extension Installs](https://img.shields.io/visual-studio-marketplace/i/Banes-Lab.phicode.svg?label=VS+Code+Installs)](https://marketplace.visualstudio.com/items?itemName=Banes-Lab.phicode)
 
+
+
 </div>
 
 ## Overview
 
-Phicode Engine runs Python modules through a runtime with bytecode caching and import system modifications. It executes standard Python code with custom syntax support.
+Phicode Engine runs Python modules through a runtime with robust bytecode caching, runtime management and import system modifications. It executes standard Python code with custom syntax support.
 
 ## Project Philosophy
 
@@ -139,6 +141,7 @@ flowchart TB
         APIServer["HTTP API Server<br/>4 REST Endpoints<br/>Subprocess Isolation<br/>Code Execution Handler"]
         Installers["Binary Installers<br/>PhiRust & Phimmuno<br/>Download + Retry Logic<br/>Cargo Fallback"]
         RustBinaries["Rust Binaries<br/>phimmuno-engine<br/>phirust-transpiler<br/>Aho-Corasick Pattern Matching"]
+        PhiemonDaemon["Phiemon Daemon<br/>Multi-Daemon Support<br/>Crash Recovery<br/>PID Tracking"]
     end
     
     Start([CLI Entry Point]) --> AutoImport[Auto Import Discovery]
@@ -160,7 +163,13 @@ flowchart TB
     Route -->|--security-*| Security
     Route -->|--config-*| Config
     Route -->|--*-install| Installers
+    Route -->|--phiemon| PhiemonDaemon
+    Route -->|--phiemon-status| DaemonStatus[Show Daemon Status]
+    Route -->|--phiemon-list| DaemonList[List All Daemons]
     Route -->|module_name| ProjectSetup[Project Setup & Discovery]
+    
+    DaemonStatus --> End
+    DaemonList --> End
     
     ProjectSetup --> ProjRoot[Detect Project Root]
     ProjRoot --> AutoDiscover[Auto-Discover φ Directories]
@@ -273,6 +282,14 @@ flowchart TB
         ResultCapture[Output Capture & Processing]
     end
     
+    subgraph DaemonSys [Phiemon Daemon System]
+        direction TB
+        MultiDaemon[Multi-Daemon Support with Per-Process State Files]
+        DaemonLoop[Restart Loop with Backoff: 1s→2s→4s→8s→16s→30s max]
+        PIDTrack[PID Tracking & Crash Detection]
+        StatusMgmt[Status Management & Debugging]
+    end
+    
     Cache -.-> CacheSystem
     BatchCache -.-> CacheSystem
     ICheck -.-> InterpreterSys
@@ -282,6 +299,7 @@ flowchart TB
     APIServer -.-> ProcessSys
     RustTrans -.-> RustBinaries
     SecValidate -.-> RustBinaries
+    PhiemonDaemon -.-> DaemonSys
     
     style Start fill:#034a69
     style End fill:#3d5a1d
@@ -295,6 +313,8 @@ flowchart TB
     style RuntimeSys fill:#840f35
     style ProcessSys fill:#5f6512
     style RustBinaries fill:#826200
+    style PhiemonDaemon fill:#6f2c00
+    style DaemonSys fill:#6f2c00
 ```
 
 ## Configuration
@@ -371,6 +391,38 @@ install_phicode_importer("/path/to/files")
 result = transpile_symbols("ƒ test(): ⟲ 42")
 # Returns: "def test(): return 42"
 ```
+
+---
+
+## Phiemon Process Management (Daemon Setup)
+
+Start processes with automatic crash recovery and multi-daemon support:
+
+```bash
+phicode my_app --phiemon                    # Start as daemon
+phicode my_app --phiemon --name myservice   # Custom name
+phicode my_app --phiemon --max-restarts 10  # Restart limit
+phicode --phiemon-status                    # Check all daemons
+phicode --phiemon-status myservice          # Check specific daemon
+```
+
+**Phiemon Daemon Features:**
+- **Multi-daemon support** with isolated state files per process
+- **Automatic restart** on process crashes with configurable limits
+- **Exponential backoff** prevents resource exhaustion (1s→2s→4s→8s→16s→30s max)
+- **Per-daemon state persistence** through `phiemon_{name}.state` files
+- **Process tracking** with PID monitoring and crash detection
+- **Enhanced debugging** with detailed error logging and status reporting
+- **Concurrent execution** of multiple services without conflicts
+
+**Status Management:**
+```bash
+phicode --phiemon-status                    # List all active daemons
+phicode --phiemon-status webapp             # Check specific daemon status
+phicode --phiemon-list                      # Show daemon overview with uptimes
+```
+
+The daemon wraps standard PhiCode execution, maintaining all security scanning and caching behavior while providing production-ready process management. Each daemon operates independently with its own state tracking and restart logic.
 
 ---
 

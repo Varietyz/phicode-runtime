@@ -1,4 +1,3 @@
-# (φ) src/phicode_engine/benchsuite/bench_cache.φ
 # Copyright 2025 Baleine Jay
 # Licensed under the PhiCode Non-Commercial License (https://banes-lab.com/licensing)
 # Commercial use requires a paid license. See link for details.
@@ -8,12 +7,12 @@
 ƒ report(name, result):
     π(f"{name}: {result}")
 
-initial_size = len(_cache.python_cache)
+initial_size = ℓ(_cache.python_cache)
 
 symbols = list(PYTHON_TO_PHICODE.values())[:5]
 test_sources = []
 
-∀ i, symbol ∈ enumerate(symbols):
+∀ i, symbol ∈ №(symbols):
     test_sources.append(f"{symbol} x: π(x + {i})")
 
 operation_count = 0
@@ -21,9 +20,9 @@ operation_count = 0
     _cache.get_python_source(f"test_{operation_count}", source)
     operation_count += 1
 
-final_size = len(_cache.python_cache)
+final_size = ℓ(_cache.python_cache)
 cache_growth = final_size - initial_size
-hit_rate = max(0, (operation_count - cache_growth) / operation_count) ¿ operation_count > 0 ⋄ 0
+hit_rate = ⭱(0, (operation_count - cache_growth) / operation_count) ¿ operation_count > 0 ⋄ 0
 
 report("Cache Hit Rate", f"{hit_rate:.2f}")
 report("Cache Growth", f"{cache_growth} entries")

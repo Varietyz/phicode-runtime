@@ -4,7 +4,7 @@
 import os
 
 # Versioning
-PHICODE_VERSION = '2.5.0'
+PHICODE_VERSION = '2.5.1'
 
 PHIRUST_VERSION = '1.0.0'
 
@@ -30,6 +30,7 @@ ENGINE_NAME = "Phicode"
 API_NAME = "APHI"
 RUST_NAME = "PhiRust"
 SECURITY_NAME = "Phimmuno"
+DAEMON_TOOL = "Phiemon"
 
 # Branding Symbol(s)
 SYMBOL = "φ"
@@ -46,6 +47,7 @@ SECURITY = f"{BADGE} {SECURITY_NAME} Engine"
 # File types
 MAIN_FILE_TYPE = f".{SYMBOL}" # .φ
 SECONDARY_FILE_TYPE = ".py"
+TERTIARY_FILE_TYPE = ".phi"
 
 # Config Location
 CONFIG_FILE_TYPE = ".json"

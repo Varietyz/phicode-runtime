@@ -1,4 +1,3 @@
-# (φ) src/phicode_engine/benchsuite/simulation/simulate_concurrency.φ
 # Copyright 2025 Baleine Jay
 # Licensed under the PhiCode Non-Commercial License (https://banes-lab.com/licensing)
 # Commercial use requires a paid license. See link for details.
@@ -8,9 +7,6 @@
 ← phicode_engine.core.cache.phicode_cache ⇒ _cache
 ← phicode_engine.core.cache.phicode_bytecode ⇒ BytecodeManager, _flush_batch_writes
 ← phicode_engine.config.config ⇒ PYTHON_TO_PHICODE, MAIN_FILE_TYPE
-
-
-π("🔄 Concurrent Engine Test - Real Components")
 
 symbols = list(PYTHON_TO_PHICODE.values())
 
@@ -31,17 +27,13 @@ errors = []
     ∴:
         start = time.perf_counter()
 
-        # Each worker hits multiple engine components
-        ∀ operation ∈ range(50):
+        ∀ operation ∈ ⟪(50):
             cache_key = f"worker_{worker_id}_op_{operation}"
 
-            # Hit transpiler
             transpiled = transpile_symbols(test_code)
 
-            # Hit cache
             _cache.get_python_source(cache_key, test_code)
 
-            # Hit bytecode manager
             BytecodeManager.compile_and_cache(transpiled, f"{cache_key}{MAIN_FILE_TYPE}")
 
         end = time.perf_counter()
@@ -50,35 +42,30 @@ errors = []
     ⛒ Exception ↦ e:
         errors.append((worker_id, str(e)))
 
-# Test ∥ realistic concurrency
 thread_count = 8
 threads = []
 
 start_time = time.perf_counter()
 
-# Start all workers
-∀ i ∈ range(thread_count):
+∀ i ∈ ⟪(thread_count):
     t = threading.Thread(target=worker_thread, args=(i,))
     threads.append(t)
     t.start()
 
-# Wait ∀ completion
 ∀ t ∈ threads:
     t.join()
 
 total_time = time.perf_counter() - start_time
 
-# Flush any pending writes
 _flush_batch_writes()
 
-# Results
-successful_workers = len(results)
-failed_workers = len(errors)
+successful_workers = ℓ(results)
+failed_workers = ℓ(errors)
 
 ¿ results:
-    avg_worker_time = sum(time ∀ _, time ∈ results) / len(results)
-    fastest_worker = min(time ∀ _, time ∈ results)
-    slowest_worker = max(time ∀ _, time ∈ results)
+    avg_worker_time = ∑(time ∀ _, time ∈ results) / ℓ(results)
+    fastest_worker = ⭳(time ∀ _, time ∈ results)
+    slowest_worker = ⭱(time ∀ _, time ∈ results)
 ⋄:
     avg_worker_time = fastest_worker = slowest_worker = 0
 
@@ -91,4 +78,4 @@ failed_workers = len(errors)
 π(f"  Slowest worker: {slowest_worker*1000:.1f}ms")
 
 ¿ errors:
-    π(f"  Errors: {[f'Worker {w}: {e}' for w, e in errors[:3]]}")  # Show first 3
+    π(f"  Errors: {[f'Worker {w}: {e}' for w, e in errors[:3]]}")

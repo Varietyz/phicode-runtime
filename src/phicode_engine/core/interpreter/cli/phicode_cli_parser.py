@@ -2,7 +2,7 @@
 # Licensed under the Phicode Non-Commercial License (https://banes-lab.com/licensing)
 # Commercial use requires a paid license. See link for details.
 import argparse
-from ....config.config import ENGINE, SERVER
+from ....config.config import ENGINE, SERVER, DAEMON_TOOL
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=f"{ENGINE}")
@@ -24,6 +24,11 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--security-status", action="store_true", help="Check security binary status")
 
     parser.add_argument("--benchmark", action="store_true", help="Engine Benchmark suite")
+
+    parser.add_argument("--phiemon", help=f"Start as {DAEMON_TOOL} process")
+    parser.add_argument("--phiemon-status", action="store_true", help=f"Show {DAEMON_TOOL} status")
+    parser.add_argument("--name", help=f"Process name for {DAEMON_TOOL}")
+    parser.add_argument("--max-restarts", type=int, default=5, help="Max restart attempts")
 
     interp_group = parser.add_mutually_exclusive_group()
     interp_group.add_argument("--interpreter")

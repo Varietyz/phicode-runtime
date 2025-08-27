@@ -1,4 +1,3 @@
-# (φ) src/phicode_engine/benchsuite/simulation/simulate_crash.φ
 # Copyright 2025 Baleine Jay
 # Licensed under the PhiCode Non-Commercial License (https://banes-lab.com/licensing)
 # Commercial use requires a paid license. See link for details.
@@ -15,8 +14,6 @@ worker_ops = 350
 thread_count = 16 # * ops_multiplier = concurrent operations
 ops_multiplier = 150
 large_cache_ops = 10000 # cache growth test
-
-π("🔥 Crash Test - Finding Breaking Points")
 
 test_code = """
 def complex_operation(data):
@@ -39,20 +36,18 @@ def complex_operation(data):
     return results or ['default']
 """
 
-π("  🎯 Transpiler overload test...")
 start_time = time.perf_counter()
 
-∀ i ∈ range(crash_iterations):
+∀ i ∈ ⟪(crash_iterations):
     transpile_symbols(test_code)
 
 transpiler_time = time.perf_counter() - start_time
 π(f"    {crash_iterations} transpilations: {transpiler_time*1000:.1f}ms")
 π(f"    Throughput: {len(test_code) * crash_iterations / transpiler_time:.0f} chars/sec")
 
-π("  🎯 Cache saturation test...")
 start_time = time.perf_counter()
 
-∀ i ∈ range(cache_operations):
+∀ i ∈ ⟪(cache_operations):
     cache_key = f"crash_test_{i}"
     _cache.get_python_source(cache_key, test_code)
 
@@ -60,14 +55,13 @@ cache_time = time.perf_counter() - start_time
 π(f"    {cache_operations} cache ops: {cache_time*1000:.1f}ms")
 π(f"    Ops/sec: {cache_operations / cache_time:.0f}")
 
-π("  🎯 Concurrent chaos test...")
 results = []
 errors = []
 
 ƒ chaos_worker(worker_id):
     ∴:
         start = time.perf_counter()
-        ∀ op ∈ range(worker_ops):
+        ∀ op ∈ ⟪(worker_ops):
             cache_key = f"chaos_{worker_id}_{op}"
             transpiled = transpile_symbols(test_code)
             _cache.get_python_source(cache_key, test_code)
@@ -81,7 +75,7 @@ errors = []
 threads = []
 chaos_start = time.perf_counter()
 
-∀ i ∈ range(thread_count):
+∀ i ∈ ⟪(thread_count):
     t = threading.Thread(target=chaos_worker, args=(i,))
     threads.append(t)
     t.start()
@@ -93,8 +87,8 @@ chaos_time = time.perf_counter() - chaos_start
 _flush_batch_writes()
 
 total_ops = thread_count * ops_multiplier
-successful_workers = len(results)
-failed_workers = len(errors)
+successful_workers = ℓ(results)
+failed_workers = ℓ(errors)
 
 π(f"    {thread_count} workers × {ops_multiplier} ops = {total_ops} total operations")
 π(f"    Total time: {chaos_time*1000:.1f}ms")
@@ -105,10 +99,9 @@ failed_workers = len(errors)
 ¿ errors:
     π(f"    First 3 errors: {[f'Worker {w}: {str(e)[:50]}...' for w, e in errors[:3]]}")
 
-π("  🎯 Memory pressure test...")
 memory_start = time.perf_counter()
 
-∀ i ∈ range(large_cache_ops):
+∀ i ∈ ⟪(large_cache_ops):
     large_key = f"memory_pressure_{i}_{i*123}"
     large_code = test_code * (i % 5 + 1)
     _cache.get_python_source(large_key, large_code)
@@ -116,5 +109,3 @@ memory_start = time.perf_counter()
 memory_time = time.perf_counter() - memory_start
 π(f"    {large_cache_ops} large cache entries: {memory_time*1000:.1f}ms")
 π(f"    Cache size: {len(_cache.python_cache)} entries")
-
-π("🔥 Crash test completed - system stress tested")

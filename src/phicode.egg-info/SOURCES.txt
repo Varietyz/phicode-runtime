@@ -55,6 +55,7 @@ src/phicode_engine/core/interpreter/cli/phicode_cli.py
 src/phicode_engine/core/interpreter/cli/phicode_cli_handlers.py
 src/phicode_engine/core/interpreter/cli/phicode_cli_parser.py
 src/phicode_engine/core/mod/phicode_config_generator.py
+src/phicode_engine/core/runtime/phicode_daemon.py
 src/phicode_engine/core/runtime/phicode_loader.py
 src/phicode_engine/core/runtime/phicode_runtime.py
 src/phicode_engine/core/runtime/shutdown_handler.py

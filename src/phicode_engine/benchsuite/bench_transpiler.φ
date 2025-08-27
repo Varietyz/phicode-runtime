@@ -1,4 +1,3 @@
-# (φ) src/phicode_engine/benchsuite/bench_transpiler.φ
 # Copyright 2025 Baleine Jay
 # Licensed under the PhiCode Non-Commercial License (https://banes-lab.com/licensing)
 # Commercial use requires a paid license. See link for details.
@@ -11,7 +10,7 @@
     base_content = ""
     ∀ symbol ∈ symbols:
         base_content += f"{symbol} x: π(x) "
-    multiplier = max(1, size // len(base_content))
+    multiplier = ⭱(1, size // ℓ(base_content))
     ⟲ base_content * multiplier
 
 ƒ report(name, result):
@@ -24,5 +23,5 @@ test_sizes = [1000, 10000, 100000]
     start = time.perf_counter()
     result = transpile_symbols(test_content)
     end = time.perf_counter()
-    chars_per_sec = len(test_content) / (end - start)
+    chars_per_sec = ℓ(test_content) / (end - start)
     report(f"Transpile {test_size} chars", f"{chars_per_sec:.0f} chars/sec")

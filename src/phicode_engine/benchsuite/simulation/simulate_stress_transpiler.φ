@@ -1,4 +1,3 @@
-# (φ) src/phicode_engine/benchsuite/simulation/simulate_stress_transpiler.φ
 # Copyright 2025 Baleine Jay
 # Licensed under the PhiCode Non-Commercial License (https://banes-lab.com/licensing)
 # Commercial use requires a paid license. See link for details.
@@ -6,11 +5,8 @@
 ← phicode_engine.core.transpilation.phicode_to_python ⇒ transpile_symbols
 ← phicode_engine.config.config ⇒ PYTHON_TO_PHICODE
 
-π("⚡ Transpiler Stress Test - Real Engine")
-
 symbols = list(PYTHON_TO_PHICODE.values())
 
-# Create realistic φ code ∥ varying symbol density
 light_symbols = f"""
 ƒ simple_func():
     ⟲ "hello world"
@@ -54,13 +50,13 @@ test_cases = [
 ∀ test_name, code, iterations ∈ test_cases:
     start = time.perf_counter()
 
-    ∀ _ ∈ range(iterations):
+    ∀ _ ∈ ⟪(iterations):
         result = transpile_symbols(code)
 
     end = time.perf_counter()
     total_time = end - start
 
-    chars_processed = len(code) * iterations
+    chars_processed = ℓ(code) * iterations
     throughput = chars_processed / total_time
 
     π(f"  {test_name}:")

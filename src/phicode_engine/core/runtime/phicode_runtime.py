@@ -12,7 +12,7 @@ from ..interpreter.phicode_interpreter import InterpreterSelector
 from ..phicode_logger import logger
 from ..cache.phicode_bytecode import _flush_batch_writes
 from ..interpreter.phicode_args import PhicodeArgs, _argv_context
-from ...config.config import STARTUP_WARNING_MS, ENGINE_NAME, MAIN_FILE_TYPE, SECONDARY_FILE_TYPE
+from ...config.config import STARTUP_WARNING_MS, ENGINE_NAME, MAIN_FILE_TYPE, SECONDARY_FILE_TYPE, TERTIARY_FILE_TYPE
 
 def run(args: PhicodeArgs):
     start_time = time.perf_counter()
@@ -63,16 +63,20 @@ def _resolve_module(module_or_file):
     if os.path.isfile(module_or_file):
         folder = os.path.dirname(os.path.abspath(module_or_file))
         name = os.path.splitext(os.path.basename(module_or_file))[0]
-        is_phi = module_or_file.endswith(MAIN_FILE_TYPE)
+        is_phi = module_or_file.endswith((MAIN_FILE_TYPE, TERTIARY_FILE_TYPE))
         logger.debug(f"Resolved file: {module_or_file} -> script: {name}, folder: {folder}")
         return name, folder, is_phi
     else:
         cwd = os.getcwd()
         phi_file = os.path.join(cwd, f"{module_or_file}" + MAIN_FILE_TYPE)
+        phi_alt_file = os.path.join(cwd, f"{module_or_file}" + TERTIARY_FILE_TYPE)
         py_file = os.path.join(cwd, f"{module_or_file}" + SECONDARY_FILE_TYPE)
 
         if os.path.isfile(phi_file):
             logger.debug(f"Found {ENGINE_NAME} script: {phi_file}")
+            return module_or_file, cwd, True
+        elif os.path.isfile(phi_alt_file):
+            logger.debug(f"Found {ENGINE_NAME} script: {phi_alt_file}")
             return module_or_file, cwd, True
         elif os.path.isfile(py_file):
             logger.debug(f"Found Python script: {py_file}")

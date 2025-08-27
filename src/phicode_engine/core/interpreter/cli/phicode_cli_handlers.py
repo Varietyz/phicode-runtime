@@ -4,7 +4,7 @@
 import sys
 import os
 from ...phicode_logger import logger
-from ....config.config import SECURITY_NAME, RUST_NAME
+from ....config.config import SECURITY_NAME, RUST_NAME, DAEMON_TOOL
 
 def handle_security_install():
     try:
@@ -77,4 +77,31 @@ def handle_config_reset():
         logger.info("Configuration reset successfully")
     else:
         logger.info("No configuration to reset")
+    sys.exit(0)
+
+def handle_daemon_start(argv):
+    script = argv[argv.index("--phiemon") + 1] if len(argv) > argv.index("--phiemon") + 1 else "main"
+    name = None
+    max_restarts = 5
+
+    if "--name" in argv:
+        name = argv[argv.index("--name") + 1]
+    if "--max-restarts" in argv:
+        max_restarts = int(argv[argv.index("--max-restarts") + 1])
+
+    from ...runtime.phicode_daemon import start_daemon
+    start_daemon(script, name, max_restarts)
+    sys.exit(0)
+
+def handle_daemon_status():
+    from ...runtime.phicode_daemon import get_daemon_status
+
+    status = get_daemon_status()
+    if status:
+        logger.info(f"{DAEMON_TOOL}: {status['name']}")
+        logger.info(f"Script: {status['script']}")
+        logger.info(f"Restarts: {status['restarts']}/{status['max_restarts']}")
+        logger.info(f"Uptime: {status['uptime']:.0f}s")
+    else:
+        logger.info(f"No {DAEMON_TOOL} running")
     sys.exit(0)
