@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "phicode"
-version = "2.5.1"
-description = "(φ) PHICODE Runtime Engine — Optimized production engine (CPython/PyPy Supported)"
+version = "2.6.0"
+description = "(φ) Phicode Runtime Engine — Optimized for stability under load (CPython/PyPy Supported)"
 readme = "README.md"
 license = {file = "LICENSE"}
 authors = [

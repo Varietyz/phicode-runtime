@@ -4,7 +4,7 @@
 
 <img src="https://banes-lab.com/assets/images/banes_lab/700px_Main_Animated.gif" width="100" alt="Banes Lab" />
 
-**Python execution engine with caching and import extensions**
+**Python execution engine with daemons, caching and import extensions**
 
 [![Python](https://img.shields.io/badge/Python-v3.8%2B-blue.svg)](https://python.org)
 [![PyPy Supported](https://img.shields.io/badge/PyPy-Supported-green.svg)](https://pypy.org)
@@ -17,12 +17,11 @@
 [![VS Code Extension Installs](https://img.shields.io/visual-studio-marketplace/i/Banes-Lab.phicode.svg?label=VS+Code+Installs)](https://marketplace.visualstudio.com/items?itemName=Banes-Lab.phicode)
 
 
-
 </div>
 
 ## Overview
 
-Phicode Engine runs Python modules through a runtime with robust bytecode caching, runtime management and import system modifications. It executes standard Python code with custom syntax support.
+Phicode Engine executes Python modules through an optimized runtime featuring robust and self-healing caching mechanisms, automatic interpreter optimization, and modified import system. It supports standard Python with optional custom syntax transpilation. The integrated Phiemon daemon system provides production-ready process management with crash recovery and multi-daemon support.
 
 ## Project Philosophy
 
