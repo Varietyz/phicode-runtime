@@ -1,6 +1,6 @@
 <div align="center">
 
-# [![Phicode](https://img.shields.io/badge/(φ)_Phicode_Runtime_Engine-v2.5.0-red.svg)](https://python.org)
+# [![Phicode](https://img.shields.io/badge/(φ)_Phicode_Runtime_Engine-v2.6.0-red.svg)](https://github.com/Varietyz/phicode-runtime)
 
 <img src="https://banes-lab.com/assets/images/banes_lab/700px_Main_Animated.gif" width="100" alt="Banes Lab" />
 
@@ -577,7 +577,7 @@ phicode --config-reset       # Reset to built-in defaults
 ## Support
 
 - **Website:** [banes-lab.com](https://banes-lab.com)
-- **GitHub:** [Varietyz/phicode-engine](https://github.com/Varietyz/phicode-engine)
+- **GitHub:** [Varietyz/phicode-engine](https://github.com/Varietyz/phicode-runtime)
 - **Email:** [jay@banes-lab.com](mailto:jay@banes-lab.com)
 
 **License:** [Phicode Non-Commercial License](https://banes-lab.com/licensing)  
